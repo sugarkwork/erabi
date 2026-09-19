@@ -1,0 +1,100 @@
+{
+  "milestone": "Milestone 14 Data Scaling Law",
+  "fractions": {
+    "12.5": {
+      "fraction": 0.125,
+      "total_records": 284,
+      "stream_a_records": 89,
+      "stream_b_records": 195,
+      "component_counts": {
+        "m3_train": 75,
+        "m3_replay": 14,
+        "m4_1_exception": 30,
+        "m4_3_1_phrasing": 30,
+        "m6_operator": 50,
+        "m7_robustness": 40,
+        "m8_general": 45
+      },
+      "stream_a_file": "data\\rc2_scaling\\train_stream_a_frac_12.5.jsonl",
+      "stream_b_file": "data\\rc2_scaling\\train_stream_b_frac_12.5.jsonl",
+      "combined_file": "data\\rc2_scaling\\train_combined_frac_12.5.jsonl",
+      "sha256": "82fd4bb19a30d693217f678b13d6720e52db9b56560ad730f435369f787f2e0f"
+    },
+    "25": {
+      "fraction": 0.25,
+      "total_records": 569,
+      "stream_a_records": 178,
+      "stream_b_records": 391,
+      "component_counts": {
+        "m3_train": 150,
+        "m3_replay": 28,
+        "m4_1_exception": 60,
+        "m4_3_1_phrasing": 60,
+        "m6_operator": 100,
+        "m7_robustness": 81,
+        "m8_general": 90
+      },
+      "stream_a_file": "data\\rc2_scaling\\train_stream_a_frac_25.jsonl",
+      "stream_b_file": "data\\rc2_scaling\\train_stream_b_frac_25.jsonl",
+      "combined_file": "data\\rc2_scaling\\train_combined_frac_25.jsonl",
+      "sha256": "622237d063ef74b1ef3ad329e952a114a02231ca3c9f9f59b76efeb2f9cb264e"
+    },
+    "50": {
+      "fraction": 0.5,
+      "total_records": 1138,
+      "stream_a_records": 356,
+      "stream_b_records": 782,
+      "component_counts": {
+        "m3_train": 300,
+        "m3_replay": 56,
+        "m4_1_exception": 120,
+        "m4_3_1_phrasing": 120,
+        "m6_operator": 200,
+        "m7_robustness": 162,
+        "m8_general": 180
+      },
+      "stream_a_file": "data\\rc2_scaling\\train_stream_a_frac_50.jsonl",
+      "stream_b_file": "data\\rc2_scaling\\train_stream_b_frac_50.jsonl",
+      "combined_file": "data\\rc2_scaling\\train_combined_frac_50.jsonl",
+      "sha256": "23a6573a2e8baa7e83e5e16f4487e63525dfb1c558daeaa87cfeea1dcab08f37"
+    },
+    "75": {
+      "fraction": 0.75,
+      "total_records": 1707,
+      "stream_a_records": 534,
+      "stream_b_records": 1173,
+      "component_counts": {
+        "m3_train": 450,
+        "m3_replay": 84,
+        "m4_1_exception": 180,
+        "m4_3_1_phrasing": 180,
+        "m6_operator": 300,
+        "m7_robustness": 243,
+        "m8_general": 270
+      },
+      "stream_a_file": "data\\rc2_scaling\\train_stream_a_frac_75.jsonl",
+      "stream_b_file": "data\\rc2_scaling\\train_stream_b_frac_75.jsonl",
+      "combined_file": "data\\rc2_scaling\\train_combined_frac_75.jsonl",
+      "sha256": "da7ecb7d5621dd7f883fa93b8a870deb33156fb135f5f6dd4e8c3a880ba55042"
+    },
+    "100": {
+      "fraction": 1.0,
+      "total_records": 2276,
+      "stream_a_records": 712,
+      "stream_b_records": 1564,
+      "component_counts": {
+        "m3_train": 600,
+        "m3_replay": 112,
+        "m4_1_exception": 240,
+        "m4_3_1_phrasing": 240,
+        "m6_operator": 400,
+        "m7_robustness": 324,
+        "m8_general": 360
+      },
+      "stream_a_file": "data\\rc2_scaling\\train_stream_a_frac_100.jsonl",
+      "stream_b_file": "data\\rc2_scaling\\train_stream_b_frac_100.jsonl",
+      "combined_file": "data\\rc2_scaling\\train_combined_frac_100.jsonl",
+      "sha256": "064a0ce35e3556d223004f84694d0ac4fa3fa6eb6711ca8901363c7599def7b4"
+    }
+  }
+}
