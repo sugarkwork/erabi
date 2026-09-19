@@ -31,6 +31,7 @@
 - **Milestone 12（Final Sealed Acceptance・完全未見Sealed Test 120件・全体正答率100.0% / 対照ペア両問100.0% / 順序不変性100.0% / 高信頼度誤差0.0% / 全Gate満額突破・FINAL_ACCEPTANCE_REPORT.md記録）**: **全工程完遂（正式受理）**。
 - **Phase A（Final Acceptance Integrity Audit・Freeze Lineage・全過去データ13240件Leakageゼロ・レンダリング自然文意味検証120/120・Raw Logits数学的再計算・Permutation Invariance・FINAL_ACCEPTANCE_VERIFIED.md保全）**: **完了（独立完全合格）**。
 - **Phase B（ONNX FP16 Release・ONNX Runtime CUDA FP16最適化・全4評価セット340問でTop1一致率100.0%・p50 11.14ms / p95 11.99ms / 88.5 req/s / 50%容量削減 / 1000回メモリドリフト-1.51MB・release/erabi-rc1-onnx-fp16/保全・テスト78/78件全PASS）**: **完了（正式リリース）**。
+- **GitHub Public Release（公開リポジトリセットアップ・バージョン管理対象選別・大容量重み/runs/zip/キャッシュ除外・全ソース/テスト/データ/文書/リリース設定追跡・https://github.com/sugarkwork/erabi-local へpush完了）**: **完了（公開完了）**。
 
 ---
 
