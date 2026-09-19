@@ -1,0 +1,23 @@
+{
+  "schema_version": "1",
+  "context": "昨日からログインできません。パスワード再設定も試しました。",
+  "question": "最初に対応すべき担当窓口を一つ選んでください。",
+  "choices": [
+    {
+      "id": "technical",
+      "text": "技術サポート"
+    },
+    {
+      "id": "billing",
+      "text": "請求担当"
+    },
+    {
+      "id": "sales",
+      "text": "営業担当"
+    },
+    {
+      "id": "insufficient",
+      "text": "情報不足のため判断できない"
+    }
+  ]
+}

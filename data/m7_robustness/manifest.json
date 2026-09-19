@@ -1,0 +1,25 @@
+{
+  "milestone": "Milestone 7 Domain & Perturbation Robustness",
+  "splits": {
+    "fresh_robustness_eval": {
+      "file": "fresh_robustness_eval.jsonl",
+      "count": 108,
+      "pairs": 54,
+      "diff_pair_rate": 1.0
+    },
+    "dev_robustness": {
+      "file": "dev_robustness.jsonl",
+      "count": 108,
+      "pairs": 54,
+      "diff_pair_rate": 1.0
+    },
+    "train_robustness": {
+      "file": "train_robustness.jsonl",
+      "count": 324,
+      "pairs": 162,
+      "diff_pair_rate": 1.0
+    }
+  },
+  "semantic_validation": "100% PASSED",
+  "exact_input_leak_count": 0
+}

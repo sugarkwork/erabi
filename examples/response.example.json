@@ -1,0 +1,35 @@
+{
+  "schema_version": "1",
+  "model_id": "erabi-example-untrained",
+  "choices": [
+    {
+      "id": "technical",
+      "probability": 0.87
+    },
+    {
+      "id": "billing",
+      "probability": 0.05
+    },
+    {
+      "id": "sales",
+      "probability": 0.02
+    },
+    {
+      "id": "insufficient",
+      "probability": 0.06
+    }
+  ],
+  "best_candidate_id": "technical",
+  "decision": {
+    "status": "review",
+    "reason": "policy_not_configured"
+  },
+  "calibration": {
+    "status": "none",
+    "artifact_id": null
+  },
+  "usage": {
+    "input_tokens": 73,
+    "truncated": false
+  }
+}

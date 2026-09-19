@@ -1,0 +1,36 @@
+{
+  "version": "M3.3_v2",
+  "description": "Rebuilt datasets eliminating cross-split leaks, rank correlations, and boundary biases.",
+  "splits": {
+    "train": {
+      "file": "train.jsonl",
+      "cases": 600,
+      "groups": 300,
+      "unique_fingerprints": 600,
+      "sha256": "9cb6545fc3f3a982ce22942a66b97984f2c8e4bd328bcfb96acc1a860db0a7d9"
+    },
+    "dev": {
+      "file": "dev.jsonl",
+      "cases": 100,
+      "groups": 50,
+      "unique_fingerprints": 100,
+      "sha256": "623729415d6b00f3589f7aa4659adbb86aecb012d1073a2f608e64f9729dfce3"
+    },
+    "eval_v2": {
+      "file": "eval_v2.jsonl",
+      "cases": 200,
+      "groups": 100,
+      "unique_fingerprints": 200,
+      "sha256": "e528ee7acc26c06a2a6db8c297e0b92c8fe25835235aeaf90bc121127266b9bc"
+    }
+  },
+  "invariance_checks": {
+    "cross_split_overlaps": {
+      "train_dev": 0,
+      "train_eval_v2": 0,
+      "dev_eval_v2": 0
+    },
+    "diagnostic_overlaps": 0,
+    "internal_duplicates": 0
+  }
+}

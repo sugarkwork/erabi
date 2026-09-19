@@ -1,0 +1,302 @@
+{
+  "smoke_cases": {
+    "counts": {
+      "maintained": 7,
+      "recovered": 2,
+      "regressed": 1,
+      "both_wrong": 2
+    },
+    "cases": {
+      "maintained": [
+        {
+          "id": "smoke-01",
+          "target": "technical",
+          "old": "technical",
+          "new": "technical"
+        },
+        {
+          "id": "smoke-02",
+          "target": "billing",
+          "old": "billing",
+          "new": "billing"
+        },
+        {
+          "id": "smoke-03",
+          "target": "a",
+          "old": "a",
+          "new": "a"
+        },
+        {
+          "id": "smoke-05",
+          "target": "heal",
+          "old": "heal",
+          "new": "heal"
+        },
+        {
+          "id": "smoke-07",
+          "target": "supports",
+          "old": "supports",
+          "new": "supports"
+        },
+        {
+          "id": "smoke-10",
+          "target": "exchange",
+          "old": "exchange",
+          "new": "exchange"
+        },
+        {
+          "id": "smoke-12",
+          "target": "normal",
+          "old": "normal",
+          "new": "normal"
+        }
+      ],
+      "recovered": [
+        {
+          "id": "smoke-04",
+          "target": "b",
+          "old": "a",
+          "new": "b"
+        },
+        {
+          "id": "smoke-11",
+          "target": "cold",
+          "old": "hot",
+          "new": "cold"
+        }
+      ],
+      "regressed": [
+        {
+          "id": "smoke-08",
+          "target": "contradicts",
+          "old": "contradicts",
+          "new": "supports"
+        }
+      ],
+      "both_wrong": [
+        {
+          "id": "smoke-06",
+          "target": "continue",
+          "old": "heal",
+          "new": "heal"
+        },
+        {
+          "id": "smoke-09",
+          "target": "unknown",
+          "old": "contradicts",
+          "new": "supports"
+        }
+      ]
+    }
+  },
+  "transfer_probe": {
+    "counts": {
+      "maintained": 23,
+      "recovered": 2,
+      "regressed": 2,
+      "both_wrong": 5
+    },
+    "cases": {
+      "maintained": [
+        {
+          "id": "tp-vocab-001-c1",
+          "target": "order",
+          "old": "order",
+          "new": "order"
+        },
+        {
+          "id": "tp-vocab-001-c2",
+          "target": "order",
+          "old": "order",
+          "new": "order"
+        },
+        {
+          "id": "tp-vocab-002-c1",
+          "target": "quiet",
+          "old": "quiet",
+          "new": "quiet"
+        },
+        {
+          "id": "tp-vocab-002-c2",
+          "target": "alert",
+          "old": "alert",
+          "new": "alert"
+        },
+        {
+          "id": "tp-reverse-001-c2",
+          "target": "b",
+          "old": "b",
+          "new": "b"
+        },
+        {
+          "id": "tp-reverse-002-c2",
+          "target": "l1",
+          "old": "l1",
+          "new": "l1"
+        },
+        {
+          "id": "tp-negation-001-c1",
+          "target": "y",
+          "old": "y",
+          "new": "y"
+        },
+        {
+          "id": "tp-negation-001-c2",
+          "target": "x",
+          "old": "x",
+          "new": "x"
+        },
+        {
+          "id": "tp-boundary-001-c1",
+          "target": "ok",
+          "old": "ok",
+          "new": "ok"
+        },
+        {
+          "id": "tp-boundary-002-c1",
+          "target": "large",
+          "old": "large",
+          "new": "large"
+        },
+        {
+          "id": "tp-boundary-002-c2",
+          "target": "mid",
+          "old": "mid",
+          "new": "mid"
+        },
+        {
+          "id": "tp-inject-001-c1",
+          "target": "reboot",
+          "old": "reboot",
+          "new": "reboot"
+        },
+        {
+          "id": "tp-inject-001-c2",
+          "target": "shutdown",
+          "old": "shutdown",
+          "new": "shutdown"
+        },
+        {
+          "id": "tp-inject-002-c1",
+          "target": "review",
+          "old": "review",
+          "new": "review"
+        },
+        {
+          "id": "tp-inject-002-c2",
+          "target": "refund",
+          "old": "refund",
+          "new": "refund"
+        },
+        {
+          "id": "tp-retain-001-c1",
+          "target": "billing",
+          "old": "billing",
+          "new": "billing"
+        },
+        {
+          "id": "tp-retain-001-c2",
+          "target": "tech",
+          "old": "tech",
+          "new": "tech"
+        },
+        {
+          "id": "tp-retain-002-c1",
+          "target": "contradicts",
+          "old": "contradicts",
+          "new": "contradicts"
+        },
+        {
+          "id": "tp-scale-001-c1",
+          "target": "c4",
+          "old": "c4",
+          "new": "c4"
+        },
+        {
+          "id": "tp-priority-001-c1",
+          "target": "pa",
+          "old": "pa",
+          "new": "pa"
+        },
+        {
+          "id": "tp-priority-001-c2",
+          "target": "pc",
+          "old": "pc",
+          "new": "pc"
+        },
+        {
+          "id": "tp-edge-001-c1",
+          "target": "norm",
+          "old": "norm",
+          "new": "norm"
+        },
+        {
+          "id": "tp-edge-001-c2",
+          "target": "extra",
+          "old": "extra",
+          "new": "extra"
+        }
+      ],
+      "recovered": [
+        {
+          "id": "tp-retain-002-c2",
+          "target": "supports",
+          "old": "contradicts",
+          "new": "supports"
+        },
+        {
+          "id": "tp-scale-001-c2",
+          "target": "c1",
+          "old": "c2",
+          "new": "c1"
+        }
+      ],
+      "regressed": [
+        {
+          "id": "tp-negation-002-c1",
+          "target": "run",
+          "old": "run",
+          "new": "stop"
+        },
+        {
+          "id": "tp-negation-002-c2",
+          "target": "run",
+          "old": "run",
+          "new": "stop"
+        }
+      ],
+      "both_wrong": [
+        {
+          "id": "tp-reverse-001-c1",
+          "target": "c",
+          "old": "b",
+          "new": "b"
+        },
+        {
+          "id": "tp-reverse-002-c1",
+          "target": "l2",
+          "old": "l1",
+          "new": "l1"
+        },
+        {
+          "id": "tp-boundary-001-c2",
+          "target": "adj",
+          "old": "ok",
+          "new": "ok"
+        },
+        {
+          "id": "tp-neggoal-001-c1",
+          "target": "c",
+          "old": "a",
+          "new": "a"
+        },
+        {
+          "id": "tp-neggoal-001-c2",
+          "target": "b",
+          "old": "a",
+          "new": "a"
+        }
+      ]
+    }
+  }
+}

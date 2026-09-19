@@ -1,0 +1,25 @@
+{
+  "milestone": "Milestone 8 General Choice Tasks",
+  "splits": {
+    "fresh_general_eval": {
+      "file": "fresh_general_eval.jsonl",
+      "count": 120,
+      "pairs": 60,
+      "diff_pair_rate": 1.0
+    },
+    "dev_general": {
+      "file": "dev_general.jsonl",
+      "count": 60,
+      "pairs": 30,
+      "diff_pair_rate": 1.0
+    },
+    "train_general": {
+      "file": "train_general.jsonl",
+      "count": 360,
+      "pairs": 180,
+      "diff_pair_rate": 1.0
+    }
+  },
+  "semantic_validation": "100% PASSED",
+  "exact_input_leak_count": 0
+}

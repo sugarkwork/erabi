@@ -1,0 +1,38 @@
+{
+  "title": "M4.3.1 Semantic Validation Audit",
+  "phrasing_train": {
+    "total_records": 240,
+    "matched_records": 240,
+    "mismatches_count": 0,
+    "is_all_valid": true,
+    "mismatches": []
+  },
+  "phrasing_dev": {
+    "total_records": 80,
+    "matched_records": 80,
+    "mismatches_count": 0,
+    "is_all_valid": true,
+    "mismatches": []
+  },
+  "fresh_phrasing_eval": {
+    "total_records": 120,
+    "matched_records": 120,
+    "mismatches_count": 0,
+    "is_all_valid": true,
+    "mismatches": []
+  },
+  "cell_a_fix": {
+    "total_records": 40,
+    "matched_records": 40,
+    "mismatches_count": 0,
+    "is_all_valid": true,
+    "mismatches": []
+  },
+  "cell_b_fix": {
+    "total_records": 40,
+    "matched_records": 40,
+    "mismatches_count": 0,
+    "is_all_valid": true,
+    "mismatches": []
+  }
+}

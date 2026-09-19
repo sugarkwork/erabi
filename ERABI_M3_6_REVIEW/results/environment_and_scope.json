@@ -1,0 +1,17 @@
+{
+  "source_zip": "review_bundle(3).zip",
+  "sha256": "154973f51914402b9309c0803f1e88d72c371d8c9e4d4b4d2946bd0b2a287162",
+  "bytes": 184828,
+  "files": 52,
+  "python": "3.13.5",
+  "libraries": {
+    "numpy": "2.3.5",
+    "scipy": "1.17.0",
+    "torch": "2.10.0+cpu",
+    "pytest": "9.0.2",
+    "fastapi": "0.128.2",
+    "httpx": "0.28.1",
+    "gliclass": "not installed",
+    "transformers": "not installed"
+  }
+}

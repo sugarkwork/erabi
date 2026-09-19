@@ -1,0 +1,107 @@
+{
+  "title": "M4.3-P Phrasing Diversification Data Manifest",
+  "splits": {
+    "phrasing_train": {
+      "file": "data/m4_3_phrasing/phrasing_train.jsonl",
+      "total_cases": 240,
+      "total_pairs": 120,
+      "family_breakdown": {
+        "family_E": 40,
+        "family_F": 40,
+        "family_G": 40,
+        "family_H": 40,
+        "family_I": 40,
+        "family_J": 40
+      },
+      "domain_breakdown": {
+        "game_action": 30,
+        "delivery_dispatch": 30,
+        "system_ops": 32,
+        "facility_control": 30,
+        "manufacturing": 30,
+        "facility_power": 30,
+        "inventory": 28,
+        "job_scheduler": 30
+      },
+      "domain_class_breakdown": {
+        "old": 122,
+        "new": 118
+      },
+      "stratum_breakdown": {
+        "conflict": 120,
+        "single": 72,
+        "fallback": 48
+      },
+      "priority_direction_breakdown": {
+        "A_over_B": 120,
+        "B_over_A": 120
+      }
+    },
+    "phrasing_dev": {
+      "file": "data/m4_3_phrasing/phrasing_dev.jsonl",
+      "total_cases": 80,
+      "total_pairs": 40,
+      "family_breakdown": {
+        "family_K": 40,
+        "family_L": 40
+      },
+      "domain_breakdown": {
+        "game_action": 12,
+        "delivery_dispatch": 10,
+        "system_ops": 10,
+        "facility_control": 10,
+        "manufacturing": 8,
+        "facility_power": 10,
+        "inventory": 10,
+        "job_scheduler": 10
+      },
+      "domain_class_breakdown": {
+        "old": 42,
+        "new": 38
+      },
+      "stratum_breakdown": {
+        "conflict": 40,
+        "single": 24,
+        "fallback": 16
+      },
+      "priority_direction_breakdown": {
+        "A_over_B": 40,
+        "B_over_A": 40
+      }
+    },
+    "fresh_phrasing_eval": {
+      "file": "data/m4_3_phrasing/fresh_phrasing_eval.jsonl",
+      "total_cases": 120,
+      "total_pairs": 60,
+      "family_breakdown": {
+        "family_M": 32,
+        "family_N": 32,
+        "family_O": 28,
+        "family_P": 28
+      },
+      "domain_breakdown": {
+        "game_action": 12,
+        "delivery_dispatch": 14,
+        "system_ops": 16,
+        "facility_control": 16,
+        "manufacturing": 16,
+        "facility_power": 16,
+        "inventory": 16,
+        "job_scheduler": 14
+      },
+      "domain_class_breakdown": {
+        "old": 58,
+        "new": 62
+      },
+      "stratum_breakdown": {
+        "conflict": 60,
+        "single": 36,
+        "fallback": 24
+      },
+      "priority_direction_breakdown": {
+        "A_over_B": 60,
+        "B_over_A": 60
+      }
+    }
+  }
+}

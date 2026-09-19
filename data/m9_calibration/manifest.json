@@ -1,0 +1,16 @@
+{
+  "milestone": "Milestone 9 Calibration",
+  "datasets": {
+    "calibration": {
+      "file": "calibration.jsonl",
+      "count": 100,
+      "pairs": 50
+    },
+    "fresh_calibration_eval": {
+      "file": "fresh_calibration_eval.jsonl",
+      "count": 100,
+      "pairs": 50
+    }
+  },
+  "exact_input_leak_count": 0
+}

@@ -1,0 +1,122 @@
+{
+  "title": "M4.3.1 Phrasing Repaired Data Manifest",
+  "splits": {
+    "phrasing_train": {
+      "total_cases": 240,
+      "total_pairs": 120,
+      "families": {
+        "family_E": 40,
+        "family_F": 40,
+        "family_G": 40,
+        "family_H": 40,
+        "family_I": 40,
+        "family_J": 40
+      },
+      "domains": {
+        "game_action": 30,
+        "delivery_dispatch": 30,
+        "system_ops": 32,
+        "facility_control": 30,
+        "manufacturing": 30,
+        "facility_power": 30,
+        "inventory": 28,
+        "job_scheduler": 30
+      },
+      "domain_classes": {
+        "old": 122,
+        "new": 118
+      },
+      "strata": {
+        "conflict": 120,
+        "single": 72,
+        "fallback": 48
+      },
+      "priorities": {
+        "A_over_B": 120,
+        "B_over_A": 120
+      }
+    },
+    "phrasing_dev": {
+      "total_cases": 80,
+      "total_pairs": 40,
+      "families": {
+        "family_K": 40,
+        "family_L": 40
+      },
+      "domains": {
+        "game_action": 12,
+        "delivery_dispatch": 10,
+        "system_ops": 10,
+        "facility_control": 10,
+        "manufacturing": 8,
+        "facility_power": 10,
+        "inventory": 10,
+        "job_scheduler": 10
+      },
+      "domain_classes": {
+        "old": 42,
+        "new": 38
+      },
+      "strata": {
+        "conflict": 40,
+        "fallback": 16,
+        "single": 24
+      },
+      "priorities": {
+        "A_over_B": 40,
+        "B_over_A": 40
+      }
+    },
+    "fresh_phrasing_eval": {
+      "total_cases": 120,
+      "total_pairs": 60,
+      "families": {
+        "family_M": 32,
+        "family_N": 32,
+        "family_O": 28,
+        "family_P": 28
+      },
+      "domains": {
+        "game_action": 12,
+        "delivery_dispatch": 14,
+        "system_ops": 16,
+        "facility_control": 16,
+        "manufacturing": 16,
+        "facility_power": 16,
+        "inventory": 16,
+        "job_scheduler": 14
+      },
+      "domain_classes": {
+        "old": 58,
+        "new": 62
+      },
+      "strata": {
+        "conflict": 60,
+        "fallback": 24,
+        "single": 36
+      },
+      "priorities": {
+        "A_over_B": 60,
+        "B_over_A": 60
+      }
+    },
+    "cell_a_fix": {
+      "total_cases": 40,
+      "total_pairs": 20,
+      "strata": {
+        "fallback": 6,
+        "single": 10,
+        "conflict": 24
+      }
+    },
+    "cell_b_fix": {
+      "total_cases": 40,
+      "total_pairs": 20,
+      "strata": {
+        "conflict": 24,
+        "single": 10,
+        "fallback": 6
+      }
+    }
+  }
+}

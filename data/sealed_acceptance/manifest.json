@@ -1,0 +1,15 @@
+{
+  "suite": "ERABI Final Sealed Acceptance Test Suite",
+  "file": "sealed_test.jsonl",
+  "total_cases": 120,
+  "total_pairs": 60,
+  "families": {
+    "core_boundary": 24,
+    "composite_exception": 24,
+    "logical_operators": 24,
+    "domain_perturbation": 24,
+    "general_choice": 24
+  },
+  "exact_train_leak_count": 0,
+  "semantic_errors": 0
+}

@@ -1,0 +1,35 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "erabi"
+version = "0.1.0"
+description = "ERABI - Local probability distribution engine for choices"
+authors = [
+    { name = "ERABI Project" }
+]
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "torch",
+    "transformers>=4.40.0",
+    "gliclass>=0.1.20",
+    "pydantic>=2.0.0",
+]
+
+[project.optional-dependencies]
+api = [
+    "fastapi>=0.110.0",
+    "uvicorn>=0.28.0",
+]
+calibrate = [
+    "scipy>=1.12.0",
+]
+dev = [
+    "pytest>=7.0.0",
+    "httpx>=0.27.0",
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]

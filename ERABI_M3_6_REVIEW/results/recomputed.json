@@ -1,0 +1,3818 @@
+{
+  "independent_temperature": 3.1096968871451347,
+  "temperature_nll": 0.1572337202431534,
+  "artifact_full_temperature": 3.109686582278409,
+  "artifact_served_temperature": 3.1097,
+  "sets": {
+    "calibration": {
+      "T1": {
+        "n": 200,
+        "correct": 189,
+        "nll": 0.3436121838662324,
+        "brier": 0.10089783127204698,
+        "pairs": {
+          "total": 100,
+          "both": 89,
+          "diff": {
+            "count": 53,
+            "both": 45
+          },
+          "same": {
+            "count": 47,
+            "both": 44
+          }
+        },
+        "bins": [
+          {
+            "low": 0,
+            "high": 0.5,
+            "count": 0,
+            "correct": 0,
+            "mean_confidence": null
+          },
+          {
+            "low": 0.5,
+            "high": 0.7,
+            "count": 2,
+            "correct": 1,
+            "mean_confidence": 0.5879951687122424
+          },
+          {
+            "low": 0.7,
+            "high": 0.9,
+            "count": 1,
+            "correct": 0,
+            "mean_confidence": 0.8246193737367843
+          },
+          {
+            "low": 0.9,
+            "high": 1.0,
+            "count": 197,
+            "correct": 188,
+            "mean_confidence": 0.9989273491823077
+          }
+        ],
+        "policy": {
+          "0.8": {
+            "count": 198,
+            "errors": 10,
+            "coverage": 0.99,
+            "risk": 0.050505050505050504
+          },
+          "0.9": {
+            "count": 197,
+            "errors": 9,
+            "coverage": 0.985,
+            "risk": 0.04568527918781726
+          },
+          "0.95": {
+            "count": 196,
+            "errors": 8,
+            "coverage": 0.98,
+            "risk": 0.04081632653061224
+          }
+        },
+        "bytask": {
+          "goal_following:None": {
+            "n": 100,
+            "correct": 93,
+            "nll": 0.4035960486794447,
+            "brier": 0.12190010057845292
+          },
+          "explicit_rule:boundary": {
+            "n": 16,
+            "correct": 16,
+            "nll": 1.5134261260874027e-07,
+            "brier": 3.175267663654511e-13
+          },
+          "explicit_rule:composite_logic": {
+            "n": 70,
+            "correct": 66,
+            "nll": 0.40517385391969685,
+            "brier": 0.11413650588403296
+          },
+          "explicit_rule:comparison": {
+            "n": 14,
+            "correct": 14,
+            "nll": 4.712210295835081e-05,
+            "brier": 5.604833646976959e-08
+          }
+        },
+        "errors": [
+          {
+            "id": "calibration-gf-0011-c1",
+            "group": "calibration-gf-0011",
+            "family": "goal_following",
+            "kind": null,
+            "template": "seen",
+            "k": 3,
+            "target": "a",
+            "prediction": "c",
+            "correct": false,
+            "pmax": 0.9999577368353121,
+            "ptarget": 3.594619101881422e-05,
+            "nll": 10.233487431599304,
+            "brier": 1.9998435844067945,
+            "probs": [
+              3.594619101881422e-05,
+              6.316973669270017e-06,
+              0.9999577368353121
+            ]
+          },
+          {
+            "id": "calibration-gf-0018-c1",
+            "group": "calibration-gf-0018",
+            "family": "goal_following",
+            "kind": null,
+            "template": "novel",
+            "k": 3,
+            "target": "a",
+            "prediction": "c",
+            "correct": false,
+            "pmax": 0.999915557296129,
+            "ptarget": 8.070753551451546e-05,
+            "nll": 9.42467861016401,
+            "brier": 1.9996697131794572,
+            "probs": [
+              8.070753551451546e-05,
+              3.7351683564723693e-06,
+              0.999915557296129
+            ]
+          },
+          {
+            "id": "calibration-gf-0041-c1",
+            "group": "calibration-gf-0041",
+            "family": "goal_following",
+            "kind": null,
+            "template": "novel",
+            "k": 3,
+            "target": "a",
+            "prediction": "c",
+            "correct": false,
+            "pmax": 0.9999128563261852,
+            "ptarget": 8.351884987958012e-05,
+            "nll": 9.390438204523658,
+            "brier": 1.9996586895351687,
+            "probs": [
+              8.351884987958012e-05,
+              3.624823935267943e-06,
+              0.9999128563261852
+            ]
+          },
+          {
+            "id": "calibration-er-0035-c1",
+            "group": "calibration-er-0035",
+            "family": "explicit_rule",
+            "kind": "composite_logic",
+            "template": "novel",
+            "k": 2,
+            "target": "wait",
+            "prediction": "heal",
+            "correct": false,
+            "pmax": 0.999534979794795,
+            "ptarget": 0.0004650202052050194,
+            "nll": 7.673429701267126,
+            "brier": 1.9981403516667624,
+            "probs": [
+              0.999534979794795,
+              0.0004650202052050194
+            ]
+          },
+          {
+            "id": "calibration-er-0097-c1",
+            "group": "calibration-er-0097",
+            "family": "explicit_rule",
+            "kind": "composite_logic",
+            "template": "novel",
+            "k": 2,
+            "target": "wait",
+            "prediction": "heal",
+            "correct": false,
+            "pmax": 0.9993554759251405,
+            "ptarget": 0.000644524074859122,
+            "nll": 7.34699838196287,
+            "brier": 1.9974227345231288,
+            "probs": [
+              0.9993554759251405,
+              0.000644524074859122
+            ]
+          },
+          {
+            "id": "calibration-er-0081-c1",
+            "group": "calibration-er-0081",
+            "family": "explicit_rule",
+            "kind": "composite_logic",
+            "template": "novel",
+            "k": 2,
+            "target": "wait",
+            "prediction": "heal",
+            "correct": false,
+            "pmax": 0.9988882808655348,
+            "ptarget": 0.001111719134465608,
+            "nll": 6.801847691976086,
+            "brier": 1.9955555953010062,
+            "probs": [
+              0.9988882808655348,
+              0.001111719134465608
+            ]
+          },
+          {
+            "id": "calibration-er-0083-c1",
+            "group": "calibration-er-0083",
+            "family": "explicit_rule",
+            "kind": "composite_logic",
+            "template": "novel",
+            "k": 2,
+            "target": "wait",
+            "prediction": "heal",
+            "correct": false,
+            "pmax": 0.9984063879630513,
+            "ptarget": 0.001593612036949181,
+            "nll": 6.441752117856002,
+            "brier": 1.9936306310508527,
+            "probs": [
+              0.9984063879630513,
+              0.001593612036949181
+            ]
+          },
+          {
+            "id": "calibration-gf-0026-c1",
+            "group": "calibration-gf-0026",
+            "family": "goal_following",
+            "kind": null,
+            "template": "seen",
+            "k": 3,
+            "target": "a",
+            "prediction": "c",
+            "correct": false,
+            "pmax": 0.9922749288944295,
+            "ptarget": 0.007368463408299319,
+            "nll": 4.910546087286601,
+            "brier": 1.9699270291178954,
+            "probs": [
+              0.007368463408299319,
+              0.0003566076972710796,
+              0.9922749288944295
+            ]
+          },
+          {
+            "id": "calibration-gf-0006-c1",
+            "group": "calibration-gf-0006",
+            "family": "goal_following",
+            "kind": null,
+            "template": "novel",
+            "k": 3,
+            "target": "a",
+            "prediction": "c",
+            "correct": false,
+            "pmax": 0.9029686200657292,
+            "ptarget": 0.09683013115180149,
+            "nll": 2.334797060905401,
+            "brier": 1.6310681813197518,
+            "probs": [
+              0.09683013115180149,
+              0.00020124878246920568,
+              0.9029686200657292
+            ]
+          },
+          {
+            "id": "calibration-gf-0021-c1",
+            "group": "calibration-gf-0021",
+            "family": "goal_following",
+            "kind": null,
+            "template": "seen",
+            "k": 3,
+            "target": "b",
+            "prediction": "c",
+            "correct": false,
+            "pmax": 0.8246193737367843,
+            "ptarget": 0.08564127751993322,
+            "nll": 2.4575878980443457,
+            "brier": 1.5241021356302946,
+            "probs": [
+              0.0897393487432826,
+              0.08564127751993322,
+              0.8246193737367843
+            ]
+          },
+          {
+            "id": "calibration-gf-0001-c1",
+            "group": "calibration-gf-0001",
+            "family": "goal_following",
+            "kind": null,
+            "template": "seen",
+            "k": 3,
+            "target": "c",
+            "prediction": "a",
+            "correct": false,
+            "pmax": 0.5552910941020126,
+            "ptarget": 0.32426250827361136,
+            "nll": 1.1262018805123135,
+            "brier": 0.7794766916143707,
+            "probs": [
+              0.5552910941020126,
+              0.12044639762437605,
+              0.32426250827361136
+            ]
+          }
+        ]
+      },
+      "Tcal": {
+        "n": 200,
+        "correct": 189,
+        "nll": 0.15723372024504545,
+        "brier": 0.0853933084251346,
+        "pairs": {
+          "total": 100,
+          "both": 89,
+          "diff": {
+            "count": 53,
+            "both": 45
+          },
+          "same": {
+            "count": 47,
+            "both": 44
+          }
+        },
+        "bins": [
+          {
+            "low": 0,
+            "high": 0.5,
+            "count": 2,
+            "correct": 1,
+            "mean_confidence": 0.45268705685874944
+          },
+          {
+            "low": 0.5,
+            "high": 0.7,
+            "count": 2,
+            "correct": 0,
+            "mean_confidence": 0.5750631567468028
+          },
+          {
+            "low": 0.7,
+            "high": 0.9,
+            "count": 16,
+            "correct": 13,
+            "mean_confidence": 0.8472319315596311
+          },
+          {
+            "low": 0.9,
+            "high": 1.0,
+            "count": 180,
+            "correct": 175,
+            "mean_confidence": 0.9759214397877837
+          }
+        ],
+        "policy": {
+          "0.8": {
+            "count": 193,
+            "errors": 7,
+            "coverage": 0.965,
+            "risk": 0.03626943005181347
+          },
+          "0.9": {
+            "count": 180,
+            "errors": 5,
+            "coverage": 0.9,
+            "risk": 0.027777777777777776
+          },
+          "0.95": {
+            "count": 157,
+            "errors": 0,
+            "coverage": 0.785,
+            "risk": 0.0
+          }
+        },
+        "bytask": {
+          "goal_following:None": {
+            "n": 100,
+            "correct": 93,
+            "nll": 0.1871855780741361,
+            "brier": 0.0983455479460059
+          },
+          "explicit_rule:boundary": {
+            "n": 16,
+            "correct": 16,
+            "nll": 0.004329547540482245,
+            "brier": 5.600751171632924e-05
+          },
+          "explicit_rule:composite_logic": {
+            "n": 70,
+            "correct": 66,
+            "nll": 0.17805785178138248,
+            "brier": 0.10321852701218026
+          },
+          "explicit_rule:comparison": {
+            "n": 14,
+            "correct": 14,
+            "nll": 0.013918846875070588,
+            "brier": 0.0012795628133034774
+          }
+        },
+        "errors": [
+          {
+            "id": "calibration-gf-0011-c1",
+            "group": "calibration-gf-0011",
+            "family": "goal_following",
+            "kind": null,
+            "template": "seen",
+            "k": 3,
+            "target": "a",
+            "prediction": "c",
+            "correct": false,
+            "pmax": 0.9447302734742652,
+            "ptarget": 0.03516569319737067,
+            "nll": 3.347684296708623,
+            "brier": 1.8238247013581381,
+            "probs": [
+              0.03516569319737067,
+              0.020104033328364173,
+              0.9447302734742652
+            ]
+          },
+          {
+            "id": "calibration-gf-0018-c1",
+            "group": "calibration-gf-0018",
+            "family": "goal_following",
+            "kind": null,
+            "template": "novel",
+            "k": 3,
+            "target": "a",
+            "prediction": "c",
+            "correct": false,
+            "pmax": 0.9378638433013533,
+            "ptarget": 0.04528080554126912,
+            "nll": 3.094872055023079,
+            "brier": 1.791361431702552,
+            "probs": [
+              0.04528080554126912,
+              0.016855351157377494,
+              0.9378638433013533
+            ]
+          },
+          {
+            "id": "calibration-gf-0041-c1",
+            "group": "calibration-gf-0041",
+            "family": "goal_following",
+            "kind": null,
+            "template": "novel",
+            "k": 3,
+            "target": "a",
+            "prediction": "c",
+            "correct": false,
+            "pmax": 0.9375454213899999,
+            "ptarget": 0.04576663824350976,
+            "nll": 3.0841998759214575,
+            "brier": 1.7898312132121206,
+            "probs": [
+              0.04576663824350976,
+              0.016687940366490326,
+              0.9375454213899999
+            ]
+          },
+          {
+            "id": "calibration-er-0035-c1",
+            "group": "calibration-er-0035",
+            "family": "explicit_rule",
+            "kind": "composite_logic",
+            "template": "novel",
+            "k": 2,
+            "target": "wait",
+            "prediction": "heal",
+            "correct": false,
+            "pmax": 0.9218274750450361,
+            "ptarget": 0.07817252495496362,
+            "nll": 2.5488370364532953,
+            "brier": 1.6995317874958138,
+            "probs": [
+              0.9218274750450361,
+              0.07817252495496362
+            ]
+          },
+          {
+            "id": "calibration-er-0097-c1",
+            "group": "calibration-er-0097",
+            "family": "explicit_rule",
+            "kind": "composite_logic",
+            "template": "novel",
+            "k": 2,
+            "target": "wait",
+            "prediction": "heal",
+            "correct": false,
+            "pmax": 0.9139155727548222,
+            "ptarget": 0.08608442724517774,
+            "nll": 2.4524267521396297,
+            "brier": 1.6704833482475494,
+            "probs": [
+              0.9139155727548222,
+              0.08608442724517774
+            ]
+          },
+          {
+            "id": "calibration-er-0081-c1",
+            "group": "calibration-er-0081",
+            "family": "explicit_rule",
+            "kind": "composite_logic",
+            "template": "novel",
+            "k": 2,
+            "target": "wait",
+            "prediction": "heal",
+            "correct": false,
+            "pmax": 0.8990716634979898,
+            "ptarget": 0.1009283365020103,
+            "nll": 2.29334455356728,
+            "brier": 1.6166597122100852,
+            "probs": [
+              0.8990716634979898,
+              0.1009283365020103
+            ]
+          },
+          {
+            "id": "calibration-er-0083-c1",
+            "group": "calibration-er-0083",
+            "family": "explicit_rule",
+            "kind": "composite_logic",
+            "template": "novel",
+            "k": 2,
+            "target": "wait",
+            "prediction": "heal",
+            "correct": false,
+            "pmax": 0.8880522977915036,
+            "ptarget": 0.11194770220849626,
+            "nll": 2.1897234613066034,
+            "brier": 1.577273767225539,
+            "probs": [
+              0.8880522977915036,
+              0.11194770220849626
+            ]
+          },
+          {
+            "id": "calibration-gf-0026-c1",
+            "group": "calibration-gf-0026",
+            "family": "goal_following",
+            "kind": null,
+            "template": "seen",
+            "k": 3,
+            "target": "a",
+            "prediction": "c",
+            "correct": false,
+            "pmax": 0.7783804927041699,
+            "ptarget": 0.16086997759575444,
+            "nll": 1.8271588328491883,
+            "brier": 1.3137058912813162,
+            "probs": [
+              0.16086997759575444,
+              0.0607495297000757,
+              0.7783804927041699
+            ]
+          },
+          {
+            "id": "calibration-gf-0006-c1",
+            "group": "calibration-gf-0006",
+            "family": "goal_following",
+            "kind": null,
+            "template": "novel",
+            "k": 3,
+            "target": "a",
+            "prediction": "c",
+            "correct": false,
+            "pmax": 0.6432269207515865,
+            "ptarget": 0.31372152635045836,
+            "nll": 1.1592495453222778,
+            "brier": 0.8865724511812378,
+            "probs": [
+              0.31372152635045836,
+              0.043051552897955016,
+              0.6432269207515865
+            ]
+          },
+          {
+            "id": "calibration-gf-0021-c1",
+            "group": "calibration-gf-0021",
+            "family": "goal_following",
+            "kind": null,
+            "template": "seen",
+            "k": 3,
+            "target": "b",
+            "prediction": "c",
+            "correct": false,
+            "pmax": 0.5068993927420189,
+            "ptarget": 0.24469737926604657,
+            "nll": 1.4077330185784132,
+            "brier": 0.8891332069266189,
+            "probs": [
+              0.2484032279919345,
+              0.24469737926604657,
+              0.5068993927420189
+            ]
+          },
+          {
+            "id": "calibration-gf-0001-c1",
+            "group": "calibration-gf-0001",
+            "family": "goal_following",
+            "kind": null,
+            "template": "seen",
+            "k": 3,
+            "target": "c",
+            "prediction": "a",
+            "correct": false,
+            "pmax": 0.40768403799192116,
+            "ptarget": 0.34292242719651456,
+            "nll": 1.0702510171711015,
+            "brier": 0.6601543467205248,
+            "probs": [
+              0.40768403799192116,
+              0.24939353481156418,
+              0.34292242719651456
+            ]
+          }
+        ]
+      },
+      "Tserved": {
+        "n": 200,
+        "correct": 189,
+        "nll": 0.15723372024332624,
+        "brier": 0.08539325429144334,
+        "pairs": {
+          "total": 100,
+          "both": 89,
+          "diff": {
+            "count": 53,
+            "both": 45
+          },
+          "same": {
+            "count": 47,
+            "both": 44
+          }
+        },
+        "bins": [
+          {
+            "low": 0,
+            "high": 0.5,
+            "count": 2,
+            "correct": 1,
+            "mean_confidence": 0.45268666858047557
+          },
+          {
+            "low": 0.5,
+            "high": 0.7,
+            "count": 2,
+            "correct": 0,
+            "mean_confidence": 0.5750622939734682
+          },
+          {
+            "low": 0.7,
+            "high": 0.9,
+            "count": 16,
+            "correct": 13,
+            "mean_confidence": 0.8472309323136451
+          },
+          {
+            "low": 0.9,
+            "high": 1.0,
+            "count": 180,
+            "correct": 175,
+            "mean_confidence": 0.9759210673475427
+          }
+        ],
+        "policy": {
+          "0.8": {
+            "count": 193,
+            "errors": 7,
+            "coverage": 0.965,
+            "risk": 0.03626943005181347
+          },
+          "0.9": {
+            "count": 180,
+            "errors": 5,
+            "coverage": 0.9,
+            "risk": 0.027777777777777776
+          },
+          "0.95": {
+            "count": 157,
+            "errors": 0,
+            "coverage": 0.785,
+            "risk": 0.0
+          }
+        },
+        "bytask": {
+          "goal_following:None": {
+            "n": 100,
+            "correct": 93,
+            "nll": 0.1871856056948299,
+            "brier": 0.09834547289952603
+          },
+          "explicit_rule:boundary": {
+            "n": 16,
+            "correct": 16,
+            "nll": 0.004329644665144891,
+            "brier": 5.6009843710195125e-05
+          },
+          "explicit_rule:composite_logic": {
+            "n": 70,
+            "correct": 66,
+            "nll": 0.17805774869005592,
+            "brier": 0.10321847359982565
+          },
+          "explicit_rule:comparison": {
+            "n": 14,
+            "correct": 14,
+            "nll": 0.01391905401685885,
+            "brier": 0.0012795899177792537
+          }
+        },
+        "errors": [
+          {
+            "id": "calibration-gf-0011-c1",
+            "group": "calibration-gf-0011",
+            "family": "goal_following",
+            "kind": null,
+            "template": "seen",
+            "k": 3,
+            "target": "a",
+            "prediction": "c",
+            "correct": false,
+            "pmax": 0.9447294862324964,
+            "ptarget": 0.03516616322361257,
+            "nll": 3.3476709307528294,
+            "brier": 1.823822319656553,
+            "probs": [
+              0.03516616322361257,
+              0.020104350543891047,
+              0.9447294862324964
+            ]
+          },
+          {
+            "id": "calibration-gf-0018-c1",
+            "group": "calibration-gf-0018",
+            "family": "goal_following",
+            "kind": null,
+            "template": "novel",
+            "k": 3,
+            "target": "a",
+            "prediction": "c",
+            "correct": false,
+            "pmax": 0.9378630138291668,
+            "ptarget": 0.045281357631682125,
+            "nll": 3.0948598625048427,
+            "brier": 1.7913588310077817,
+            "probs": [
+              0.045281357631682125,
+              0.016855628539151075,
+              0.9378630138291668
+            ]
+          },
+          {
+            "id": "calibration-gf-0041-c1",
+            "group": "calibration-gf-0041",
+            "family": "goal_following",
+            "kind": null,
+            "template": "novel",
+            "k": 3,
+            "target": "a",
+            "prediction": "c",
+            "correct": false,
+            "pmax": 0.9375445903525516,
+            "ptarget": 0.04576719399276687,
+            "nll": 3.0841877328866136,
+            "brier": 1.7898286035015087,
+            "probs": [
+              0.04576719399276687,
+              0.016688215654681624,
+              0.9375445903525516
+            ]
+          },
+          {
+            "id": "calibration-er-0035-c1",
+            "group": "calibration-er-0035",
+            "family": "explicit_rule",
+            "kind": "composite_logic",
+            "template": "novel",
+            "k": 2,
+            "target": "wait",
+            "prediction": "heal",
+            "correct": false,
+            "pmax": 0.9218267078379699,
+            "ptarget": 0.07817329216203,
+            "nll": 2.5488272222212225,
+            "brier": 1.69952895856678,
+            "probs": [
+              0.9218267078379699,
+              0.07817329216203
+            ]
+          },
+          {
+            "id": "calibration-er-0097-c1",
+            "group": "calibration-er-0097",
+            "family": "explicit_rule",
+            "kind": "composite_logic",
+            "template": "novel",
+            "k": 2,
+            "target": "wait",
+            "prediction": "heal",
+            "correct": false,
+            "pmax": 0.9139147708035174,
+            "ptarget": 0.08608522919648265,
+            "nll": 2.4524174363133513,
+            "brier": 1.6704804165856912,
+            "probs": [
+              0.9139147708035174,
+              0.08608522919648265
+            ]
+          },
+          {
+            "id": "calibration-er-0081-c1",
+            "group": "calibration-er-0081",
+            "family": "explicit_rule",
+            "kind": "composite_logic",
+            "template": "novel",
+            "k": 2,
+            "target": "wait",
+            "prediction": "heal",
+            "correct": false,
+            "pmax": 0.8990708072321891,
+            "ptarget": 0.10092919276781089,
+            "nll": 2.293336069704392,
+            "brier": 1.6166566328342804,
+            "probs": [
+              0.8990708072321891,
+              0.10092919276781089
+            ]
+          },
+          {
+            "id": "calibration-er-0083-c1",
+            "group": "calibration-er-0083",
+            "family": "explicit_rule",
+            "kind": "composite_logic",
+            "template": "novel",
+            "k": 2,
+            "target": "wait",
+            "prediction": "heal",
+            "correct": false,
+            "pmax": 0.8880514094184732,
+            "ptarget": 0.11194859058152698,
+            "nll": 2.1897155257305414,
+            "brier": 1.577270611540273,
+            "probs": [
+              0.8880514094184732,
+              0.11194859058152698
+            ]
+          },
+          {
+            "id": "calibration-gf-0026-c1",
+            "group": "calibration-gf-0026",
+            "family": "goal_following",
+            "kind": null,
+            "template": "seen",
+            "k": 3,
+            "target": "a",
+            "prediction": "c",
+            "correct": false,
+            "pmax": 0.7783791204978496,
+            "ptarget": 0.1608707883646243,
+            "nll": 1.8271537929602117,
+            "brier": 1.3137024626200307,
+            "probs": [
+              0.1608707883646243,
+              0.06075009113752605,
+              0.7783791204978496
+            ]
+          },
+          {
+            "id": "calibration-gf-0006-c1",
+            "group": "calibration-gf-0006",
+            "family": "goal_following",
+            "kind": null,
+            "template": "novel",
+            "k": 3,
+            "target": "a",
+            "prediction": "c",
+            "correct": false,
+            "pmax": 0.6432259724950012,
+            "ptarget": 0.31372203576232327,
+            "nll": 1.1592479215527607,
+            "brier": 0.8865705698833615,
+            "probs": [
+              0.31372203576232327,
+              0.043051991742675294,
+              0.6432259724950012
+            ]
+          },
+          {
+            "id": "calibration-gf-0021-c1",
+            "group": "calibration-gf-0021",
+            "family": "goal_following",
+            "kind": null,
+            "template": "seen",
+            "k": 3,
+            "target": "b",
+            "prediction": "c",
+            "correct": false,
+            "pmax": 0.5068986154519352,
+            "ptarget": 0.24469777298496764,
+            "nll": 1.4077314095762836,
+            "brier": 0.8891320147185464,
+            "probs": [
+              0.2484036115630972,
+              0.24469777298496764,
+              0.5068986154519352
+            ]
+          },
+          {
+            "id": "calibration-gf-0001-c1",
+            "group": "calibration-gf-0001",
+            "family": "goal_following",
+            "kind": null,
+            "template": "seen",
+            "k": 3,
+            "target": "c",
+            "prediction": "a",
+            "correct": false,
+            "pmax": 0.4076837180365462,
+            "ptarget": 0.3429224140270495,
+            "nll": 1.0702510555747295,
+            "brier": 0.660154269304423,
+            "probs": [
+              0.4076837180365462,
+              0.24939386793640436,
+              0.3429224140270495
+            ]
+          }
+        ]
+      }
+    },
+    "fresh_eval": {
+      "T1": {
+        "n": 200,
+        "correct": 188,
+        "nll": 0.3489477139260247,
+        "brier": 0.11794976918880855,
+        "pairs": {
+          "total": 100,
+          "both": 88,
+          "diff": {
+            "count": 51,
+            "both": 41
+          },
+          "same": {
+            "count": 49,
+            "both": 47
+          }
+        },
+        "bins": [
+          {
+            "low": 0,
+            "high": 0.5,
+            "count": 0,
+            "correct": 0,
+            "mean_confidence": null
+          },
+          {
+            "low": 0.5,
+            "high": 0.7,
+            "count": 1,
+            "correct": 1,
+            "mean_confidence": 0.5398652074329918
+          },
+          {
+            "low": 0.7,
+            "high": 0.9,
+            "count": 2,
+            "correct": 1,
+            "mean_confidence": 0.7999738210000754
+          },
+          {
+            "low": 0.9,
+            "high": 1.0,
+            "count": 197,
+            "correct": 186,
+            "mean_confidence": 0.9983567498441633
+          }
+        ],
+        "policy": {
+          "0.8": {
+            "count": 198,
+            "errors": 12,
+            "coverage": 0.99,
+            "risk": 0.06060606060606061
+          },
+          "0.9": {
+            "count": 197,
+            "errors": 11,
+            "coverage": 0.985,
+            "risk": 0.05583756345177665
+          },
+          "0.95": {
+            "count": 195,
+            "errors": 10,
+            "coverage": 0.975,
+            "risk": 0.05128205128205128
+          }
+        },
+        "bytask": {
+          "goal_following:None": {
+            "n": 100,
+            "correct": 93,
+            "nll": 0.4015439345745898,
+            "brier": 0.13886823425259884
+          },
+          "explicit_rule:comparison": {
+            "n": 14,
+            "correct": 14,
+            "nll": 1.4259322018388737e-07,
+            "brier": 6.551708035801306e-14
+          },
+          "explicit_rule:composite_logic": {
+            "n": 70,
+            "correct": 65,
+            "nll": 0.42335917387780336,
+            "brier": 0.13861614874954148
+          },
+          "explicit_rule:boundary": {
+            "n": 16,
+            "correct": 16,
+            "nll": 3.2249966437636335e-07,
+            "brier": 2.0628056593719395e-12
+          }
+        },
+        "errors": [
+          {
+            "id": "fresh_eval-er-0005-c1",
+            "group": "fresh_eval-er-0005",
+            "family": "explicit_rule",
+            "kind": "composite_logic",
+            "template": "novel",
+            "k": 2,
+            "target": "wait",
+            "prediction": "heal",
+            "correct": false,
+            "pmax": 0.9996589849892165,
+            "ptarget": 0.00034101501078370185,
+            "nll": 7.9835840617560505,
+            "brier": 1.9986361725393407,
+            "probs": [
+              0.9996589849892165,
+              0.00034101501078370185
+            ]
+          },
+          {
+            "id": "fresh_eval-gf-0032-c1",
+            "group": "fresh_eval-gf-0032",
+            "family": "goal_following",
+            "kind": null,
+            "template": "seen",
+            "k": 3,
+            "target": "c",
+            "prediction": "a",
+            "correct": false,
+            "pmax": 0.9995669599351819,
+            "ptarget": 0.00043001849954735346,
+            "nll": 7.751682327998947,
+            "brier": 1.9982742553200064,
+            "probs": [
+              0.9995669599351819,
+              3.021565270865575e-06,
+              0.00043001849954735346
+            ]
+          },
+          {
+            "id": "fresh_eval-er-0083-c1",
+            "group": "fresh_eval-er-0083",
+            "family": "explicit_rule",
+            "kind": "composite_logic",
+            "template": "novel",
+            "k": 2,
+            "target": "wait",
+            "prediction": "heal",
+            "correct": false,
+            "pmax": 0.9995600852715864,
+            "ptarget": 0.00043991472841327817,
+            "nll": 7.728929648894163,
+            "brier": 1.9982407281362826,
+            "probs": [
+              0.9995600852715864,
+              0.00043991472841327817
+            ]
+          },
+          {
+            "id": "fresh_eval-er-0085-c1",
+            "group": "fresh_eval-er-0085",
+            "family": "explicit_rule",
+            "kind": "composite_logic",
+            "template": "novel",
+            "k": 2,
+            "target": "wait",
+            "prediction": "heal",
+            "correct": false,
+            "pmax": 0.9992936189907659,
+            "ptarget": 0.0007063810092339289,
+            "nll": 7.255355792906331,
+            "brier": 1.9971754739113243,
+            "probs": [
+              0.9992936189907659,
+              0.0007063810092339289
+            ]
+          },
+          {
+            "id": "fresh_eval-gf-0013-c1",
+            "group": "fresh_eval-gf-0013",
+            "family": "goal_following",
+            "kind": null,
+            "template": "seen",
+            "k": 3,
+            "target": "a",
+            "prediction": "b",
+            "correct": false,
+            "pmax": 0.9990436785517339,
+            "ptarget": 0.00041176096706500013,
+            "nll": 7.795067554009263,
+            "brier": 1.997265215813262,
+            "probs": [
+              0.00041176096706500013,
+              0.9990436785517339,
+              0.0005445604812007405
+            ]
+          },
+          {
+            "id": "fresh_eval-gf-0026-c1",
+            "group": "fresh_eval-gf-0026",
+            "family": "goal_following",
+            "kind": null,
+            "template": "seen",
+            "k": 3,
+            "target": "a",
+            "prediction": "c",
+            "correct": false,
+            "pmax": 0.9980229093116302,
+            "ptarget": 0.001790246504687446,
+            "nll": 6.325401956495025,
+            "brier": 1.9924724743947722,
+            "probs": [
+              0.001790246504687446,
+              0.00018684418368222866,
+              0.9980229093116302
+            ]
+          },
+          {
+            "id": "fresh_eval-gf-0011-c1",
+            "group": "fresh_eval-gf-0011",
+            "family": "goal_following",
+            "kind": null,
+            "template": "novel",
+            "k": 3,
+            "target": "c",
+            "prediction": "a",
+            "correct": false,
+            "pmax": 0.9969063672792264,
+            "ptarget": 0.003080486634935716,
+            "nll": 5.782667696121328,
+            "brier": 1.98767082142272,
+            "probs": [
+              0.9969063672792264,
+              1.3146085837737633e-05,
+              0.003080486634935716
+            ]
+          },
+          {
+            "id": "fresh_eval-gf-0043-c1",
+            "group": "fresh_eval-gf-0043",
+            "family": "goal_following",
+            "kind": null,
+            "template": "novel",
+            "k": 3,
+            "target": "b",
+            "prediction": "c",
+            "correct": false,
+            "pmax": 0.995813839644504,
+            "ptarget": 0.003671519856020519,
+            "nll": 5.607149572937834,
+            "brier": 1.9843159084283857,
+            "probs": [
+              0.0005146404994756331,
+              0.003671519856020519,
+              0.995813839644504
+            ]
+          },
+          {
+            "id": "fresh_eval-er-0013-c2",
+            "group": "fresh_eval-er-0013",
+            "family": "explicit_rule",
+            "kind": "composite_logic",
+            "template": "seen",
+            "k": 2,
+            "target": "wait",
+            "prediction": "heal",
+            "correct": false,
+            "pmax": 0.9632323747120742,
+            "ptarget": 0.03676762528792582,
+            "nll": 3.3031375686230042,
+            "brier": 1.8556332153869233,
+            "probs": [
+              0.9632323747120742,
+              0.03676762528792582
+            ]
+          },
+          {
+            "id": "fresh_eval-er-0077-c1",
+            "group": "fresh_eval-er-0077",
+            "family": "explicit_rule",
+            "kind": "composite_logic",
+            "template": "novel",
+            "k": 2,
+            "target": "wait",
+            "prediction": "heal",
+            "correct": false,
+            "pmax": 0.9620830251614849,
+            "ptarget": 0.03791697483851491,
+            "nll": 3.2723563822430313,
+            "brier": 1.8512074946077492,
+            "probs": [
+              0.9620830251614849,
+              0.03791697483851491
+            ]
+          },
+          {
+            "id": "fresh_eval-gf-0046-c1",
+            "group": "fresh_eval-gf-0046",
+            "family": "goal_following",
+            "kind": null,
+            "template": "seen",
+            "k": 3,
+            "target": "a",
+            "prediction": "b",
+            "correct": false,
+            "pmax": 0.9413504554466411,
+            "ptarget": 0.03914780912009001,
+            "nll": 3.2404108192838788,
+            "brier": 1.809757930373231,
+            "probs": [
+              0.03914780912009001,
+              0.9413504554466411,
+              0.019501735433269003
+            ]
+          },
+          {
+            "id": "fresh_eval-gf-0006-c1",
+            "group": "fresh_eval-gf-0006",
+            "family": "goal_following",
+            "kind": null,
+            "template": "seen",
+            "k": 3,
+            "target": "b",
+            "prediction": "a",
+            "correct": false,
+            "pmax": 0.847862846488663,
+            "ptarget": 0.06986290586367117,
+            "nll": 2.6612204449393033,
+            "brier": 1.5907954721702215,
+            "probs": [
+              0.847862846488663,
+              0.06986290586367117,
+              0.08227424764766597
+            ]
+          }
+        ]
+      },
+      "Tcal": {
+        "n": 200,
+        "correct": 188,
+        "nll": 0.16753910792706403,
+        "brier": 0.0957209795404529,
+        "pairs": {
+          "total": 100,
+          "both": 88,
+          "diff": {
+            "count": 51,
+            "both": 41
+          },
+          "same": {
+            "count": 49,
+            "both": 47
+          }
+        },
+        "bins": [
+          {
+            "low": 0,
+            "high": 0.5,
+            "count": 2,
+            "correct": 2,
+            "mean_confidence": 0.4790098390809771
+          },
+          {
+            "low": 0.5,
+            "high": 0.7,
+            "count": 3,
+            "correct": 1,
+            "mean_confidence": 0.587279235666822
+          },
+          {
+            "low": 0.7,
+            "high": 0.9,
+            "count": 27,
+            "correct": 21,
+            "mean_confidence": 0.8364969707927526
+          },
+          {
+            "low": 0.9,
+            "high": 1.0,
+            "count": 168,
+            "correct": 164,
+            "mean_confidence": 0.9791664346450397
+          }
+        ],
+        "policy": {
+          "0.8": {
+            "count": 188,
+            "errors": 7,
+            "coverage": 0.94,
+            "risk": 0.03723404255319149
+          },
+          "0.9": {
+            "count": 168,
+            "errors": 4,
+            "coverage": 0.84,
+            "risk": 0.023809523809523808
+          },
+          "0.95": {
+            "count": 152,
+            "errors": 0,
+            "coverage": 0.76,
+            "risk": 0.0
+          }
+        },
+        "bytask": {
+          "goal_following:None": {
+            "n": 100,
+            "correct": 93,
+            "nll": 0.1974509646678349,
+            "brier": 0.11111274977262293
+          },
+          "explicit_rule:comparison": {
+            "n": 14,
+            "correct": 14,
+            "nll": 0.005783880466128584,
+            "brier": 7.221782734525111e-05
+          },
+          "explicit_rule:composite_logic": {
+            "n": 70,
+            "correct": 65,
+            "nll": 0.1942847403581544,
+            "brier": 0.11472276100843068
+          },
+          "explicit_rule:boundary": {
+            "n": 16,
+            "correct": 16,
+            "nll": 0.005113685439544269,
+            "brier": 8.228816595679122e-05
+          }
+        },
+        "errors": [
+          {
+            "id": "fresh_eval-er-0005-c1",
+            "group": "fresh_eval-er-0005",
+            "family": "explicit_rule",
+            "kind": "composite_logic",
+            "template": "novel",
+            "k": 2,
+            "target": "wait",
+            "prediction": "heal",
+            "correct": false,
+            "pmax": 0.9287217454535089,
+            "ptarget": 0.07127825454649098,
+            "nll": 2.641163983402076,
+            "brier": 1.7250481609564248,
+            "probs": [
+              0.9287217454535089,
+              0.07127825454649098
+            ]
+          },
+          {
+            "id": "fresh_eval-er-0083-c1",
+            "group": "fresh_eval-er-0083",
+            "family": "explicit_rule",
+            "kind": "composite_logic",
+            "template": "novel",
+            "k": 2,
+            "target": "wait",
+            "prediction": "heal",
+            "correct": false,
+            "pmax": 0.9231045193406222,
+            "ptarget": 0.07689548065937792,
+            "nll": 2.5653081732563123,
+            "brier": 1.7042439072541622,
+            "probs": [
+              0.9231045193406222,
+              0.07689548065937792
+            ]
+          },
+          {
+            "id": "fresh_eval-er-0085-c1",
+            "group": "fresh_eval-er-0085",
+            "family": "explicit_rule",
+            "kind": "composite_logic",
+            "template": "novel",
+            "k": 2,
+            "target": "wait",
+            "prediction": "heal",
+            "correct": false,
+            "pmax": 0.9115669863129887,
+            "ptarget": 0.0884330136870114,
+            "nll": 2.4255099210587536,
+            "brier": 1.661908741071489,
+            "probs": [
+              0.9115669863129887,
+              0.0884330136870114
+            ]
+          },
+          {
+            "id": "fresh_eval-gf-0032-c1",
+            "group": "fresh_eval-gf-0032",
+            "family": "goal_following",
+            "kind": null,
+            "template": "seen",
+            "k": 3,
+            "target": "c",
+            "prediction": "a",
+            "correct": false,
+            "pmax": 0.9095184208228276,
+            "ptarget": 0.07521126102495362,
+            "nll": 2.5874543115651507,
+            "brier": 1.6826911521675767,
+            "probs": [
+              0.9095184208228276,
+              0.015270318152218834,
+              0.07521126102495362
+            ]
+          },
+          {
+            "id": "fresh_eval-gf-0013-c1",
+            "group": "fresh_eval-gf-0013",
+            "family": "goal_following",
+            "kind": null,
+            "template": "seen",
+            "k": 3,
+            "target": "a",
+            "prediction": "b",
+            "correct": false,
+            "pmax": 0.8541209065960869,
+            "ptarget": 0.06966341089340945,
+            "nll": 2.664080050364908,
+            "brier": 1.6008575223755483,
+            "probs": [
+              0.06966341089340945,
+              0.8541209065960869,
+              0.07621568251050381
+            ]
+          },
+          {
+            "id": "fresh_eval-gf-0011-c1",
+            "group": "fresh_eval-gf-0011",
+            "family": "goal_following",
+            "kind": null,
+            "template": "novel",
+            "k": 3,
+            "target": "c",
+            "prediction": "a",
+            "correct": false,
+            "pmax": 0.8454102500260563,
+            "ptarget": 0.13179560945581165,
+            "nll": 2.0265029696399766,
+            "brier": 1.4690169274512848,
+            "probs": [
+              0.8454102500260563,
+              0.022794140518131938,
+              0.13179560945581165
+            ]
+          },
+          {
+            "id": "fresh_eval-gf-0026-c1",
+            "group": "fresh_eval-gf-0026",
+            "family": "goal_following",
+            "kind": null,
+            "template": "seen",
+            "k": 3,
+            "target": "a",
+            "prediction": "c",
+            "correct": false,
+            "pmax": 0.8374065795703037,
+            "ptarget": 0.10960136505286747,
+            "nll": 2.2109054496838536,
+            "brier": 1.4968676665564133,
+            "probs": [
+              0.10960136505286747,
+              0.052992055376828856,
+              0.8374065795703037
+            ]
+          },
+          {
+            "id": "fresh_eval-gf-0043-c1",
+            "group": "fresh_eval-gf-0043",
+            "family": "goal_following",
+            "kind": null,
+            "template": "novel",
+            "k": 3,
+            "target": "b",
+            "prediction": "c",
+            "correct": false,
+            "pmax": 0.7982610345039851,
+            "ptarget": 0.13171769384366463,
+            "nll": 2.0270943296467925,
+            "brier": 1.3960378208753488,
+            "probs": [
+              0.07002127165235028,
+              0.13171769384366463,
+              0.7982610345039851
+            ]
+          },
+          {
+            "id": "fresh_eval-er-0013-c2",
+            "group": "fresh_eval-er-0013",
+            "family": "explicit_rule",
+            "kind": "composite_logic",
+            "template": "seen",
+            "k": 2,
+            "target": "wait",
+            "prediction": "heal",
+            "correct": false,
+            "pmax": 0.7408061481008905,
+            "ptarget": 0.2591938518991095,
+            "nll": 1.3501790343103703,
+            "brier": 1.097587498128157,
+            "probs": [
+              0.7408061481008905,
+              0.2591938518991095
+            ]
+          },
+          {
+            "id": "fresh_eval-er-0077-c1",
+            "group": "fresh_eval-er-0077",
+            "family": "explicit_rule",
+            "kind": "composite_logic",
+            "template": "novel",
+            "k": 2,
+            "target": "wait",
+            "prediction": "heal",
+            "correct": false,
+            "pmax": 0.7388269116394263,
+            "ptarget": 0.2611730883605737,
+            "nll": 1.3425719176667108,
+            "brier": 1.0917304107253054,
+            "probs": [
+              0.7388269116394263,
+              0.2611730883605737
+            ]
+          },
+          {
+            "id": "fresh_eval-gf-0046-c1",
+            "group": "fresh_eval-gf-0046",
+            "family": "goal_following",
+            "kind": null,
+            "template": "seen",
+            "k": 3,
+            "target": "a",
+            "prediction": "b",
+            "correct": false,
+            "pmax": 0.6071229025841879,
+            "ptarget": 0.21835659087342557,
+            "nll": 1.5216258146037838,
+            "brier": 1.0100220450770738,
+            "probs": [
+              0.21835659087342557,
+              0.6071229025841879,
+              0.17452050654238652
+            ]
+          },
+          {
+            "id": "fresh_eval-gf-0006-c1",
+            "group": "fresh_eval-gf-0006",
+            "family": "goal_following",
+            "kind": null,
+            "template": "seen",
+            "k": 3,
+            "target": "b",
+            "prediction": "a",
+            "correct": false,
+            "pmax": 0.5207198924578221,
+            "ptarget": 0.23334075191719658,
+            "nll": 1.4552554391814159,
+            "brier": 0.9194017757174062,
+            "probs": [
+              0.5207198924578221,
+              0.23334075191719658,
+              0.24593935562498132
+            ]
+          }
+        ]
+      },
+      "Tserved": {
+        "n": 200,
+        "correct": 188,
+        "nll": 0.16753912952795338,
+        "brier": 0.09572091038320889,
+        "pairs": {
+          "total": 100,
+          "both": 88,
+          "diff": {
+            "count": 51,
+            "both": 41
+          },
+          "same": {
+            "count": 49,
+            "both": 47
+          }
+        },
+        "bins": [
+          {
+            "low": 0,
+            "high": 0.5,
+            "count": 2,
+            "correct": 2,
+            "mean_confidence": 0.47900937359123996
+          },
+          {
+            "low": 0.5,
+            "high": 0.7,
+            "count": 3,
+            "correct": 1,
+            "mean_confidence": 0.5872781958590844
+          },
+          {
+            "low": 0.7,
+            "high": 0.9,
+            "count": 27,
+            "correct": 21,
+            "mean_confidence": 0.8364958889238792
+          },
+          {
+            "low": 0.9,
+            "high": 1.0,
+            "count": 168,
+            "correct": 164,
+            "mean_confidence": 0.9791661074019389
+          }
+        ],
+        "policy": {
+          "0.8": {
+            "count": 188,
+            "errors": 7,
+            "coverage": 0.94,
+            "risk": 0.03723404255319149
+          },
+          "0.9": {
+            "count": 168,
+            "errors": 4,
+            "coverage": 0.84,
+            "risk": 0.023809523809523808
+          },
+          "0.95": {
+            "count": 152,
+            "errors": 0,
+            "coverage": 0.76,
+            "risk": 0.0
+          }
+        },
+        "bytask": {
+          "goal_following:None": {
+            "n": 100,
+            "correct": 93,
+            "nll": 0.19745103785516066,
+            "brier": 0.1111126497342631
+          },
+          "explicit_rule:comparison": {
+            "n": 14,
+            "correct": 14,
+            "nll": 0.0057840074647942386,
+            "brier": 7.222094259795384e-05
+          },
+          "explicit_rule:composite_logic": {
+            "n": 70,
+            "correct": 65,
+            "nll": 0.19428464682628505,
+            "brier": 0.11472270496815248
+          },
+          "explicit_rule:boundary": {
+            "n": 16,
+            "correct": 16,
+            "nll": 0.005113796107971864,
+            "brier": 8.229139052624864e-05
+          }
+        },
+        "errors": [
+          {
+            "id": "fresh_eval-er-0005-c1",
+            "group": "fresh_eval-er-0005",
+            "family": "explicit_rule",
+            "kind": "composite_logic",
+            "template": "novel",
+            "k": 2,
+            "target": "wait",
+            "prediction": "heal",
+            "correct": false,
+            "pmax": 0.9287210121770475,
+            "ptarget": 0.07127898782295254,
+            "nll": 2.6411536959350994,
+            "brier": 1.7250454369183192,
+            "probs": [
+              0.9287210121770475,
+              0.07127898782295254
+            ]
+          },
+          {
+            "id": "fresh_eval-er-0083-c1",
+            "group": "fresh_eval-er-0083",
+            "family": "explicit_rule",
+            "kind": "composite_logic",
+            "template": "novel",
+            "k": 2,
+            "target": "wait",
+            "prediction": "heal",
+            "correct": false,
+            "pmax": 0.9231037581525826,
+            "ptarget": 0.07689624184741718,
+            "nll": 2.5652982743095176,
+            "brier": 1.7042410966308439,
+            "probs": [
+              0.9231037581525826,
+              0.07689624184741718
+            ]
+          },
+          {
+            "id": "fresh_eval-er-0085-c1",
+            "group": "fresh_eval-er-0085",
+            "family": "explicit_rule",
+            "kind": "composite_logic",
+            "template": "novel",
+            "k": 2,
+            "target": "wait",
+            "prediction": "heal",
+            "correct": false,
+            "pmax": 0.9115661748571482,
+            "ptarget": 0.08843382514285185,
+            "nll": 2.4255007451629687,
+            "brier": 1.6619057822873857,
+            "probs": [
+              0.9115661748571482,
+              0.08843382514285185
+            ]
+          },
+          {
+            "id": "fresh_eval-gf-0032-c1",
+            "group": "fresh_eval-gf-0032",
+            "family": "goal_following",
+            "kind": null,
+            "template": "seen",
+            "k": 3,
+            "target": "c",
+            "prediction": "a",
+            "correct": false,
+            "pmax": 0.9095174401821625,
+            "ptarget": 0.07521198884215027,
+            "nll": 2.587444634640908,
+            "brier": 1.6826880299147282,
+            "probs": [
+              0.9095174401821625,
+              0.015270570975687113,
+              0.07521198884215027
+            ]
+          },
+          {
+            "id": "fresh_eval-gf-0013-c1",
+            "group": "fresh_eval-gf-0013",
+            "family": "goal_following",
+            "kind": null,
+            "template": "seen",
+            "k": 3,
+            "target": "a",
+            "prediction": "b",
+            "correct": false,
+            "pmax": 0.8541195843591866,
+            "ptarget": 0.06966405643418276,
+            "nll": 2.6640707838392803,
+            "brier": 1.6008541656871231,
+            "probs": [
+              0.06966405643418276,
+              0.8541195843591866,
+              0.07621635920663081
+            ]
+          },
+          {
+            "id": "fresh_eval-gf-0011-c1",
+            "group": "fresh_eval-gf-0011",
+            "family": "goal_following",
+            "kind": null,
+            "template": "novel",
+            "k": 3,
+            "target": "c",
+            "prediction": "a",
+            "correct": false,
+            "pmax": 0.8454090560553505,
+            "ptarget": 0.13179648023900095,
+            "nll": 2.026496362588981,
+            "brier": 1.4690134113614146,
+            "probs": [
+              0.8454090560553505,
+              0.022794463705648416,
+              0.13179648023900095
+            ]
+          },
+          {
+            "id": "fresh_eval-gf-0026-c1",
+            "group": "fresh_eval-gf-0026",
+            "family": "goal_following",
+            "kind": null,
+            "template": "seen",
+            "k": 3,
+            "target": "a",
+            "prediction": "c",
+            "correct": false,
+            "pmax": 0.8374052457858805,
+            "ptarget": 0.10960215212584032,
+            "nll": 2.2108982684763347,
+            "brier": 1.496864089044733,
+            "probs": [
+              0.10960215212584032,
+              0.0529926020882792,
+              0.8374052457858805
+            ]
+          },
+          {
+            "id": "fresh_eval-gf-0043-c1",
+            "group": "fresh_eval-gf-0043",
+            "family": "goal_following",
+            "kind": null,
+            "template": "novel",
+            "k": 3,
+            "target": "b",
+            "prediction": "c",
+            "correct": false,
+            "pmax": 0.7982596301353704,
+            "ptarget": 0.13171848612851317,
+            "nll": 2.0270883146427137,
+            "brier": 1.3960342886367734,
+            "probs": [
+              0.07002188373611655,
+              0.13171848612851317,
+              0.7982596301353704
+            ]
+          },
+          {
+            "id": "fresh_eval-er-0013-c2",
+            "group": "fresh_eval-er-0013",
+            "family": "explicit_rule",
+            "kind": "composite_logic",
+            "template": "seen",
+            "k": 2,
+            "target": "wait",
+            "prediction": "heal",
+            "correct": false,
+            "pmax": 0.7408052780460354,
+            "ptarget": 0.25919472195396465,
+            "nll": 1.3501756775432692,
+            "brier": 1.0975849199617276,
+            "probs": [
+              0.7408052780460354,
+              0.25919472195396465
+            ]
+          },
+          {
+            "id": "fresh_eval-er-0077-c1",
+            "group": "fresh_eval-er-0077",
+            "family": "explicit_rule",
+            "kind": "composite_logic",
+            "template": "novel",
+            "k": 2,
+            "target": "wait",
+            "prediction": "heal",
+            "correct": false,
+            "pmax": 0.7388260458441046,
+            "ptarget": 0.26117395415589545,
+            "nll": 1.3425686026471881,
+            "brier": 1.0917278520352698,
+            "probs": [
+              0.7388260458441046,
+              0.26117395415589545
+            ]
+          },
+          {
+            "id": "fresh_eval-gf-0046-c1",
+            "group": "fresh_eval-gf-0046",
+            "family": "goal_following",
+            "kind": null,
+            "template": "seen",
+            "k": 3,
+            "target": "a",
+            "prediction": "b",
+            "correct": false,
+            "pmax": 0.6071217476894688,
+            "ptarget": 0.2183571389653947,
+            "nll": 1.5216233045294185,
+            "brier": 1.0100199977271043,
+            "probs": [
+              0.2183571389653947,
+              0.6071217476894688,
+              0.1745211133451366
+            ]
+          },
+          {
+            "id": "fresh_eval-gf-0006-c1",
+            "group": "fresh_eval-gf-0006",
+            "family": "goal_following",
+            "kind": null,
+            "template": "seen",
+            "k": 3,
+            "target": "b",
+            "prediction": "a",
+            "correct": false,
+            "pmax": 0.52071905711691,
+            "ptarget": 0.23334118577628035,
+            "nll": 1.4552535798461868,
+            "brier": 0.9194004379974001,
+            "probs": [
+              0.52071905711691,
+              0.23334118577628035,
+              0.24593975710680963
+            ]
+          }
+        ]
+      }
+    },
+    "eval_v2": {
+      "T1": {
+        "n": 200,
+        "correct": 195,
+        "nll": 0.1537999761314747,
+        "brier": 0.04843465712562346,
+        "pairs": {
+          "total": 100,
+          "both": 95,
+          "diff": {
+            "count": 47,
+            "both": 43
+          },
+          "same": {
+            "count": 53,
+            "both": 52
+          }
+        },
+        "bins": [
+          {
+            "low": 0,
+            "high": 0.5,
+            "count": 0,
+            "correct": 0,
+            "mean_confidence": null
+          },
+          {
+            "low": 0.5,
+            "high": 0.7,
+            "count": 1,
+            "correct": 1,
+            "mean_confidence": 0.5592772946010163
+          },
+          {
+            "low": 0.7,
+            "high": 0.9,
+            "count": 3,
+            "correct": 2,
+            "mean_confidence": 0.7982329124748158
+          },
+          {
+            "low": 0.9,
+            "high": 1.0,
+            "count": 196,
+            "correct": 192,
+            "mean_confidence": 0.9993037757713257
+          }
+        ],
+        "policy": {
+          "0.8": {
+            "count": 197,
+            "errors": 4,
+            "coverage": 0.985,
+            "risk": 0.02030456852791878
+          },
+          "0.9": {
+            "count": 196,
+            "errors": 4,
+            "coverage": 0.98,
+            "risk": 0.02040816326530612
+          },
+          "0.95": {
+            "count": 196,
+            "errors": 4,
+            "coverage": 0.98,
+            "risk": 0.02040816326530612
+          }
+        },
+        "bytask": {
+          "goal_following:None": {
+            "n": 100,
+            "correct": 99,
+            "nll": 0.0714676894891584,
+            "brier": 0.020765595206864863
+          },
+          "explicit_rule:boundary": {
+            "n": 38,
+            "correct": 38,
+            "nll": 1.5582318930904442e-06,
+            "brier": 6.933678285032375e-11
+          },
+          "explicit_rule:composite_logic": {
+            "n": 20,
+            "correct": 17,
+            "nll": 1.0668343817441979,
+            "brier": 0.2995748803985788
+          },
+          "explicit_rule:comparison": {
+            "n": 42,
+            "correct": 41,
+            "nll": 0.05420189118293343,
+            "brier": 0.038544626043615055
+          }
+        },
+        "errors": [
+          {
+            "id": "eval_v2-er-0003-c1",
+            "group": "eval_v2-er-0003",
+            "family": "explicit_rule",
+            "kind": "composite_logic",
+            "template": "novel",
+            "k": 2,
+            "target": "wait",
+            "prediction": "heal",
+            "correct": false,
+            "pmax": 0.9991908802226234,
+            "ptarget": 0.0008091197773770253,
+            "nll": 7.119563595774737,
+            "brier": 1.9967648302401209,
+            "probs": [
+              0.9991908802226234,
+              0.0008091197773770253
+            ]
+          },
+          {
+            "id": "eval_v2-er-0087-c1",
+            "group": "eval_v2-er-0087",
+            "family": "explicit_rule",
+            "kind": "composite_logic",
+            "template": "novel",
+            "k": 2,
+            "target": "wait",
+            "prediction": "heal",
+            "correct": false,
+            "pmax": 0.9991600762337634,
+            "ptarget": 0.0008399237662367977,
+            "nll": 7.082199424725355,
+            "brier": 1.9966417158789194,
+            "probs": [
+              0.9991600762337634,
+              0.0008399237662367977
+            ]
+          },
+          {
+            "id": "eval_v2-er-0025-c1",
+            "group": "eval_v2-er-0025",
+            "family": "explicit_rule",
+            "kind": "composite_logic",
+            "template": "novel",
+            "k": 2,
+            "target": "wait",
+            "prediction": "heal",
+            "correct": false,
+            "pmax": 0.9991520700544494,
+            "ptarget": 0.0008479299455508657,
+            "nll": 7.072712536963575,
+            "brier": 1.9966097181881823,
+            "probs": [
+              0.9991520700544494,
+              0.0008479299455508657
+            ]
+          },
+          {
+            "id": "eval_v2-gf-0052-c1",
+            "group": "eval_v2-gf-0052",
+            "family": "goal_following",
+            "kind": null,
+            "template": "seen",
+            "k": 3,
+            "target": "c",
+            "prediction": "b",
+            "correct": false,
+            "pmax": 0.9989906361351506,
+            "ptarget": 0.0010092152081490734,
+            "nll": 6.89858227180133,
+            "brier": 1.9959648791847733,
+            "probs": [
+              1.4865670028953842e-07,
+              0.9989906361351506,
+              0.0010092152081490734
+            ]
+          },
+          {
+            "id": "eval_v2-er-0049-c2",
+            "group": "eval_v2-er-0049",
+            "family": "explicit_rule",
+            "kind": "comparison",
+            "template": "novel",
+            "k": 2,
+            "target": "delay",
+            "prediction": "ship",
+            "correct": false,
+            "pmax": 0.767166212183217,
+            "ptarget": 0.232833787816783,
+            "nll": 1.4574304369861317,
+            "brier": 1.1770879942310895,
+            "probs": [
+              0.767166212183217,
+              0.232833787816783
+            ]
+          }
+        ]
+      },
+      "Tcal": {
+        "n": 200,
+        "correct": 195,
+        "nll": 0.08801390995173669,
+        "brier": 0.04649768528015219,
+        "pairs": {
+          "total": 100,
+          "both": 95,
+          "diff": {
+            "count": 47,
+            "both": 43
+          },
+          "same": {
+            "count": 53,
+            "both": 52
+          }
+        },
+        "bins": [
+          {
+            "low": 0,
+            "high": 0.5,
+            "count": 1,
+            "correct": 1,
+            "mean_confidence": 0.49863817005679084
+          },
+          {
+            "low": 0.5,
+            "high": 0.7,
+            "count": 3,
+            "correct": 2,
+            "mean_confidence": 0.5823556879791215
+          },
+          {
+            "low": 0.7,
+            "high": 0.9,
+            "count": 14,
+            "correct": 13,
+            "mean_confidence": 0.8378393013043003
+          },
+          {
+            "low": 0.9,
+            "high": 1.0,
+            "count": 182,
+            "correct": 179,
+            "mean_confidence": 0.982035998241099
+          }
+        ],
+        "policy": {
+          "0.8": {
+            "count": 192,
+            "errors": 4,
+            "coverage": 0.96,
+            "risk": 0.020833333333333332
+          },
+          "0.9": {
+            "count": 182,
+            "errors": 3,
+            "coverage": 0.91,
+            "risk": 0.016483516483516484
+          },
+          "0.95": {
+            "count": 170,
+            "errors": 0,
+            "coverage": 0.85,
+            "risk": 0.0
+          }
+        },
+        "bytask": {
+          "goal_following:None": {
+            "n": 100,
+            "correct": 99,
+            "nll": 0.05643978040620673,
+            "brier": 0.021740311111748886
+          },
+          "explicit_rule:boundary": {
+            "n": 38,
+            "correct": 38,
+            "nll": 0.00601259601823862,
+            "brier": 0.00017074717325477737
+          },
+          "explicit_rule:composite_logic": {
+            "n": 20,
+            "correct": 17,
+            "nll": 0.43961243389219645,
+            "brier": 0.26989345566571715
+          },
+          "explicit_rule:comparison": {
+            "n": 42,
+            "correct": 41,
+            "nll": 0.0699542053140397,
+            "brier": 0.040979724737083924
+          }
+        },
+        "errors": [
+          {
+            "id": "eval_v2-er-0003-c1",
+            "group": "eval_v2-er-0003",
+            "family": "explicit_rule",
+            "kind": "composite_logic",
+            "template": "novel",
+            "k": 2,
+            "target": "wait",
+            "prediction": "heal",
+            "correct": false,
+            "pmax": 0.9079802311508574,
+            "ptarget": 0.0920197688491427,
+            "nll": 2.385751846221209,
+            "brier": 1.6488562003215288,
+            "probs": [
+              0.9079802311508574,
+              0.0920197688491427
+            ]
+          },
+          {
+            "id": "eval_v2-er-0087-c1",
+            "group": "eval_v2-er-0087",
+            "family": "explicit_rule",
+            "kind": "composite_logic",
+            "template": "novel",
+            "k": 2,
+            "target": "wait",
+            "prediction": "heal",
+            "correct": false,
+            "pmax": 0.9069705479533032,
+            "ptarget": 0.09302945204669673,
+            "nll": 2.3748391472899963,
+            "brier": 1.6451911497094303,
+            "probs": [
+              0.9069705479533032,
+              0.09302945204669673
+            ]
+          },
+          {
+            "id": "eval_v2-er-0025-c1",
+            "group": "eval_v2-er-0025",
+            "family": "explicit_rule",
+            "kind": "composite_logic",
+            "template": "novel",
+            "k": 2,
+            "target": "wait",
+            "prediction": "heal",
+            "correct": false,
+            "pmax": 0.9067126029534154,
+            "ptarget": 0.09328739704658469,
+            "nll": 2.3720702601395005,
+            "brier": 1.6442554887091156,
+            "probs": [
+              0.9067126029534154,
+              0.09328739704658469
+            ]
+          },
+          {
+            "id": "eval_v2-gf-0052-c1",
+            "group": "eval_v2-gf-0052",
+            "family": "goal_following",
+            "kind": null,
+            "template": "seen",
+            "k": 3,
+            "target": "c",
+            "prediction": "b",
+            "correct": false,
+            "pmax": 0.8967069870751521,
+            "ptarget": 0.09757649924430332,
+            "nll": 2.3271186009881157,
+            "brier": 1.6184842739142238,
+            "probs": [
+              0.005716513680544776,
+              0.8967069870751521,
+              0.09757649924430332
+            ]
+          },
+          {
+            "id": "eval_v2-er-0049-c2",
+            "group": "eval_v2-er-0049",
+            "family": "explicit_rule",
+            "kind": "comparison",
+            "template": "novel",
+            "k": 2,
+            "target": "delay",
+            "prediction": "ship",
+            "correct": false,
+            "pmax": 0.5947025527760552,
+            "ptarget": 0.4052974472239447,
+            "nll": 0.9031340438529191,
+            "brier": 0.7073422525567137,
+            "probs": [
+              0.5947025527760552,
+              0.4052974472239447
+            ]
+          }
+        ]
+      },
+      "Tserved": {
+        "n": 200,
+        "correct": 195,
+        "nll": 0.08801408537483738,
+        "brier": 0.046497692638613655,
+        "pairs": {
+          "total": 100,
+          "both": 95,
+          "diff": {
+            "count": 47,
+            "both": 43
+          },
+          "same": {
+            "count": 53,
+            "both": 52
+          }
+        },
+        "bins": [
+          {
+            "low": 0,
+            "high": 0.5,
+            "count": 1,
+            "correct": 1,
+            "mean_confidence": 0.4986374583052636
+          },
+          {
+            "low": 0.5,
+            "high": 0.7,
+            "count": 3,
+            "correct": 2,
+            "mean_confidence": 0.5823553451405229
+          },
+          {
+            "low": 0.7,
+            "high": 0.9,
+            "count": 14,
+            "correct": 13,
+            "mean_confidence": 0.8378383300684537
+          },
+          {
+            "low": 0.9,
+            "high": 1.0,
+            "count": 182,
+            "correct": 179,
+            "mean_confidence": 0.9820356975348052
+          }
+        ],
+        "policy": {
+          "0.8": {
+            "count": 192,
+            "errors": 4,
+            "coverage": 0.96,
+            "risk": 0.020833333333333332
+          },
+          "0.9": {
+            "count": 182,
+            "errors": 3,
+            "coverage": 0.91,
+            "risk": 0.016483516483516484
+          },
+          "0.95": {
+            "count": 170,
+            "errors": 0,
+            "coverage": 0.85,
+            "risk": 0.0
+          }
+        },
+        "bytask": {
+          "goal_following:None": {
+            "n": 100,
+            "correct": 99,
+            "nll": 0.05644014857277231,
+            "brier": 0.02174033680502119
+          },
+          "explicit_rule:boundary": {
+            "n": 38,
+            "correct": 38,
+            "nll": 0.006012716100618353,
+            "brier": 0.0001707527421878225
+          },
+          "explicit_rule:composite_logic": {
+            "n": 20,
+            "correct": 17,
+            "nll": 0.4396117119228141,
+            "brier": 0.26989327252321443
+          },
+          "explicit_rule:comparison": {
+            "n": 42,
+            "correct": 41,
+            "nll": 0.06995439922405862,
+            "brier": 0.04097978077507583
+          }
+        },
+        "errors": [
+          {
+            "id": "eval_v2-er-0003-c1",
+            "group": "eval_v2-er-0003",
+            "family": "explicit_rule",
+            "kind": "composite_logic",
+            "template": "novel",
+            "k": 2,
+            "target": "wait",
+            "prediction": "heal",
+            "correct": false,
+            "pmax": 0.9079794058601813,
+            "ptarget": 0.09202059413981874,
+            "nll": 2.3857428776377674,
+            "brier": 1.6488532029324157,
+            "probs": [
+              0.9079794058601813,
+              0.09202059413981874
+            ]
+          },
+          {
+            "id": "eval_v2-er-0087-c1",
+            "group": "eval_v2-er-0087",
+            "family": "explicit_rule",
+            "kind": "composite_logic",
+            "template": "novel",
+            "k": 2,
+            "target": "wait",
+            "prediction": "heal",
+            "correct": false,
+            "pmax": 0.906969718912954,
+            "ptarget": 0.09303028108704607,
+            "nll": 2.3748302357395454,
+            "brier": 1.6451881420500856,
+            "probs": [
+              0.906969718912954,
+              0.09303028108704607
+            ]
+          },
+          {
+            "id": "eval_v2-er-0025-c1",
+            "group": "eval_v2-er-0025",
+            "family": "explicit_rule",
+            "kind": "composite_logic",
+            "template": "novel",
+            "k": 2,
+            "target": "wait",
+            "prediction": "heal",
+            "correct": false,
+            "pmax": 0.9067117729651751,
+            "ptarget": 0.09328822703482482,
+            "nll": 2.3720613630690046,
+            "brier": 1.6442524784673025,
+            "probs": [
+              0.9067117729651751,
+              0.09328822703482482
+            ]
+          },
+          {
+            "id": "eval_v2-gf-0052-c1",
+            "group": "eval_v2-gf-0052",
+            "family": "goal_following",
+            "kind": null,
+            "template": "seen",
+            "k": 3,
+            "target": "c",
+            "prediction": "b",
+            "correct": false,
+            "pmax": 0.8967060378519036,
+            "ptarget": 0.09757732982393846,
+            "nll": 2.327110088937503,
+            "brier": 1.618481073852882,
+            "probs": [
+              0.005716632324158099,
+              0.8967060378519036,
+              0.09757732982393846
+            ]
+          },
+          {
+            "id": "eval_v2-er-0049-c2",
+            "group": "eval_v2-er-0049",
+            "family": "explicit_rule",
+            "kind": "comparison",
+            "template": "novel",
+            "k": 2,
+            "target": "delay",
+            "prediction": "ship",
+            "correct": false,
+            "pmax": 0.5947021539976892,
+            "ptarget": 0.4052978460023109,
+            "nll": 0.9031330599380862,
+            "brier": 0.7073413039389824,
+            "probs": [
+              0.5947021539976892,
+              0.4052978460023109
+            ]
+          }
+        ]
+      }
+    },
+    "smoke_cases": {
+      "T1": {
+        "n": 12,
+        "correct": 9,
+        "nll": 2.1238632826331663,
+        "brier": 0.49017568753291596,
+        "pairs": null,
+        "bins": [
+          {
+            "low": 0,
+            "high": 0.5,
+            "count": 0,
+            "correct": 0,
+            "mean_confidence": null
+          },
+          {
+            "low": 0.5,
+            "high": 0.7,
+            "count": 1,
+            "correct": 1,
+            "mean_confidence": 0.5470762671295815
+          },
+          {
+            "low": 0.7,
+            "high": 0.9,
+            "count": 2,
+            "correct": 1,
+            "mean_confidence": 0.8872208638393171
+          },
+          {
+            "low": 0.9,
+            "high": 1.0,
+            "count": 9,
+            "correct": 7,
+            "mean_confidence": 0.9813069973721112
+          }
+        ],
+        "policy": {
+          "0.8": {
+            "count": 11,
+            "errors": 3,
+            "coverage": 0.9166666666666666,
+            "risk": 0.2727272727272727
+          },
+          "0.9": {
+            "count": 9,
+            "errors": 2,
+            "coverage": 0.75,
+            "risk": 0.2222222222222222
+          },
+          "0.95": {
+            "count": 8,
+            "errors": 1,
+            "coverage": 0.6666666666666666,
+            "risk": 0.125
+          }
+        },
+        "bytask": {
+          "support_routing:None": {
+            "n": 2,
+            "correct": 2,
+            "nll": 0.038398490432560495,
+            "brier": 0.0024291836860822124
+          },
+          "goal_following:None": {
+            "n": 2,
+            "correct": 2,
+            "nll": 1.4662273692955807e-06,
+            "brier": 4.681189610744331e-12
+          },
+          "explicit_rule:None": {
+            "n": 3,
+            "correct": 2,
+            "nll": 6.212322330407363,
+            "brier": 0.6666666556108536
+          },
+          "entailment:None": {
+            "n": 3,
+            "correct": 1,
+            "nll": 2.0166100790352908,
+            "brier": 1.1471864339468978
+          },
+          "quoted_intent:None": {
+            "n": 1,
+            "correct": 1,
+            "nll": 0.11959519169565791,
+            "brier": 0.025410798745661173
+          },
+          "instruction_separation:None": {
+            "n": 1,
+            "correct": 1,
+            "nll": 0.6031670582545104,
+            "brier": 0.41027981559454846
+          }
+        },
+        "errors": [
+          {
+            "id": "smoke-06",
+            "group": "scenario-game-001",
+            "family": "explicit_rule",
+            "kind": null,
+            "template": null,
+            "k": 3,
+            "target": "continue",
+            "prediction": "heal",
+            "correct": false,
+            "pmax": 0.9999999914550486,
+            "ptarget": 8.055079915239715e-09,
+            "nll": 18.63696289916995,
+            "brier": 1.9999999667999375,
+            "probs": [
+              0.9999999914550486,
+              8.055079915239715e-09,
+              4.898709305487504e-10
+            ]
+          },
+          {
+            "id": "smoke-09",
+            "group": "scenario-nli-001",
+            "family": "entailment",
+            "kind": null,
+            "template": null,
+            "k": 3,
+            "target": "unknown",
+            "prediction": "supports",
+            "correct": false,
+            "pmax": 0.9161705793385121,
+            "ptarget": 0.049837486511804883,
+            "nll": 2.998987836918194,
+            "brier": 1.7433327840709059,
+            "probs": [
+              0.9161705793385121,
+              0.0339919341496831,
+              0.049837486511804883
+            ]
+          },
+          {
+            "id": "smoke-08",
+            "group": "scenario-nli-001",
+            "family": "entailment",
+            "kind": null,
+            "template": null,
+            "k": 3,
+            "target": "contradicts",
+            "prediction": "supports",
+            "correct": false,
+            "pmax": 0.8871621855238752,
+            "ptarget": 0.04775184139959529,
+            "nll": 3.0417376494566346,
+            "brier": 1.698069482872679,
+            "probs": [
+              0.8871621855238752,
+              0.04775184139959529,
+              0.0650859730765295
+            ]
+          }
+        ]
+      },
+      "Tcal": {
+        "n": 12,
+        "correct": 9,
+        "nll": 0.941296896829514,
+        "brier": 0.4245233769107944,
+        "pairs": null,
+        "bins": [
+          {
+            "low": 0,
+            "high": 0.5,
+            "count": 0,
+            "correct": 0,
+            "mean_confidence": null
+          },
+          {
+            "low": 0.5,
+            "high": 0.7,
+            "count": 6,
+            "correct": 4,
+            "mean_confidence": 0.5991188166883438
+          },
+          {
+            "low": 0.7,
+            "high": 0.9,
+            "count": 1,
+            "correct": 1,
+            "mean_confidence": 0.7692688906007237
+          },
+          {
+            "low": 0.9,
+            "high": 1.0,
+            "count": 5,
+            "correct": 4,
+            "mean_confidence": 0.987318816444948
+          }
+        ],
+        "policy": {
+          "0.8": {
+            "count": 5,
+            "errors": 1,
+            "coverage": 0.4166666666666667,
+            "risk": 0.2
+          },
+          "0.9": {
+            "count": 5,
+            "errors": 1,
+            "coverage": 0.4166666666666667,
+            "risk": 0.2
+          },
+          "0.95": {
+            "count": 5,
+            "errors": 1,
+            "coverage": 0.4166666666666667,
+            "risk": 0.2
+          }
+        },
+        "bytask": {
+          "support_routing:None": {
+            "n": 2,
+            "correct": 2,
+            "nll": 0.4275991888209629,
+            "brier": 0.1850980127632002
+          },
+          "goal_following:None": {
+            "n": 2,
+            "correct": 2,
+            "nll": 0.018004763166022952,
+            "brier": 0.0005247034351179659
+          },
+          "explicit_rule:None": {
+            "n": 3,
+            "correct": 2,
+            "nll": 2.0070407831266084,
+            "brier": 0.662921916012808
+          },
+          "entailment:None": {
+            "n": 3,
+            "correct": 1,
+            "nll": 1.0971949515087556,
+            "brier": 0.6766567126280686
+          },
+          "quoted_intent:None": {
+            "n": 1,
+            "correct": 1,
+            "nll": 0.4284065862288997,
+            "brier": 0.23419619876148506
+          },
+          "instruction_separation:None": {
+            "n": 1,
+            "correct": 1,
+            "nll": 0.663241067845206,
+            "brier": 0.47010300584878056
+          }
+        },
+        "errors": [
+          {
+            "id": "smoke-06",
+            "group": "scenario-game-001",
+            "family": "explicit_rule",
+            "kind": null,
+            "template": null,
+            "k": 3,
+            "target": "continue",
+            "prediction": "heal",
+            "correct": false,
+            "pmax": 0.9965023286086266,
+            "ptarget": 0.0024869446984468217,
+            "nll": 5.996700350657869,
+            "brier": 1.9880502079879026,
+            "probs": [
+              0.9965023286086266,
+              0.0024869446984468217,
+              0.001010726692926365
+            ]
+          },
+          {
+            "id": "smoke-09",
+            "group": "scenario-nli-001",
+            "family": "entailment",
+            "kind": null,
+            "template": null,
+            "k": 3,
+            "target": "unknown",
+            "prediction": "supports",
+            "correct": false,
+            "pmax": 0.5751104997117363,
+            "ptarget": 0.22549885225570176,
+            "nll": 1.4894402098275155,
+            "brier": 0.9703607452587633,
+            "probs": [
+              0.5751104997117363,
+              0.19939064803256182,
+              0.22549885225570176
+            ]
+          },
+          {
+            "id": "smoke-08",
+            "group": "scenario-nli-001",
+            "family": "entailment",
+            "kind": null,
+            "template": null,
+            "k": 3,
+            "target": "contradicts",
+            "prediction": "supports",
+            "correct": false,
+            "pmax": 0.5487116912813085,
+            "ptarget": 0.21441756286676866,
+            "nll": 1.5398299367842545,
+            "brier": 0.9743320359214276,
+            "probs": [
+              0.5487116912813085,
+              0.21441756286676866,
+              0.23687074585192275
+            ]
+          }
+        ]
+      },
+      "Tserved": {
+        "n": 12,
+        "correct": 9,
+        "nll": 0.9412950491892337,
+        "brier": 0.4245234628029709,
+        "pairs": null,
+        "bins": [
+          {
+            "low": 0,
+            "high": 0.5,
+            "count": 0,
+            "correct": 0,
+            "mean_confidence": null
+          },
+          {
+            "low": 0.5,
+            "high": 0.7,
+            "count": 6,
+            "correct": 4,
+            "mean_confidence": 0.5991179235100056
+          },
+          {
+            "low": 0.7,
+            "high": 0.9,
+            "count": 1,
+            "correct": 1,
+            "mean_confidence": 0.7692675184124115
+          },
+          {
+            "low": 0.9,
+            "high": 1.0,
+            "count": 5,
+            "correct": 4,
+            "mean_confidence": 0.9873185678355497
+          }
+        ],
+        "policy": {
+          "0.8": {
+            "count": 5,
+            "errors": 1,
+            "coverage": 0.4166666666666667,
+            "risk": 0.2
+          },
+          "0.9": {
+            "count": 5,
+            "errors": 1,
+            "coverage": 0.4166666666666667,
+            "risk": 0.2
+          },
+          "0.95": {
+            "count": 5,
+            "errors": 1,
+            "coverage": 0.4166666666666667,
+            "risk": 0.2
+          }
+        },
+        "bytask": {
+          "support_routing:None": {
+            "n": 2,
+            "correct": 2,
+            "nll": 0.42760112831449476,
+            "brier": 0.18509932911014326
+          },
+          "goal_following:None": {
+            "n": 2,
+            "correct": 2,
+            "nll": 0.018005116509533625,
+            "brier": 0.0005247235110090851
+          },
+          "explicit_rule:None": {
+            "n": 3,
+            "correct": 2,
+            "nll": 2.0070323487837087,
+            "brier": 0.6629218193038682
+          },
+          "entailment:None": {
+            "n": 3,
+            "correct": 1,
+            "nll": 1.0971940314642576,
+            "brier": 0.6766559130590654
+          },
+          "quoted_intent:None": {
+            "n": 1,
+            "correct": 1,
+            "nll": 0.42840776498340394,
+            "brier": 0.23419711852261907
+          },
+          "instruction_separation:None": {
+            "n": 1,
+            "correct": 1,
+            "nll": 0.6632411948954406,
+            "brier": 0.4701031327819268
+          }
+        },
+        "errors": [
+          {
+            "id": "smoke-06",
+            "group": "scenario-game-001",
+            "family": "explicit_rule",
+            "kind": null,
+            "template": null,
+            "k": 3,
+            "target": "continue",
+            "prediction": "heal",
+            "correct": false,
+            "pmax": 0.9965022345630412,
+            "ptarget": 0.0024870087755161333,
+            "nll": 5.996674585612156,
+            "brier": 1.9880498927797803,
+            "probs": [
+              0.9965022345630412,
+              0.0024870087755161333,
+              0.0010107566614423514
+            ]
+          },
+          {
+            "id": "smoke-09",
+            "group": "scenario-nli-001",
+            "family": "entailment",
+            "kind": null,
+            "template": null,
+            "k": 3,
+            "target": "unknown",
+            "prediction": "supports",
+            "correct": false,
+            "pmax": 0.5751094516900898,
+            "ptarget": 0.2254993522814009,
+            "nll": 1.4894379924098224,
+            "brier": 0.9703589837934847,
+            "probs": [
+              0.5751094516900898,
+              0.19939119602850933,
+              0.2254993522814009
+            ]
+          },
+          {
+            "id": "smoke-08",
+            "group": "scenario-nli-001",
+            "family": "entailment",
+            "kind": null,
+            "template": null,
+            "k": 3,
+            "target": "contradicts",
+            "prediction": "supports",
+            "correct": false,
+            "pmax": 0.5487107431549927,
+            "ptarget": 0.21441806170419084,
+            "nll": 1.5398276103104562,
+            "brier": 0.9743304245177435,
+            "probs": [
+              0.5487107431549927,
+              0.21441806170419084,
+              0.2368711951408165
+            ]
+          }
+        ]
+      }
+    },
+    "transfer_probe": {
+      "T1": {
+        "n": 32,
+        "correct": 25,
+        "nll": 1.623906746113446,
+        "brier": 0.47539699306293226,
+        "pairs": {
+          "total": 16,
+          "both": 11,
+          "diff": {
+            "count": 14,
+            "both": 10
+          },
+          "same": {
+            "count": 2,
+            "both": 1
+          }
+        },
+        "bins": [
+          {
+            "low": 0,
+            "high": 0.5,
+            "count": 0,
+            "correct": 0,
+            "mean_confidence": null
+          },
+          {
+            "low": 0.5,
+            "high": 0.7,
+            "count": 5,
+            "correct": 5,
+            "mean_confidence": 0.5874929130681803
+          },
+          {
+            "low": 0.7,
+            "high": 0.9,
+            "count": 3,
+            "correct": 2,
+            "mean_confidence": 0.8257652148478544
+          },
+          {
+            "low": 0.9,
+            "high": 1.0,
+            "count": 24,
+            "correct": 18,
+            "mean_confidence": 0.9871225572083135
+          }
+        ],
+        "policy": {
+          "0.8": {
+            "count": 26,
+            "errors": 7,
+            "coverage": 0.8125,
+            "risk": 0.2692307692307692
+          },
+          "0.9": {
+            "count": 24,
+            "errors": 6,
+            "coverage": 0.75,
+            "risk": 0.25
+          },
+          "0.95": {
+            "count": 21,
+            "errors": 6,
+            "coverage": 0.65625,
+            "risk": 0.2857142857142857
+          }
+        },
+        "bytask": {
+          "transfer_probe:None": {
+            "n": 32,
+            "correct": 25,
+            "nll": 1.623906746113446,
+            "brier": 0.47539699306293226
+          }
+        },
+        "errors": [
+          {
+            "id": "tp-neggoal-001-c1",
+            "group": "tp-neggoal-001",
+            "family": "transfer_probe",
+            "kind": null,
+            "template": "transfer",
+            "k": 3,
+            "target": "c",
+            "prediction": "a",
+            "correct": false,
+            "pmax": 0.9999329826238308,
+            "ptarget": 6.369049601966445e-05,
+            "nll": 9.661475205580796,
+            "brier": 1.9997385928144986,
+            "probs": [
+              0.9999329826238308,
+              3.326880149594669e-06,
+              6.369049601966445e-05
+            ]
+          },
+          {
+            "id": "tp-neggoal-001-c2",
+            "group": "tp-neggoal-001",
+            "family": "transfer_probe",
+            "kind": null,
+            "template": "transfer",
+            "k": 3,
+            "target": "b",
+            "prediction": "a",
+            "correct": false,
+            "pmax": 0.9998734883330679,
+            "ptarget": 4.560556874892305e-06,
+            "nll": 12.298065820207317,
+            "brier": 1.9997378864504598,
+            "probs": [
+              0.9998734883330679,
+              4.560556874892305e-06,
+              0.00012195111005745
+            ]
+          },
+          {
+            "id": "tp-reverse-001-c1",
+            "group": "tp-reverse-001",
+            "family": "transfer_probe",
+            "kind": null,
+            "template": "transfer",
+            "k": 3,
+            "target": "c",
+            "prediction": "b",
+            "correct": false,
+            "pmax": 0.9990156177613635,
+            "ptarget": 0.0009664294669701392,
+            "nll": 6.941902239764578,
+            "brier": 1.996100279905395,
+            "probs": [
+              1.795277166611033e-05,
+              0.9990156177613635,
+              0.0009664294669701392
+            ]
+          },
+          {
+            "id": "tp-reverse-002-c1",
+            "group": "tp-reverse-002",
+            "family": "transfer_probe",
+            "kind": null,
+            "template": "transfer",
+            "k": 3,
+            "target": "l2",
+            "prediction": "l1",
+            "correct": false,
+            "pmax": 0.9928227667958909,
+            "ptarget": 0.0001771906199265399,
+            "nll": 8.638284456146204,
+            "brier": 1.9853916970210912,
+            "probs": [
+              0.9928227667958909,
+              0.0001771906199265399,
+              0.007000042584182864
+            ]
+          },
+          {
+            "id": "tp-negation-002-c2",
+            "group": "tp-negation-002",
+            "family": "transfer_probe",
+            "kind": null,
+            "template": "transfer",
+            "k": 2,
+            "target": "run",
+            "prediction": "stop",
+            "correct": false,
+            "pmax": 0.9912792362816587,
+            "ptarget": 0.008720763718341299,
+            "nll": 4.742048462517772,
+            "brier": 1.9652690485662971,
+            "probs": [
+              0.008720763718341299,
+              0.9912792362816587
+            ]
+          },
+          {
+            "id": "tp-boundary-001-c2",
+            "group": "tp-boundary-001",
+            "family": "transfer_probe",
+            "kind": null,
+            "template": "transfer",
+            "k": 2,
+            "target": "adj",
+            "prediction": "ok",
+            "correct": false,
+            "pmax": 0.9868749293997189,
+            "ptarget": 0.013125070600281083,
+            "nll": 4.333231091449882,
+            "brier": 1.9478442525554003,
+            "probs": [
+              0.013125070600281083,
+              0.9868749293997189
+            ]
+          },
+          {
+            "id": "tp-negation-002-c1",
+            "group": "tp-negation-002",
+            "family": "transfer_probe",
+            "kind": null,
+            "template": "transfer",
+            "k": 2,
+            "target": "run",
+            "prediction": "stop",
+            "correct": false,
+            "pmax": 0.8578070269464656,
+            "ptarget": 0.1421929730535344,
+            "nll": 1.9505701787725809,
+            "brier": 1.4716657909574686,
+            "probs": [
+              0.1421929730535344,
+              0.8578070269464656
+            ]
+          }
+        ]
+      },
+      "Tcal": {
+        "n": 32,
+        "correct": 25,
+        "nll": 0.77052200461782,
+        "brier": 0.4469597176804817,
+        "pairs": {
+          "total": 16,
+          "both": 11,
+          "diff": {
+            "count": 14,
+            "both": 10
+          },
+          "same": {
+            "count": 2,
+            "both": 1
+          }
+        },
+        "bins": [
+          {
+            "low": 0,
+            "high": 0.5,
+            "count": 2,
+            "correct": 2,
+            "mean_confidence": 0.40694729044463884
+          },
+          {
+            "low": 0.5,
+            "high": 0.7,
+            "count": 9,
+            "correct": 8,
+            "mean_confidence": 0.5931586943345817
+          },
+          {
+            "low": 0.7,
+            "high": 0.9,
+            "count": 12,
+            "correct": 8,
+            "mean_confidence": 0.8430324876798551
+          },
+          {
+            "low": 0.9,
+            "high": 1.0,
+            "count": 9,
+            "correct": 7,
+            "mean_confidence": 0.9491306414232044
+          }
+        ],
+        "policy": {
+          "0.8": {
+            "count": 19,
+            "errors": 5,
+            "coverage": 0.59375,
+            "risk": 0.2631578947368421
+          },
+          "0.9": {
+            "count": 9,
+            "errors": 2,
+            "coverage": 0.28125,
+            "risk": 0.2222222222222222
+          },
+          "0.95": {
+            "count": 3,
+            "errors": 0,
+            "coverage": 0.09375,
+            "risk": 0.0
+          }
+        },
+        "bytask": {
+          "transfer_probe:None": {
+            "n": 32,
+            "correct": 25,
+            "nll": 0.77052200461782,
+            "brier": 0.4469597176804817
+          }
+        },
+        "errors": [
+          {
+            "id": "tp-neggoal-001-c1",
+            "group": "tp-neggoal-001",
+            "family": "transfer_probe",
+            "kind": null,
+            "template": "transfer",
+            "k": 3,
+            "target": "c",
+            "prediction": "a",
+            "correct": false,
+            "pmax": 0.9415701130700611,
+            "ptarget": 0.04212635668712367,
+            "nll": 3.1670816846057,
+            "brier": 1.8043419994786294,
+            "probs": [
+              0.9415701130700611,
+              0.016303530242815265,
+              0.04212635668712367
+            ]
+          },
+          {
+            "id": "tp-neggoal-001-c2",
+            "group": "tp-neggoal-001",
+            "family": "transfer_probe",
+            "kind": null,
+            "template": "transfer",
+            "k": 3,
+            "target": "b",
+            "prediction": "a",
+            "correct": false,
+            "pmax": 0.930839269596042,
+            "ptarget": 0.0178386375678881,
+            "nll": 4.0263885242595725,
+            "brier": 1.8337366448896695,
+            "probs": [
+              0.930839269596042,
+              0.0178386375678881,
+              0.051322092836069685
+            ]
+          },
+          {
+            "id": "tp-reverse-001-c1",
+            "group": "tp-reverse-001",
+            "family": "transfer_probe",
+            "kind": null,
+            "template": "transfer",
+            "k": 3,
+            "target": "c",
+            "prediction": "b",
+            "correct": false,
+            "pmax": 0.8794346879823967,
+            "ptarget": 0.09437235055225159,
+            "nll": 2.360507145425546,
+            "brier": 1.5942528811012746,
+            "probs": [
+              0.026192961465351886,
+              0.8794346879823967,
+              0.09437235055225159
+            ]
+          },
+          {
+            "id": "tp-negation-002-c2",
+            "group": "tp-negation-002",
+            "family": "transfer_probe",
+            "kind": null,
+            "template": "transfer",
+            "k": 2,
+            "target": "run",
+            "prediction": "stop",
+            "correct": false,
+            "pmax": 0.8208491870893647,
+            "ptarget": 0.17915081291063528,
+            "nll": 1.7195272976437281,
+            "brier": 1.3475867758905418,
+            "probs": [
+              0.17915081291063528,
+              0.8208491870893647
+            ]
+          },
+          {
+            "id": "tp-boundary-001-c2",
+            "group": "tp-boundary-001",
+            "family": "transfer_probe",
+            "kind": null,
+            "template": "transfer",
+            "k": 2,
+            "target": "adj",
+            "prediction": "ok",
+            "correct": false,
+            "pmax": 0.8004666812175845,
+            "ptarget": 0.19953331878241548,
+            "nll": 1.6117740451563978,
+            "brier": 1.2814938154789879,
+            "probs": [
+              0.19953331878241548,
+              0.8004666812175845
+            ]
+          },
+          {
+            "id": "tp-reverse-002-c1",
+            "group": "tp-reverse-002",
+            "family": "transfer_probe",
+            "kind": null,
+            "template": "transfer",
+            "k": 3,
+            "target": "l2",
+            "prediction": "l1",
+            "correct": false,
+            "pmax": 0.7901571975864037,
+            "ptarget": 0.0492389454605057,
+            "nll": 3.011070394213135,
+            "brier": 1.554088578594859,
+            "probs": [
+              0.7901571975864037,
+              0.0492389454605057,
+              0.1606038569530906
+            ]
+          },
+          {
+            "id": "tp-negation-002-c1",
+            "group": "tp-negation-002",
+            "family": "transfer_probe",
+            "kind": null,
+            "template": "transfer",
+            "k": 2,
+            "target": "run",
+            "prediction": "stop",
+            "correct": false,
+            "pmax": 0.6405919152819978,
+            "ptarget": 0.3594080847180021,
+            "nll": 1.0232968098439459,
+            "brier": 0.8207160038493166,
+            "probs": [
+              0.3594080847180021,
+              0.6405919152819978
+            ]
+          }
+        ]
+      },
+      "Tserved": {
+        "n": 32,
+        "correct": 25,
+        "nll": 0.7705208850131736,
+        "brier": 0.44695951351337904,
+        "pairs": {
+          "total": 16,
+          "both": 11,
+          "diff": {
+            "count": 14,
+            "both": 10
+          },
+          "same": {
+            "count": 2,
+            "both": 1
+          }
+        },
+        "bins": [
+          {
+            "low": 0,
+            "high": 0.5,
+            "count": 2,
+            "correct": 2,
+            "mean_confidence": 0.40694654916775197
+          },
+          {
+            "low": 0.5,
+            "high": 0.7,
+            "count": 9,
+            "correct": 8,
+            "mean_confidence": 0.593158259154836
+          },
+          {
+            "low": 0.7,
+            "high": 0.9,
+            "count": 12,
+            "correct": 8,
+            "mean_confidence": 0.843031411673615
+          },
+          {
+            "low": 0.9,
+            "high": 1.0,
+            "count": 9,
+            "correct": 7,
+            "mean_confidence": 0.9491300015532569
+          }
+        ],
+        "policy": {
+          "0.8": {
+            "count": 19,
+            "errors": 5,
+            "coverage": 0.59375,
+            "risk": 0.2631578947368421
+          },
+          "0.9": {
+            "count": 9,
+            "errors": 2,
+            "coverage": 0.28125,
+            "risk": 0.2222222222222222
+          },
+          "0.95": {
+            "count": 3,
+            "errors": 0,
+            "coverage": 0.09375,
+            "risk": 0.0
+          }
+        },
+        "bytask": {
+          "transfer_probe:None": {
+            "n": 32,
+            "correct": 25,
+            "nll": 0.7705208850131736,
+            "brier": 0.44695951351337904
+          }
+        },
+        "errors": [
+          {
+            "id": "tp-neggoal-001-c1",
+            "group": "tp-neggoal-001",
+            "family": "transfer_probe",
+            "kind": null,
+            "template": "transfer",
+            "k": 3,
+            "target": "c",
+            "prediction": "a",
+            "correct": false,
+            "pmax": 0.9415693126708448,
+            "ptarget": 0.0421268856064095,
+            "nll": 3.167069129141449,
+            "brier": 1.8043394877921382,
+            "probs": [
+              0.9415693126708448,
+              0.0163038017227456,
+              0.0421268856064095
+            ]
+          },
+          {
+            "id": "tp-neggoal-001-c2",
+            "group": "tp-neggoal-001",
+            "family": "transfer_probe",
+            "kind": null,
+            "template": "transfer",
+            "k": 3,
+            "target": "b",
+            "prediction": "a",
+            "correct": false,
+            "pmax": 0.9308383888927683,
+            "ptarget": 0.017838925087490704,
+            "nll": 4.0263724065889015,
+            "brier": 1.833734501410061,
+            "probs": [
+              0.9308383888927683,
+              0.017838925087490704,
+              0.05132268601974086
+            ]
+          },
+          {
+            "id": "tp-reverse-001-c1",
+            "group": "tp-reverse-001",
+            "family": "transfer_probe",
+            "kind": null,
+            "template": "transfer",
+            "k": 3,
+            "target": "c",
+            "prediction": "b",
+            "correct": false,
+            "pmax": 0.8794335394389775,
+            "ptarget": 0.09437313618237787,
+            "nll": 2.36049882066886,
+            "brier": 1.5942494570003145,
+            "probs": [
+              0.02619332437864459,
+              0.8794335394389775,
+              0.09437313618237787
+            ]
+          },
+          {
+            "id": "tp-negation-002-c2",
+            "group": "tp-negation-002",
+            "family": "transfer_probe",
+            "kind": null,
+            "template": "transfer",
+            "k": 2,
+            "target": "run",
+            "prediction": "stop",
+            "correct": false,
+            "pmax": 0.8208482212835919,
+            "ptarget": 0.17915177871640808,
+            "nll": 1.7195219066373812,
+            "brier": 1.3475836047688734,
+            "probs": [
+              0.17915177871640808,
+              0.8208482212835919
+            ]
+          },
+          {
+            "id": "tp-boundary-001-c2",
+            "group": "tp-boundary-001",
+            "family": "transfer_probe",
+            "kind": null,
+            "template": "transfer",
+            "k": 2,
+            "target": "adj",
+            "prediction": "ok",
+            "correct": false,
+            "pmax": 0.8004657238277757,
+            "ptarget": 0.19953427617222438,
+            "nll": 1.6117692470228435,
+            "brier": 1.2814907500462496,
+            "probs": [
+              0.19953427617222438,
+              0.8004657238277757
+            ]
+          },
+          {
+            "id": "tp-reverse-002-c1",
+            "group": "tp-reverse-002",
+            "family": "transfer_probe",
+            "kind": null,
+            "template": "transfer",
+            "k": 3,
+            "target": "l2",
+            "prediction": "l1",
+            "correct": false,
+            "pmax": 0.7901558592231477,
+            "ptarget": 0.049239451744077053,
+            "nll": 3.011060112088614,
+            "brier": 1.5540857681238884,
+            "probs": [
+              0.7901558592231477,
+              0.049239451744077053,
+              0.16060468903277536
+            ]
+          },
+          {
+            "id": "tp-negation-002-c1",
+            "group": "tp-negation-002",
+            "family": "transfer_probe",
+            "kind": null,
+            "template": "transfer",
+            "k": 2,
+            "target": "run",
+            "prediction": "stop",
+            "correct": false,
+            "pmax": 0.6405913411548463,
+            "ptarget": 0.3594086588451538,
+            "nll": 1.023295212421079,
+            "brier": 0.8207145327251293,
+            "probs": [
+              0.3594086588451538,
+              0.6405913411548463
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "duplicates": {
+    "within_inputs": {
+      "calibration": 0,
+      "fresh_eval": 0
+    },
+    "input_pairs": {
+      "calibration:fresh_eval": 0,
+      "calibration:train": 0,
+      "calibration:dev": 0,
+      "calibration:eval_v2": 0,
+      "calibration:smoke_cases": 0,
+      "calibration:transfer_probe": 0,
+      "fresh_eval:train": 0,
+      "fresh_eval:dev": 0,
+      "fresh_eval:eval_v2": 0,
+      "fresh_eval:smoke_cases": 0,
+      "fresh_eval:transfer_probe": 0
+    },
+    "semantic_pairs": {
+      "calibration:fresh_eval": 0,
+      "calibration:train": 0,
+      "calibration:dev": 0,
+      "calibration:eval_v2": 0,
+      "calibration:smoke_cases": 0,
+      "calibration:transfer_probe": 0,
+      "fresh_eval:train": 0,
+      "fresh_eval:dev": 0,
+      "fresh_eval:eval_v2": 0,
+      "fresh_eval:smoke_cases": 0,
+      "fresh_eval:transfer_probe": 0
+    },
+    "semantic_parse_rows": {
+      "train": 600,
+      "dev": 100,
+      "eval_v2": 200,
+      "smoke_cases": 4,
+      "transfer_probe": 0,
+      "calibration": 200,
+      "fresh_eval": 200
+    }
+  },
+  "label_check": {
+    "calibration": {
+      "checked": 200,
+      "mismatches": []
+    },
+    "fresh_eval": {
+      "checked": 200,
+      "mismatches": []
+    }
+  },
+  "file_hashes": {
+    "data/m3_3_v2/train.jsonl": "9cb6545fc3f3a982ce22942a66b97984f2c8e4bd328bcfb96acc1a860db0a7d9",
+    "data/m3_3_v2/dev.jsonl": "623729415d6b00f3589f7aa4659adbb86aecb012d1073a2f608e64f9729dfce3",
+    "data/m3_3_v2/eval_v2.jsonl": "e528ee7acc26c06a2a6db8c297e0b92c8fe25835235aeaf90bc121127266b9bc",
+    "examples/smoke_cases.jsonl": "205e47c218d2fd1c3e9698bfec88c30953e559f14b856b9a10c140e03af1f9e8",
+    "data/m3_1/transfer_probe.jsonl": "bb407fa9d9f5c65f5176c7f707f082b468155c71516a812271db46b83608fd0a",
+    "data/m3_6_cal/calibration.jsonl": "9b2338c57f39bc8b7442d7ad17cad4b90dcc67eb743b1ebc72eaa47019e56069",
+    "data/m3_6_cal/fresh_eval.jsonl": "ddd2be564dc8df077856bcdd20ab7b18adac5f338f7c4e9b81d61df2f5b37be7"
+  },
+  "counts": {
+    "train": {
+      "rows": 600,
+      "groups": 300,
+      "choices": {
+        "3": 300,
+        "2": 300
+      },
+      "templates": {
+        "seen": 600
+      },
+      "kinds": {
+        "null": 300,
+        "composite_logic": 84,
+        "boundary": 100,
+        "comparison": 116
+      }
+    },
+    "dev": {
+      "rows": 100,
+      "groups": 50,
+      "choices": {
+        "3": 50,
+        "2": 50
+      },
+      "templates": {
+        "seen": 100
+      },
+      "kinds": {
+        "null": 50,
+        "boundary": 24,
+        "comparison": 18,
+        "composite_logic": 8
+      }
+    },
+    "eval_v2": {
+      "rows": 200,
+      "groups": 100,
+      "choices": {
+        "3": 100,
+        "2": 100
+      },
+      "templates": {
+        "seen": 76,
+        "novel": 124
+      },
+      "kinds": {
+        "null": 100,
+        "boundary": 38,
+        "composite_logic": 20,
+        "comparison": 42
+      }
+    },
+    "smoke_cases": {
+      "rows": 12,
+      "groups": 8,
+      "choices": {
+        "3": 10,
+        "2": 2
+      },
+      "templates": {
+        "null": 12
+      },
+      "kinds": {
+        "null": 12
+      }
+    },
+    "transfer_probe": {
+      "rows": 32,
+      "groups": 16,
+      "choices": {
+        "2": 20,
+        "3": 10,
+        "4": 2
+      },
+      "templates": {
+        "transfer": 32
+      },
+      "kinds": {
+        "null": 32
+      }
+    },
+    "calibration": {
+      "rows": 200,
+      "groups": 100,
+      "choices": {
+        "3": 100,
+        "2": 100
+      },
+      "templates": {
+        "seen": 88,
+        "novel": 112
+      },
+      "kinds": {
+        "null": 100,
+        "boundary": 16,
+        "composite_logic": 70,
+        "comparison": 14
+      }
+    },
+    "fresh_eval": {
+      "rows": 200,
+      "groups": 100,
+      "choices": {
+        "3": 100,
+        "2": 100
+      },
+      "templates": {
+        "novel": 100,
+        "seen": 100
+      },
+      "kinds": {
+        "null": 100,
+        "comparison": 14,
+        "composite_logic": 70,
+        "boundary": 16
+      }
+    }
+  }
+}

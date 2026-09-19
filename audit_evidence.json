@@ -1,0 +1,41 @@
+{
+  "zip": {
+    "files": 20,
+    "size_bytes": 164625,
+    "sha256": "c9eccb61a57f80c93e11ee78277cf6b1b99a10c01820dd92afbecafc2065afb4"
+  },
+  "m44_replay": {
+    "r1_boundary_cases": 48,
+    "r2_composite_cases": 56,
+    "total": 104
+  },
+  "missed_m3_train_comparison_equality": {
+    "groups": 4,
+    "cases": 8,
+    "group_ids": [
+      "train-er-0031",
+      "train-er-0151",
+      "train-er-0199",
+      "train-er-0283"
+    ],
+    "values": [
+      [
+        38,
+        38
+      ],
+      [
+        55,
+        55
+      ],
+      [
+        59,
+        59
+      ],
+      [
+        40,
+        40
+      ]
+    ]
+  },
+  "key_conclusion": "M4.4 R1 selector only covered rule_kind=boundary and omitted directly analogous rule_kind=comparison equality examples."
+}

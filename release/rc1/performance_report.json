@@ -1,0 +1,23 @@
+{
+  "iterations": 100,
+  "temperature": 0.256,
+  "latency_ms": {
+    "p50": 27.69,
+    "p95": 45.44,
+    "p99": 48.38,
+    "mean": 32.08,
+    "min": 26.17,
+    "max": 48.38
+  },
+  "probability_sum": {
+    "max_deviation_from_1": "0.00e+00",
+    "is_valid": true
+  },
+  "order_preserved": true,
+  "deterministic": true,
+  "memory_rss": {
+    "start_mb": 0.0,
+    "peak_mb": 0.19,
+    "delta_mb": 0.19
+  }
+}

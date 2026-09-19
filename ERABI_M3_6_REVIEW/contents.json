@@ -1,0 +1,46 @@
+{
+  "ERABI_M3_6_REVIEW/README.md": {
+    "bytes": 1607,
+    "sha256": "b36467041256b1d69866bd5586d7b2e6c3542fcf4af30e3ab249d1591a974b8d"
+  },
+  "ERABI_M3_6_REVIEW/audit_saved_results.py": {
+    "bytes": 9727,
+    "sha256": "09fb37b2267c751242bf6dfe59127d61230a6d1937d3a24a8eed7f0141ace4ed"
+  },
+  "ERABI_M3_6_REVIEW/probe_contracts.py": {
+    "bytes": 5099,
+    "sha256": "062629a4da00fd5be36f47f0d4c14c407a0d65bec2635e4105aa5a85d9ac4f98"
+  },
+  "ERABI_M3_6_REVIEW/results/contract_probes.json": {
+    "bytes": 2320,
+    "sha256": "12f55a7e0b9ffb1a4104cc0d93215caa48980e3faa730a67eacc24fddbd3f3ad"
+  },
+  "ERABI_M3_6_REVIEW/results/environment_and_scope.json": {
+    "bytes": 413,
+    "sha256": "e5399cec35723f5ba3990d969613f2c1b53431c8470ddbc12dc88d204ef55de3"
+  },
+  "ERABI_M3_6_REVIEW/results/historical_transitions.json": {
+    "bytes": 6426,
+    "sha256": "37a13778608f8fdd9fa19151f3701d3c8eac04ed6a315a6a1a18b5a4dee08ee6"
+  },
+  "ERABI_M3_6_REVIEW/results/pytest.txt": {
+    "bytes": 1025,
+    "sha256": "2e7df3f076c74c01ffba554daa13fb713fb1e8a88269530334ee44d18cadcf27"
+  },
+  "ERABI_M3_6_REVIEW/results/recomputed.json": {
+    "bytes": 108294,
+    "sha256": "d21faa7ad76e2141d06846f6b033f6db334a52e067c9b1da4b482283421c577e"
+  },
+  "ERABI_M3_6_REVIEW/source_excerpt.md": {
+    "bytes": 14795,
+    "sha256": "337b3c2431a471d558d5497b3dee1a4411f0bf8249a2467f55fd2aa48a528ee9"
+  },
+  "ERABI_M3_6_REVIEW.md": {
+    "bytes": 15389,
+    "sha256": "d513ef8641b7fcd15b89bb067626b22d6bf39d537cf659fc446dd7beea3c3d34"
+  },
+  "ERABI_M3_7_CALIBRATION_HANDOFF_NEXT.md": {
+    "bytes": 14567,
+    "sha256": "9e5f2369bc1d57ba7aa8575b6b732048d332f213cf6a1c9fc790a14659d7e24b"
+  }
+}

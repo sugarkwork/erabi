@@ -1,0 +1,661 @@
+{
+  "audit_timestamp": "2026-09-19T14:51:12.791397+00:00",
+  "overall_decision": "PASS",
+  "freeze_lineage": {
+    "file_info": {
+      "model_safetensors": {
+        "path": "F:\\ai\\erabi-local\\release\\rc1\\model\\model.safetensors",
+        "size_bytes": 746224192,
+        "sha256": "be9a9cb17d58f3732a0f484b569490fa8e09fd809cbbe1ff0986e38b573afdcf",
+        "mtime_utc": "2026-09-19T14:12:02.589925+00:00",
+        "ctime_utc": "2026-09-19T14:18:43.442244+00:00",
+        "mtime_epoch": 1789827122.5899253
+      },
+      "config_json": {
+        "path": "F:\\ai\\erabi-local\\release\\rc1\\model\\config.json",
+        "size_bytes": 3832,
+        "sha256": "30031aeabbfcbd04bd6211903d5779ec31de10af157f1bfb49ab36344b41111d",
+        "mtime_utc": "2026-09-19T14:12:02.101020+00:00",
+        "ctime_utc": "2026-09-19T14:18:43.440243+00:00",
+        "mtime_epoch": 1789827122.10102
+      },
+      "tokenizer_json": {
+        "path": "F:\\ai\\erabi-local\\release\\rc1\\model\\tokenizer.json",
+        "size_bytes": 8332927,
+        "sha256": "ac84fa7889747f37393545a7fc14ce4f1f158b33460318cad93531e0aa8db109",
+        "mtime_utc": "2026-09-19T14:12:02.605653+00:00",
+        "ctime_utc": "2026-09-19T14:18:43.610207+00:00",
+        "mtime_epoch": 1789827122.605653
+      },
+      "tokenizer_config_json": {
+        "path": "F:\\ai\\erabi-local\\release\\rc1\\model\\tokenizer_config.json",
+        "size_bytes": 753,
+        "sha256": "276e1525b9d4543bf789cfbd981155e82324d78a5dcf4fbc01803886899efc3e",
+        "mtime_utc": "2026-09-19T14:12:02.591940+00:00",
+        "ctime_utc": "2026-09-19T14:18:43.612207+00:00",
+        "mtime_epoch": 1789827122.5919397
+      },
+      "calibration_json": {
+        "path": "F:\\ai\\erabi-local\\release\\rc1\\calibration.json",
+        "size_bytes": 1767,
+        "sha256": "8fc501f10d107af09d500b99bfdd9086bfad1ecc2de549574127c0400519b477",
+        "mtime_utc": "2026-09-19T14:18:44.050866+00:00",
+        "ctime_utc": "2026-09-19T14:18:21.969023+00:00",
+        "mtime_epoch": 1789827524.0508657
+      },
+      "manifest_json": {
+        "path": "F:\\ai\\erabi-local\\release\\rc1\\manifest.json",
+        "size_bytes": 1044,
+        "sha256": "2745959671f7f08e35ff8335eca0c358262097b6d3cd7af645507f9be903017a",
+        "mtime_utc": "2026-09-19T14:18:49.737398+00:00",
+        "ctime_utc": "2026-09-19T14:18:49.737398+00:00",
+        "mtime_epoch": 1789827529.7373977
+      },
+      "sealed_test_jsonl": {
+        "path": "F:\\ai\\erabi-local\\data\\sealed_acceptance\\sealed_test.jsonl",
+        "size_bytes": 73974,
+        "sha256": "86825a0ca378dbf40915bc51f27d7c7e69c94a741d11ae4893ced173c5e883c1",
+        "mtime_utc": "2026-09-19T14:19:46.894715+00:00",
+        "ctime_utc": "2026-09-19T14:19:46.893663+00:00",
+        "mtime_epoch": 1789827586.8947153
+      },
+      "sealed_manifest_json": {
+        "path": "F:\\ai\\erabi-local\\data\\sealed_acceptance\\manifest.json",
+        "size_bytes": 362,
+        "sha256": "953f524c1294d1d0500062c7f5247a361eeb685335bb181b76133f42c525b580",
+        "mtime_utc": "2026-09-19T14:19:46.895245+00:00",
+        "ctime_utc": "2026-09-19T14:19:46.894715+00:00",
+        "mtime_epoch": 1789827586.8952453
+      },
+      "sealed_builder_py": {
+        "path": "F:\\ai\\erabi-local\\src\\erabi\\data\\sealed_acceptance\\builder.py",
+        "size_bytes": 12506,
+        "sha256": "729a9e41cb388acb6e123bc4a20998f922a3e503405e3a0a3b74a20d74f822a6",
+        "mtime_utc": "2026-09-19T14:19:44.262747+00:00",
+        "ctime_utc": "2026-09-19T14:19:44.262233+00:00",
+        "mtime_epoch": 1789827584.2627468
+      },
+      "sealed_run_script_py": {
+        "path": "F:\\ai\\erabi-local\\scripts\\run_final_sealed_acceptance.py",
+        "size_bytes": 11648,
+        "sha256": "ca87080fd2e4cdbbbe7fa64b2c8deb73d5001cd457f09072f5844f14fa7810f0",
+        "mtime_utc": "2026-09-19T14:19:58.609218+00:00",
+        "ctime_utc": "2026-09-19T14:19:58.609218+00:00",
+        "mtime_epoch": 1789827598.6092176
+      }
+    },
+    "calibration_T_full_precision": 0.25597742585799016,
+    "calibration_T_used": 0.256,
+    "sealed_is_strictly_after_model": true,
+    "sealed_is_strictly_after_calib": true,
+    "freeze_audit_pass": true
+  },
+  "leakage_audit": {
+    "total_compared_records": 13240,
+    "sealed_cases_count": 120,
+    "exact_signature_leaks": 0,
+    "group_id_leaks": 0,
+    "exact_context_leaks": 0,
+    "semantic_leak_count": 0,
+    "by_category": {
+      "train": {
+        "files_count": 14,
+        "records_compared": 8980,
+        "signature_leak_count": 0,
+        "group_id_leak_count": 0,
+        "context_leak_count": 0,
+        "semantic_leak_count": 0
+      },
+      "dev": {
+        "files_count": 12,
+        "records_compared": 1308,
+        "signature_leak_count": 0,
+        "group_id_leak_count": 0,
+        "context_leak_count": 0,
+        "semantic_leak_count": 0
+      },
+      "calibration": {
+        "files_count": 3,
+        "records_compared": 500,
+        "signature_leak_count": 0,
+        "group_id_leak_count": 0,
+        "context_leak_count": 0,
+        "semantic_leak_count": 0
+      },
+      "fresh_calibration_eval": {
+        "files_count": 2,
+        "records_compared": 300,
+        "signature_leak_count": 0,
+        "group_id_leak_count": 0,
+        "context_leak_count": 0,
+        "semantic_leak_count": 0
+      },
+      "historical_eval": {
+        "files_count": 16,
+        "records_compared": 1756,
+        "signature_leak_count": 0,
+        "group_id_leak_count": 0,
+        "context_leak_count": 0,
+        "semantic_leak_count": 0
+      },
+      "transfer_probes": {
+        "files_count": 2,
+        "records_compared": 56,
+        "signature_leak_count": 0,
+        "group_id_leak_count": 0,
+        "context_leak_count": 0,
+        "semantic_leak_count": 0
+      },
+      "smoke": {
+        "files_count": 1,
+        "records_compared": 12,
+        "signature_leak_count": 0,
+        "group_id_leak_count": 0,
+        "context_leak_count": 0,
+        "semantic_leak_count": 0
+      },
+      "operator_eval": {
+        "files_count": 1,
+        "records_compared": 100,
+        "signature_leak_count": 0,
+        "group_id_leak_count": 0,
+        "context_leak_count": 0,
+        "semantic_leak_count": 0
+      },
+      "robustness_eval": {
+        "files_count": 1,
+        "records_compared": 108,
+        "signature_leak_count": 0,
+        "group_id_leak_count": 0,
+        "context_leak_count": 0,
+        "semantic_leak_count": 0
+      },
+      "general_choice_eval": {
+        "files_count": 1,
+        "records_compared": 120,
+        "signature_leak_count": 0,
+        "group_id_leak_count": 0,
+        "context_leak_count": 0,
+        "semantic_leak_count": 0
+      }
+    },
+    "leakage_audit_pass": true
+  },
+  "semantic_verification": {
+    "total_cases": 120,
+    "verified_correct_count": 120,
+    "mismatch_count": 0,
+    "unhandled_count": 0,
+    "all_120_verified_valid": true,
+    "sample_verifications": [
+      {
+        "id": "sealed-0001-c1",
+        "family": "core_boundary",
+        "stored_target": "ship",
+        "derived_target": "ship",
+        "reason": "val(110) >= thresh(110) is True",
+        "is_match": true
+      },
+      {
+        "id": "sealed-0001-c2",
+        "family": "core_boundary",
+        "stored_target": "hold",
+        "derived_target": "hold",
+        "reason": "val(110) > thresh(110) is False",
+        "is_match": true
+      },
+      {
+        "id": "sealed-0002-c1",
+        "family": "core_boundary",
+        "stored_target": "ship",
+        "derived_target": "ship",
+        "reason": "val(115) >= thresh(115) is True",
+        "is_match": true
+      },
+      {
+        "id": "sealed-0002-c2",
+        "family": "core_boundary",
+        "stored_target": "hold",
+        "derived_target": "hold",
+        "reason": "val(115) > thresh(115) is False",
+        "is_match": true
+      },
+      {
+        "id": "sealed-0003-c1",
+        "family": "core_boundary",
+        "stored_target": "ship",
+        "derived_target": "ship",
+        "reason": "val(120) >= thresh(120) is True",
+        "is_match": true
+      },
+      {
+        "id": "sealed-0003-c2",
+        "family": "core_boundary",
+        "stored_target": "hold",
+        "derived_target": "hold",
+        "reason": "val(120) > thresh(120) is False",
+        "is_match": true
+      },
+      {
+        "id": "sealed-0004-c1",
+        "family": "core_boundary",
+        "stored_target": "ship",
+        "derived_target": "ship",
+        "reason": "val(125) >= thresh(125) is True",
+        "is_match": true
+      },
+      {
+        "id": "sealed-0004-c2",
+        "family": "core_boundary",
+        "stored_target": "hold",
+        "derived_target": "hold",
+        "reason": "val(125) > thresh(125) is False",
+        "is_match": true
+      },
+      {
+        "id": "sealed-0005-c1",
+        "family": "core_boundary",
+        "stored_target": "ship",
+        "derived_target": "ship",
+        "reason": "val(130) >= thresh(130) is True",
+        "is_match": true
+      },
+      {
+        "id": "sealed-0005-c2",
+        "family": "core_boundary",
+        "stored_target": "hold",
+        "derived_target": "hold",
+        "reason": "val(130) > thresh(130) is False",
+        "is_match": true
+      }
+    ]
+  },
+  "metrics_recomputation": {
+    "metrics_t1": {
+      "temperature": 1.0,
+      "accuracy": 1.0,
+      "pair_both_rate": 1.0,
+      "permutation_consistency": 1.0,
+      "mean_nll": 2.6850814124887085e-10,
+      "mean_nll_scientific": "2.685081e-10",
+      "mean_brier": 1.5918896688086809e-18,
+      "mean_brier_scientific": "1.591890e-18",
+      "high_confidence_error_rate": 0.0,
+      "confidence_bins": {
+        "0.00-0.50": {
+          "count": 0,
+          "correct": 0
+        },
+        "0.50-0.70": {
+          "count": 0,
+          "correct": 0
+        },
+        "0.70-0.90": {
+          "count": 0,
+          "correct": 0
+        },
+        "0.90-1.00": {
+          "count": 120,
+          "correct": 120
+        }
+      },
+      "family_breakdown": {
+        "core_boundary": {
+          "count": 24,
+          "accuracy": 1.0,
+          "mean_nll": 8.124883900313968e-10,
+          "mean_brier": 5.3987155360648276e-18,
+          "mean_target_prob": 0.9999999991875116,
+          "min_target_prob": 0.9999999957733519,
+          "mean_margin": 27.045149564743042,
+          "perm_consistency": 1.0
+        },
+        "composite_exception": {
+          "count": 24,
+          "accuracy": 1.0,
+          "mean_nll": 5.115223516136285e-10,
+          "mean_brier": 2.5590046751670972e-18,
+          "mean_target_prob": 0.9999999994884776,
+          "min_target_prob": 0.9999999971395912,
+          "mean_margin": 28.50472265481949,
+          "perm_consistency": 1.0
+        },
+        "logical_operators": {
+          "count": 24,
+          "accuracy": 1.0,
+          "mean_nll": 1.1967269767365112e-11,
+          "mean_brier": 1.5267337805189135e-21,
+          "mean_target_prob": 0.9999999999880327,
+          "min_target_prob": 0.9999999999306424,
+          "mean_margin": 28.02619743347168,
+          "perm_consistency": 1.0
+        },
+        "domain_perturbation": {
+          "count": 24,
+          "accuracy": 1.0,
+          "mean_nll": 5.692983121906123e-12,
+          "mean_brier": 1.9871074560823595e-22,
+          "mean_target_prob": 0.9999999999943071,
+          "min_target_prob": 0.999999999974073,
+          "mean_margin": 30.011878967285156,
+          "perm_consistency": 1.0
+        },
+        "general_choice": {
+          "count": 24,
+          "accuracy": 1.0,
+          "mean_nll": 8.697117100565215e-13,
+          "mean_brier": 2.6882853446865276e-24,
+          "mean_target_prob": 0.9999999999991304,
+          "min_target_prob": 0.999999999997671,
+          "mean_margin": 28.495667854944866,
+          "perm_consistency": 1.0
+        }
+      },
+      "worst_cases_top3": [
+        {
+          "id": "sealed-0006-c2",
+          "family": "core_boundary",
+          "target": "hold",
+          "predicted": "hold",
+          "is_correct": true,
+          "target_prob": 0.9999999957733519,
+          "logit_margin": 19.281856536865234,
+          "prob_margin": 0.9999999915467036,
+          "nll": 4.2266481336589385e-09,
+          "brier": 3.5729109692482634e-17
+        },
+        {
+          "id": "sealed-0005-c2",
+          "family": "core_boundary",
+          "target": "hold",
+          "predicted": "hold",
+          "is_correct": true,
+          "target_prob": 0.9999999965745336,
+          "logit_margin": 19.49202823638916,
+          "prob_margin": 0.9999999931490674,
+          "nll": 3.4254663491445983e-09,
+          "brier": 2.3467638856548856e-17
+        },
+        {
+          "id": "sealed-0009-c2",
+          "family": "core_boundary",
+          "target": "hold",
+          "predicted": "hold",
+          "is_correct": true,
+          "target_prob": 0.9999999965891604,
+          "logit_margin": 19.496307373046875,
+          "prob_margin": 0.9999999931783209,
+          "nll": 3.410839604934368e-09,
+          "brier": 2.3267653219802602e-17
+        }
+      ]
+    },
+    "metrics_t_optimal_full": {
+      "temperature": 0.25597742585799016,
+      "accuracy": 1.0,
+      "pair_both_rate": 1.0,
+      "permutation_consistency": 1.0,
+      "mean_nll": 0.0,
+      "mean_nll_scientific": "0.000000e+00",
+      "mean_brier": 5.124443529211905e-68,
+      "mean_brier_scientific": "5.124444e-68",
+      "high_confidence_error_rate": 0.0,
+      "confidence_bins": {
+        "0.00-0.50": {
+          "count": 0,
+          "correct": 0
+        },
+        "0.50-0.70": {
+          "count": 0,
+          "correct": 0
+        },
+        "0.70-0.90": {
+          "count": 0,
+          "correct": 0
+        },
+        "0.90-1.00": {
+          "count": 120,
+          "correct": 120
+        }
+      },
+      "family_breakdown": {
+        "core_boundary": {
+          "count": 24,
+          "accuracy": 1.0,
+          "mean_nll": 0.0,
+          "mean_brier": 2.3910556376817043e-67,
+          "mean_target_prob": 1.0,
+          "min_target_prob": 1.0,
+          "mean_margin": 105.65443212069415,
+          "perm_consistency": 1.0
+        },
+        "composite_exception": {
+          "count": 24,
+          "accuracy": 1.0,
+          "mean_nll": 0.0,
+          "mean_brier": 1.7116612692419022e-68,
+          "mean_target_prob": 1.0,
+          "min_target_prob": 1.0,
+          "mean_margin": 111.35639230403541,
+          "perm_consistency": 1.0
+        },
+        "logical_operators": {
+          "count": 24,
+          "accuracy": 1.0,
+          "mean_nll": 0.0,
+          "mean_brier": 5.833994760791913e-81,
+          "mean_target_prob": 1.0,
+          "min_target_prob": 1.0,
+          "mean_margin": 109.48698831364884,
+          "perm_consistency": 1.0
+        },
+        "domain_perturbation": {
+          "count": 24,
+          "accuracy": 1.0,
+          "mean_nll": 0.0,
+          "mean_brier": 1.2400372930619505e-84,
+          "mean_target_prob": 1.0,
+          "min_target_prob": 1.0,
+          "mean_margin": 117.24424084151464,
+          "perm_consistency": 1.0
+        },
+        "general_choice": {
+          "count": 24,
+          "accuracy": 1.0,
+          "mean_nll": 0.0,
+          "mean_brier": 1.1156059002774133e-92,
+          "mean_target_prob": 1.0,
+          "min_target_prob": 1.0,
+          "mean_margin": 111.32101887278742,
+          "perm_consistency": 1.0
+        }
+      },
+      "worst_cases_top3": [
+        {
+          "id": "sealed-0001-c1",
+          "family": "core_boundary",
+          "target": "ship",
+          "predicted": "ship",
+          "is_correct": true,
+          "target_prob": 1.0,
+          "logit_margin": 97.7359022109422,
+          "prob_margin": 1.0,
+          "nll": -0.0,
+          "brier": 1.281368288800706e-85
+        },
+        {
+          "id": "sealed-0001-c2",
+          "family": "core_boundary",
+          "target": "hold",
+          "predicted": "hold",
+          "is_correct": true,
+          "target_prob": 1.0,
+          "logit_margin": 129.0470422591232,
+          "prob_margin": 1.0,
+          "nll": -0.0,
+          "brier": 8.15010646274344e-113
+        },
+        {
+          "id": "sealed-0002-c1",
+          "family": "core_boundary",
+          "target": "ship",
+          "predicted": "ship",
+          "is_correct": true,
+          "target_prob": 1.0,
+          "logit_margin": 120.03911811998961,
+          "prob_margin": 1.0,
+          "nll": -0.0,
+          "brier": 5.436842798114925e-105
+        }
+      ]
+    },
+    "metrics_t_rounded": {
+      "temperature": 0.256,
+      "accuracy": 1.0,
+      "pair_both_rate": 1.0,
+      "permutation_consistency": 1.0,
+      "mean_nll": 0.0,
+      "mean_nll_scientific": "0.000000e+00",
+      "mean_brier": 5.193368824174798e-68,
+      "mean_brier_scientific": "5.193369e-68",
+      "high_confidence_error_rate": 0.0,
+      "confidence_bins": {
+        "0.00-0.50": {
+          "count": 0,
+          "correct": 0
+        },
+        "0.50-0.70": {
+          "count": 0,
+          "correct": 0
+        },
+        "0.70-0.90": {
+          "count": 0,
+          "correct": 0
+        },
+        "0.90-1.00": {
+          "count": 120,
+          "correct": 120
+        }
+      },
+      "family_breakdown": {
+        "core_boundary": {
+          "count": 24,
+          "accuracy": 1.0,
+          "mean_nll": 0.0,
+          "mean_brier": 2.4231766675754102e-67,
+          "mean_target_prob": 1.0,
+          "min_target_prob": 1.0,
+          "mean_margin": 105.64511548727751,
+          "perm_consistency": 1.0
+        },
+        "composite_exception": {
+          "count": 24,
+          "accuracy": 1.0,
+          "mean_nll": 0.0,
+          "mean_brier": 1.7350774451192883e-68,
+          "mean_target_prob": 1.0,
+          "min_target_prob": 1.0,
+          "mean_margin": 111.34657287038863,
+          "perm_consistency": 1.0
+        },
+        "logical_operators": {
+          "count": 24,
+          "accuracy": 1.0,
+          "mean_nll": 0.0,
+          "mean_brier": 5.928871515628349e-81,
+          "mean_target_prob": 1.0,
+          "min_target_prob": 1.0,
+          "mean_margin": 109.47733372449875,
+          "perm_consistency": 1.0
+        },
+        "domain_perturbation": {
+          "count": 24,
+          "accuracy": 1.0,
+          "mean_nll": 0.0,
+          "mean_brier": 1.2611116385215896e-84,
+          "mean_target_prob": 1.0,
+          "min_target_prob": 1.0,
+          "mean_margin": 117.23390221595764,
+          "perm_consistency": 1.0
+        },
+        "general_choice": {
+          "count": 24,
+          "accuracy": 1.0,
+          "mean_nll": 0.0,
+          "mean_brier": 1.1364600697021124e-92,
+          "mean_target_prob": 1.0,
+          "min_target_prob": 1.0,
+          "mean_margin": 111.31120255837838,
+          "perm_consistency": 1.0
+        }
+      },
+      "worst_cases_top3": [
+        {
+          "id": "sealed-0001-c1",
+          "family": "core_boundary",
+          "target": "ship",
+          "predicted": "ship",
+          "is_correct": true,
+          "target_prob": 1.0,
+          "logit_margin": 97.72728383541107,
+          "prob_margin": 1.0,
+          "nll": -0.0,
+          "brier": 1.3036463642585806e-85
+        },
+        {
+          "id": "sealed-0001-c2",
+          "family": "core_boundary",
+          "target": "hold",
+          "predicted": "hold",
+          "is_correct": true,
+          "target_prob": 1.0,
+          "logit_margin": 129.03566285967827,
+          "prob_margin": 1.0,
+          "nll": -0.0,
+          "brier": 8.337719927215142e-113
+        },
+        {
+          "id": "sealed-0002-c1",
+          "family": "core_boundary",
+          "target": "ship",
+          "predicted": "ship",
+          "is_correct": true,
+          "target_prob": 1.0,
+          "logit_margin": 120.0285330414772,
+          "prob_margin": 1.0,
+          "nll": -0.0,
+          "brier": 5.553168586979655e-105
+        }
+      ]
+    }
+  },
+  "calibration_and_permutation": {
+    "calibration_audit": {
+      "dataset_path": "F:\\ai\\erabi-local\\data\\m9_calibration\\calibration.jsonl",
+      "dataset_cases": 100,
+      "expected_sha256": "a33978a1abdcb6a6744c8c388aa9f64d6c74ca8f7197b10df1b506e03966361b",
+      "actual_sha256": "a33978a1abdcb6a6744c8c388aa9f64d6c74ca8f7197b10df1b506e03966361b",
+      "hash_matches": true,
+      "is_at_boundary": false,
+      "optimizer_bounds": [
+        0.1,
+        10.0
+      ],
+      "eval_count": 39,
+      "optimal_T": 0.25597742585799016,
+      "independence_pass": true
+    },
+    "permutation_audit": {
+      "total_cases": 120,
+      "consistent_count": 120,
+      "consistency_rate": 1.0,
+      "max_prob_drift": 1.932691656475745e-33,
+      "max_prob_drift_scientific": "1.932692e-33",
+      "max_logit_drift": 40.32381062569695,
+      "max_logit_drift_scientific": "4.032381e+01",
+      "mean_tv_distance": 4.7368783106786307e-35,
+      "mean_tv_distance_scientific": "4.736878e-35",
+      "permutation_audit_pass": true
+    }
+  }
+}

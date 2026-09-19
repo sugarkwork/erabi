@@ -1,0 +1,42 @@
+# 設計値の例。まだ実装コードはなく、このファイルだけでは実行できません。
+# 本番で使う前に実機・モデルrevision・依存を確認してください。
+project = "ERABI"
+schema_version = "1"
+
+[model]
+backend = "gliclass"
+model_id = "knowledgator/gliclass-multilang-mini"
+revision = "" # 取得時に実際のcommitを記録する。空のまま学習結果を保存しない。
+local_path = "models/gliclass-multilang-mini"
+device = "cuda:0" # GPUの空きを実機確認して変更する。
+precision = "auto" # 実装が検証して選択し、選択後のdtypeを記録する。
+offline_inference = true
+
+[limits]
+max_choices = 16
+max_total_tokens = 512
+max_request_bytes = 65536
+truncation = false
+
+[decision]
+mode = "review_only" # 閾値の検証が終わるまで自動採用しない。
+
+[teacher]
+enabled = false
+budget_usd = 0.0
+
+[training]
+# M2以降の出発点。M1では実装・実行しない。
+seed = 42
+micro_batch_size = 2
+gradient_accumulation_steps = 8
+encoder_learning_rate = 0.00002
+new_head_learning_rate = 0.0001
+epochs = 1
+
+[server]
+# M3以降。M1ではHTTPサーバーを作らない。
+host = "127.0.0.1"
+port = 8765
+workers = 1
+max_inflight = 1

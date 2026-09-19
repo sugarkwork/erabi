@@ -1,0 +1,25 @@
+{
+  "milestone": "Milestone 6 Operator Generalization",
+  "splits": {
+    "fresh_operator_eval": {
+      "file": "fresh_operator_eval.jsonl",
+      "count": 100,
+      "pairs": 50,
+      "diff_pair_rate": 1.0
+    },
+    "dev_operator": {
+      "file": "dev_operator.jsonl",
+      "count": 60,
+      "pairs": 30,
+      "diff_pair_rate": 1.0
+    },
+    "train_operator": {
+      "file": "train_operator.jsonl",
+      "count": 400,
+      "pairs": 200,
+      "diff_pair_rate": 1.0
+    }
+  },
+  "semantic_validation": "100% PASSED",
+  "exact_input_leak_count": 0
+}

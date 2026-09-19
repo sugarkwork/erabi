@@ -1,0 +1,79 @@
+{
+  "torch_version": "2.10.0+cpu",
+  "source_sha256": "02d7215103c3486038f75418a958799495f5dd1b95f3bbf1ade8bcada310d7f9",
+  "tolerance": 1e-06,
+  "scope": "Execute actual run_full_training and compute_batch_loss via AST. Fake model/data-preparation/optimizer/evaluation; record gradients at each step without weight updates; no GPU or real GLiClass execution.",
+  "cases": [
+    {
+      "case": "normal16",
+      "samples": 16,
+      "micro": 2,
+      "accum": 8,
+      "reference": [
+        0.625
+      ],
+      "actual_uploaded_loop": [
+        0.625
+      ],
+      "max_abs_error": 0.0
+    },
+    {
+      "case": "partial8",
+      "samples": 8,
+      "micro": 2,
+      "accum": 8,
+      "reference": [
+        0.3125
+      ],
+      "actual_uploaded_loop": [
+        0.3125
+      ],
+      "max_abs_error": 0.0
+    },
+    {
+      "case": "odd15",
+      "samples": 15,
+      "micro": 2,
+      "accum": 8,
+      "reference": [
+        0.5000000260770321
+      ],
+      "actual_uploaded_loop": [
+        0.5000000260770321
+      ],
+      "max_abs_error": 0.0
+    },
+    {
+      "case": "multi23",
+      "samples": 23,
+      "micro": 2,
+      "accum": 8,
+      "reference": [
+        0.40625,
+        1.1428571939468384
+      ],
+      "actual_uploaded_loop": [
+        0.40625,
+        1.1428571939468384
+      ],
+      "max_abs_error": 0.0
+    },
+    {
+      "case": "accum_one5",
+      "samples": 5,
+      "micro": 2,
+      "accum": 1,
+      "reference": [
+        0.25,
+        -0.25,
+        2.5
+      ],
+      "actual_uploaded_loop": [
+        0.25,
+        -0.25,
+        2.5
+      ],
+      "max_abs_error": 0.0
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "release_candidate": "rc1_onnx_fp32",
+  "format": "ONNX Runtime FP32",
+  "created_at": "2026-09-19T15:06:04.246395+00:00",
+  "model_file": "model.onnx",
+  "model_size_bytes": 747285179,
+  "temperature": 0.256,
+  "parity_summary": {
+    "sealed_acceptance_top1_agreement": 1.0,
+    "sealed_acceptance_accuracy": 1.0
+  },
+  "benchmarks": {
+    "cold_start_ms": 51.64019999210723,
+    "p50_latency_ms": 51.539800013415515,
+    "p95_latency_ms": 54.221024992875755,
+    "p99_latency_ms": 54.76974401099142,
+    "mean_latency_ms": 51.06489099940518,
+    "throughput_req_per_sec": 19.58292635955393,
+    "ram_rss_mb": 3400.4609375,
+    "gpu_vram_peak_mb": 721.74609375,
+    "drift_1000_req_mb": null
+  }
+}

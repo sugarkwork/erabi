@@ -1,0 +1,44 @@
+--- M3.2/train.py
++++ M3.3/train.py
+@@ -175,10 +175,11 @@
+             best_idx = int(torch.argmax(logits_tensor).item())
+             best_id = req.choices[best_idx].id
+ 
+-            choice_outputs = [{"id": c.id, "probability": round(p, 6)} for c, p in zip(req.choices, probs)]
++            choice_outputs = [{"id": c.id, "probability": float(p)} for c, p in zip(req.choices, probs)]
+             predictions.append({
+                 "choices": choice_outputs,
+                 "best_candidate_id": best_id,
++                "raw_logits": logits_tensor.cpu().tolist(),
+             })
+             targets.append(target_choice_id)
+ 
+@@ -384,6 +385,9 @@
+         epoch_loss = 0.0
+         n_batches = 0
+ 
++        total_micro_batches = (len(epoch_records) + batch_size - 1) // batch_size
++        batch_idx = 0
++
+         for i in range(0, len(epoch_records), batch_size):
+             batch_records = epoch_records[i : i + batch_size]
+             # Shuffle choices for training augmentation
+@@ -391,10 +395,17 @@
+                 batch_records, shuffle_choices=True, rng=rng
+             )
+ 
++            # Determine actual window size for this accumulation window (handles fractional tail)
++            window_offset = batch_idx % trainer.gradient_accumulation_steps
++            remaining_in_window = trainer.gradient_accumulation_steps - window_offset
++            remaining_in_epoch = total_micro_batches - batch_idx
++            current_window_size = min(remaining_in_window, remaining_in_epoch)
++
+             loss = trainer.compute_batch_loss(tokenized, target_indices, num_choices_list, max_num_classes)
+-            loss_scaled = loss / trainer.gradient_accumulation_steps
++            loss_scaled = loss / current_window_size
+             loss_scaled.backward()
+             step += 1
++            batch_idx += 1
+             epoch_loss += loss.item()
+             n_batches += 1
+ 

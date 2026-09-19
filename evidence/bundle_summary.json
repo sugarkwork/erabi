@@ -1,0 +1,16 @@
+{
+  "followup": {
+    "source": "review_bundle_followup.zip",
+    "bytes": 183065,
+    "sha256": "4179fc2569b3d42f65a7b9bcdc5a9fbc8121fdbd0cff3618eebf3352b0491ed0",
+    "members": 44,
+    "uncompressed_bytes": 1307161
+  },
+  "m3_3_original": {
+    "source": "review_bundle(1).zip",
+    "bytes": 144288,
+    "sha256": "269c0aa6fb63cef90d4bb55e3caf3c8f1c626858e700f3279041eb508c1f5508",
+    "members": 40,
+    "uncompressed_bytes": 1091614
+  }
+}

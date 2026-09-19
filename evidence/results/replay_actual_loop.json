@@ -1,0 +1,63 @@
+{
+  "scope": "Execute reviewed training/loss source on synthetic CPU data, without model downloads.\nUse: python verify_uploaded_loop.py --source src/erabi/train.py --out gradient_check.json\nThe model, input preparation, shuffle, evaluation and optimizer are test doubles.\nThe uploaded run_full_training and compute_batch_loss bodies execute unmodified.\nOptimizer records gradients at each step; it does not update parameters.\nNo claim of reproducing a GLiClass training run.\n",
+  "torch": "2.10.0+cpu",
+  "source_sha256": "02d7215103c3486038f75418a958799495f5dd1b95f3bbf1ade8bcada310d7f9",
+  "cases": [
+    {
+      "case": "normal16",
+      "reference": [
+        0.625
+      ],
+      "actual_uploaded_loop": [
+        0.625
+      ],
+      "max_abs_error": 0.0
+    },
+    {
+      "case": "partial8",
+      "reference": [
+        0.3125
+      ],
+      "actual_uploaded_loop": [
+        0.3125
+      ],
+      "max_abs_error": 0.0
+    },
+    {
+      "case": "odd15",
+      "reference": [
+        0.5000000260770321
+      ],
+      "actual_uploaded_loop": [
+        0.5000000260770321
+      ],
+      "max_abs_error": 0.0
+    },
+    {
+      "case": "multi23",
+      "reference": [
+        0.40625,
+        1.1428571939468384
+      ],
+      "actual_uploaded_loop": [
+        0.40625,
+        1.1428571939468384
+      ],
+      "max_abs_error": 0.0
+    },
+    {
+      "case": "accum_one5",
+      "reference": [
+        0.25,
+        -0.25,
+        2.5
+      ],
+      "actual_uploaded_loop": [
+        0.25,
+        -0.25,
+        2.5
+      ],
+      "max_abs_error": 0.0
+    }
+  ]
+}

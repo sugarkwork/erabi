@@ -1,0 +1,85 @@
+....................FFFF.......s....                                     [100%]
+=================================== FAILURES ===================================
+_________________________ test_independent_audit_cases _________________________
+
+    def test_independent_audit_cases():
+        """Verify that independent audit cases match hand-crafted ground truth without generator logic."""
+        audit_path = ROOT_DIR / "data" / "m3_2_label_fix" / "audit_cases.jsonl"
+>       assert audit_path.exists(), "audit_cases.jsonl not found"
+E       AssertionError: audit_cases.jsonl not found
+E       assert False
+E        +  where False = exists()
+E        +    where exists = PosixPath('/mnt/data/ERABI_M3_4_REVIEW/current/data/m3_2_label_fix/audit_cases.jsonl').exists
+
+tests/test_repair.py:27: AssertionError
+________________________ test_dataset_input_invariance _________________________
+
+    def test_dataset_input_invariance():
+        """Verify that all repaired files preserve exact input text, choices, and structure."""
+        pairs = [
+            ("data/m2_1/train.jsonl", "data/m3_2_label_fix/train.jsonl"),
+            ("data/m2_1/dev.jsonl", "data/m3_2_label_fix/dev.jsonl"),
+            ("data/m2_1/holdout.jsonl", "data/m3_2_label_fix/holdout_corrected.jsonl"),
+            ("data/m3_1/final_test.jsonl", "data/m3_2_label_fix/final_test_corrected.jsonl"),
+        ]
+    
+        for old_rel, new_rel in pairs:
+            old_path = ROOT_DIR / old_rel
+            new_path = ROOT_DIR / new_rel
+>           assert old_path.exists() and new_path.exists()
+E           AssertionError: assert (False)
+E            +  where False = exists()
+E            +    where exists = PosixPath('/mnt/data/ERABI_M3_4_REVIEW/current/data/m2_1/train.jsonl').exists
+
+tests/test_repair.py:68: AssertionError
+____________________________ test_label_changes_log ____________________________
+
+    def test_label_changes_log():
+        """Verify label_changes.jsonl contains expected change counts and valid reasons."""
+        changes_path = ROOT_DIR / "data" / "m3_2_label_fix" / "label_changes.jsonl"
+>       assert changes_path.exists()
+E       AssertionError: assert False
+E        +  where False = exists()
+E        +    where exists = PosixPath('/mnt/data/ERABI_M3_4_REVIEW/current/data/m3_2_label_fix/label_changes.jsonl').exists
+
+tests/test_repair.py:94: AssertionError
+_____________________ test_counterfactual_probe_structure ______________________
+
+    def test_counterfactual_probe_structure():
+        """Verify counterfactual probe contains exactly 24 cases (12 pairs) with verified labels."""
+        cf_path = ROOT_DIR / "data" / "m3_2_label_fix" / "counterfactual_probe.jsonl"
+>       assert cf_path.exists()
+E       AssertionError: assert False
+E        +  where False = exists()
+E        +    where exists = PosixPath('/mnt/data/ERABI_M3_4_REVIEW/current/data/m3_2_label_fix/counterfactual_probe.jsonl').exists
+
+tests/test_repair.py:115: AssertionError
+=============================== warnings summary ===============================
+tests/test_api.py::test_api_validation_error_422
+  /opt/pyvenv/lib/python3.13/site-packages/starlette/_exception_handler.py:59: DeprecationWarning: 'HTTP_422_UNPROCESSABLE_ENTITY' is deprecated. Use 'HTTP_422_UNPROCESSABLE_CONTENT' instead.
+    response = await handler(conn, exc)
+
+tests/test_api.py::test_api_request_too_large_413
+  /mnt/data/ERABI_M3_4_REVIEW/current/src/erabi/api.py:172: DeprecationWarning: 'HTTP_413_REQUEST_ENTITY_TOO_LARGE' is deprecated. Use 'HTTP_413_CONTENT_TOO_LARGE' instead.
+    return await handle_choice_inference(request)
+
+tests/test_api.py::test_api_concurrency_lock_503
+  /mnt/data/ERABI_M3_4_REVIEW/current/tests/test_api.py:112: DeprecationWarning: There is no current event loop
+    loop = asyncio.get_event_loop()
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED tests/test_repair.py::test_independent_audit_cases - AssertionError: audit_cases.jsonl not found
+assert False
+ +  where False = exists()
+ +    where exists = PosixPath('/mnt/data/ERABI_M3_4_REVIEW/current/data/m3_2_label_fix/audit_cases.jsonl').exists
+FAILED tests/test_repair.py::test_dataset_input_invariance - AssertionError: assert (False)
+ +  where False = exists()
+ +    where exists = PosixPath('/mnt/data/ERABI_M3_4_REVIEW/current/data/m2_1/train.jsonl').exists
+FAILED tests/test_repair.py::test_label_changes_log - AssertionError: assert False
+ +  where False = exists()
+ +    where exists = PosixPath('/mnt/data/ERABI_M3_4_REVIEW/current/data/m3_2_label_fix/label_changes.jsonl').exists
+FAILED tests/test_repair.py::test_counterfactual_probe_structure - AssertionError: assert False
+ +  where False = exists()
+ +    where exists = PosixPath('/mnt/data/ERABI_M3_4_REVIEW/current/data/m3_2_label_fix/counterfactual_probe.jsonl').exists
+4 failed, 31 passed, 1 skipped, 3 warnings in 3.29s

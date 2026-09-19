@@ -1,0 +1,41 @@
+{
+  "release_candidate": "RC-1.0.0",
+  "milestone": "Milestone 10 Release Candidate",
+  "model_version": "W_general_v1",
+  "model_checkpoint_dir": "model",
+  "calibration_artifact": "calibration.json",
+  "temperature": 0.256,
+  "benchmarks": {
+    "iterations": 100,
+    "temperature": 0.256,
+    "latency_ms": {
+      "p50": 27.69,
+      "p95": 45.44,
+      "p99": 48.38,
+      "mean": 32.08,
+      "min": 26.17,
+      "max": 48.38
+    },
+    "probability_sum": {
+      "max_deviation_from_1": "0.00e+00",
+      "is_valid": true
+    },
+    "order_preserved": true,
+    "deterministic": true,
+    "memory_rss": {
+      "start_mb": 0.0,
+      "peak_mb": 0.19,
+      "delta_mb": 0.19
+    }
+  },
+  "accuracy_summary": {
+    "fresh_general_eval": "100.0%",
+    "fresh_robustness_eval": "100.0%",
+    "fresh_operator_eval": "92.0%",
+    "eval_v2_core": "97.5%",
+    "eval_exception": "100.0%",
+    "fresh_phrasing_eval": "86.7%",
+    "smoke_cases": "10/12 (83.3%)"
+  },
+  "created_at": "2026-09-19 23:18:49"
+}

@@ -1,0 +1,124 @@
+{
+  "source": "/mnt/data/ERABI_FOLLOWUP_REVIEW/followup/src/erabi/train.py",
+  "source_sha256": "faca48cc761ed6b0e85c6201a9334b4b2333257011e09e3a774f2ed24447db67",
+  "torch": "2.10.0+cpu",
+  "scope": "CPU synthetic gradient check, not actual-model retraining; real source function and loss executed with tiny dependencies. Clipping nonbinding; no optimizer update; no shuffle/dropout.",
+  "cases": [
+    {
+      "case": "direction_flip_full16",
+      "samples": 16,
+      "micro_batch": 2,
+      "accum": 8,
+      "reference_grads": [
+        0.625
+      ],
+      "uploaded_loop_grads": [
+        -0.28214283287525177
+      ],
+      "patched_loop_grads": [
+        0.625
+      ],
+      "uploaded_max_error": 0.9071428328752518,
+      "patched_max_error": 0.0
+    },
+    {
+      "case": "partial8",
+      "samples": 8,
+      "micro_batch": 2,
+      "accum": 8,
+      "reference_grads": [
+        0.3125
+      ],
+      "uploaded_loop_grads": [
+        -0.1458333358168602
+      ],
+      "patched_loop_grads": [
+        0.3125
+      ],
+      "uploaded_max_error": 0.4583333358168602,
+      "patched_max_error": 0.0
+    },
+    {
+      "case": "short_last_micro15",
+      "samples": 15,
+      "micro_batch": 2,
+      "accum": 8,
+      "reference_grads": [
+        0.5000000260770321
+      ],
+      "uploaded_loop_grads": [
+        1.4663690775632858
+      ],
+      "patched_loop_grads": [
+        0.5000000260770321
+      ],
+      "uploaded_max_error": 0.9663690514862537,
+      "patched_max_error": 0.0
+    },
+    {
+      "case": "full_then_tail23",
+      "samples": 23,
+      "micro_batch": 2,
+      "accum": 8,
+      "reference_grads": [
+        0.40625,
+        1.1428571939468384
+      ],
+      "uploaded_loop_grads": [
+        0.7163690775632858,
+        2.27083333581686
+      ],
+      "patched_loop_grads": [
+        0.40625,
+        1.1428571939468384
+      ],
+      "uploaded_max_error": 1.1279761418700218,
+      "patched_max_error": 0.0
+    },
+    {
+      "case": "accum_one5",
+      "samples": 5,
+      "micro_batch": 2,
+      "accum": 1,
+      "reference_grads": [
+        0.25,
+        -0.25,
+        2.5
+      ],
+      "uploaded_loop_grads": [
+        0.25,
+        -0.25,
+        2.5
+      ],
+      "patched_loop_grads": [
+        0.25,
+        -0.25,
+        2.5
+      ],
+      "uploaded_max_error": 0.0,
+      "patched_max_error": 0.0
+    }
+  ],
+  "full_window_wrong_divisors": [
+    8,
+    7,
+    6,
+    5,
+    4,
+    3,
+    2,
+    1
+  ],
+  "correct_full_window_micro_weights": [
+    0.125,
+    0.125,
+    0.125,
+    0.125,
+    0.125,
+    0.125,
+    0.125,
+    0.125
+  ],
+  "wrong_sum_micro_weights": 2.717857142857143,
+  "git_apply_check_on_original": "passed"
+}

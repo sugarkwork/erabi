@@ -1,0 +1,35 @@
+--- a/src/erabi/train.py
++++ b/src/erabi/train.py
+@@ -385,7 +385,6 @@
+         epoch_loss = 0.0
+         n_batches = 0
+ 
+-        total_micro_batches = (len(epoch_records) + batch_size - 1) // batch_size
+         batch_idx = 0
+ 
+         for i in range(0, len(epoch_records), batch_size):
+@@ -395,14 +394,18 @@
+                 batch_records, shuffle_choices=True, rng=rng
+             )
+ 
+-            # Determine actual window size for this accumulation window (handles fractional tail)
+-            window_offset = batch_idx % trainer.gradient_accumulation_steps
+-            remaining_in_window = trainer.gradient_accumulation_steps - window_offset
+-            remaining_in_epoch = total_micro_batches - batch_idx
+-            current_window_size = min(remaining_in_window, remaining_in_epoch)
++            # Weight each microbatch mean by its sample share in this optimizer window.
++            # The window denominator is constant until optimizer.step(), including the tail.
++            window_start_batch = (batch_idx // trainer.gradient_accumulation_steps) * trainer.gradient_accumulation_steps
++            window_start_sample = window_start_batch * batch_size
++            window_end_sample = min(
++                window_start_sample + trainer.gradient_accumulation_steps * batch_size,
++                len(epoch_records),
++            )
++            window_sample_count = window_end_sample - window_start_sample
+ 
+             loss = trainer.compute_batch_loss(tokenized, target_indices, num_choices_list, max_num_classes)
+-            loss_scaled = loss / current_window_size
++            loss_scaled = loss * (len(batch_records) / window_sample_count)
+             loss_scaled.backward()
+             step += 1
+             batch_idx += 1

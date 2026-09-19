@@ -1,0 +1,101 @@
+{
+  "generated_status_consumed": {
+    "generated_status": "applied_scoped",
+    "intended_temperature": 3.1097,
+    "actual_health": {
+      "status": "ok",
+      "model_id": "fake-local-model",
+      "calibration": {
+        "status": "none",
+        "artifact_id": null
+      },
+      "temperature": 1.0,
+      "decision_policy": "review_default"
+    },
+    "actual_prediction": {
+      "schema_version": "1",
+      "model_id": "fake-local-model",
+      "choices": [
+        {
+          "id": "a",
+          "probability": 0.017986209962091555
+        },
+        {
+          "id": "b",
+          "probability": 0.9820137900379085
+        }
+      ],
+      "best_candidate_id": "b",
+      "decision": {
+        "status": "review",
+        "reason": "policy_not_configured"
+      },
+      "calibration": {
+        "status": "none",
+        "artifact_id": null
+      },
+      "usage": {
+        "input_tokens": 5,
+        "truncated": false
+      }
+    }
+  },
+  "required_calibration_rejected": "Calibration artifact status is 'applied_scoped', but calibration was required.",
+  "nonlocal_model_verification_bypass": {
+    "model_id": "not-a-real-directory/or/model",
+    "loader_returned_status": "applied",
+    "loader_returned_temperature": 3.1097,
+    "model_hash_checked": false
+  },
+  "contract_mismatch_accepted": {
+    "loader_status": "applied",
+    "temperature": 3.1097,
+    "contract": {
+      "schema_version": "999",
+      "max_tokens": 1,
+      "precision": "not-the-runtime-precision",
+      "decision_policy": "review_default",
+      "scope": "bounded_synthetic_rules_only",
+      "formatter_version": "not-the-runtime-format"
+    },
+    "note": "Real loader and real hash helper; fake local checkpoint bytes, no model instantiation."
+  },
+  "goal_state_roundtrip": {
+    "generated_state": [
+      "gf",
+      "プラン",
+      [
+        [
+          550,
+          12
+        ],
+        [
+          1100,
+          5
+        ],
+        [
+          4450,
+          4
+        ]
+      ]
+    ],
+    "extracted_states": [
+      [
+        "gf",
+        [
+          4450,
+          4,
+          1100,
+          5,
+          550,
+          12
+        ]
+      ]
+    ],
+    "matches_own_state": false
+  },
+  "current_artifact_vs_summary_status": {
+    "artifact": "applied",
+    "summary": "applied_scoped"
+  }
+}

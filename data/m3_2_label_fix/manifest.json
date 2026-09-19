@@ -1,0 +1,41 @@
+{
+  "version": "M3.2",
+  "description": "Repaired datasets for server capacity label bug, plus independent audit and counterfactual probes.",
+  "files": {
+    "train.jsonl": {
+      "sha256": "047f14e002fa2c6be8bdcf87c54eeabef3fc5d5393989efca94843c31401711e",
+      "size_bytes": 367033
+    },
+    "dev.jsonl": {
+      "sha256": "04b23a3243ffa7c396fcbf0ad3f876e85b1f3f5e548091e77eb05f90db281c4a",
+      "size_bytes": 61075
+    },
+    "holdout_corrected.jsonl": {
+      "sha256": "701b682d116730df5ba89263c1c86fc0aa44ddf085474735784cbf57502433d3",
+      "size_bytes": 122928
+    },
+    "final_test_corrected.jsonl": {
+      "sha256": "f8b1b435f8ca3f94af5d1988d22c005f0348bafa3e9c8dc8de12a86bb4ccd4dc",
+      "size_bytes": 130864
+    },
+    "label_changes.jsonl": {
+      "sha256": "ec3af55e12daaf52166f790dcb7007ea652d88b1d1fb8309d371e9b7c89bf0fb",
+      "size_bytes": 29736
+    },
+    "audit_cases.jsonl": {
+      "sha256": "13b8906e89cf91da28c04b8d798de5737cc129cf6d92e0ddcdb7631c4b6c6c82",
+      "size_bytes": 5202
+    },
+    "counterfactual_probe.jsonl": {
+      "sha256": "a7d1438b23cd5915fc7a1b4d749c0655f68dd7016f484b5d2d63bc06e4a01661",
+      "size_bytes": 15315
+    }
+  },
+  "change_counts_by_split": {
+    "train": 38,
+    "dev": 6,
+    "holdout": 12,
+    "final_test": 10,
+    "total": 66
+  }
+}

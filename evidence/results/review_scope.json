@@ -1,0 +1,35 @@
+{
+  "date": "2026-09-18",
+  "archives": {
+    "review_bundle(2).zip": {
+      "bytes": 124685,
+      "sha256": "e42f8b8bdd8a983491dba869f2e21ef01a78dff30d92ae6c4e050dd59d993fca"
+    },
+    "review_bundle_followup.zip": {
+      "bytes": 183065,
+      "sha256": "4179fc2569b3d42f65a7b9bcdc5a9fbc8121fdbd0cff3618eebf3352b0491ed0"
+    },
+    "review_bundle.zip": {
+      "bytes": 254378,
+      "sha256": "2ac0bc5e000ed87f4e3a905affdac3e6793d4b8081f0c1e5f4a21e89e20e8752"
+    }
+  },
+  "scoring_scope": {
+    "models": 4,
+    "datasets": 3,
+    "prediction_rows": 976,
+    "new_model_rows": 244,
+    "max_prediction_mismatches": 0
+  },
+  "tests": {
+    "with_original_archive_only": "31 passed; 1 skipped due missing old data; 4 failures due omitted fixtures; 5 calibration tests not collected due missing gliclass/transformers",
+    "with_prior_user_uploaded_data_in_separate_workspace": "36 passed; 5 calibration tests not executed",
+    "production_loop_probe": "5 synthetic CPU scenarios passed, real loop and loss via AST"
+  },
+  "unperformed": [
+    "GLiClass forward",
+    "GPU training",
+    "weight hashing of missing checkpoint files",
+    "5 calibration pytest cases"
+  ]
+}

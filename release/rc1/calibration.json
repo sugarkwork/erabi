@@ -1,0 +1,50 @@
+{
+  "artifact_id": "calib-rc1-prod",
+  "created_at": "2026-09-19T14:18:44.050865+00:00",
+  "status": "applied",
+  "temperature": 0.256,
+  "method": "temperature_scaling_nll_minimize_scalar",
+  "optimization": {
+    "initial_T": 1.0,
+    "initial_nll": 1.7185645886794145e-07,
+    "initial_nll_scientific": "1.718565e-07",
+    "optimal_T": 0.25597742585799016,
+    "optimal_nll": 0.0,
+    "optimal_nll_scientific": "0.000000e+00",
+    "improvement": 1.7185645886794145e-07,
+    "eval_count": 39,
+    "success": true,
+    "is_at_boundary": false,
+    "bounds": [
+      0.1,
+      10.0
+    ]
+  },
+  "target_model": {
+    "checkpoint_path": "F:\\ai\\erabi-local\\release\\rc1\\model",
+    "files": {
+      "config.json": "30031aeabbfcbd04bd6211903d5779ec31de10af157f1bfb49ab36344b41111d",
+      "model.safetensors": "be9a9cb17d58f3732a0f484b569490fa8e09fd809cbbe1ff0986e38b573afdcf",
+      "tokenizer.json": "ac84fa7889747f37393545a7fc14ce4f1f158b33460318cad93531e0aa8db109",
+      "tokenizer_config.json": "276e1525b9d4543bf789cfbd981155e82324d78a5dcf4fbc01803886899efc3e"
+    }
+  },
+  "dataset": {
+    "path": "F:\\ai\\erabi-local\\data\\m9_calibration\\calibration.jsonl",
+    "cases": 100,
+    "sha256": "a33978a1abdcb6a6744c8c388aa9f64d6c74ca8f7197b10df1b506e03966361b",
+    "description": "ERABI Release Candidate 1 Multitask Calibration Set"
+  },
+  "contract": {
+    "schema_version": "1",
+    "max_tokens": 512,
+    "formatter_version": "m1_instruct_pipe_v1",
+    "precision": "float32_forward_float64_nll",
+    "decision_policy": "review_default",
+    "scope": "multitask_general_choice_engine"
+  },
+  "adoption": {
+    "decision": "ACCEPT_SCOPED",
+    "reason": "Bound to Release Candidate 1 model weights"
+  }
+}

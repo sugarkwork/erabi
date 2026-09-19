@@ -1,0 +1,27 @@
+{
+  "generator_seed": 20260918,
+  "splits": {
+    "calibration": {
+      "file": "calibration.jsonl",
+      "groups": 100,
+      "cases": 200,
+      "seen_template_cases": 100,
+      "novel_template_cases": 100,
+      "sha256": "530ec6d03bf95ee4ef101a289fce7abb6151d77c6f720e397bc4204178b689b7"
+    },
+    "final_test": {
+      "file": "final_test.jsonl",
+      "groups": 100,
+      "cases": 200,
+      "seen_template_cases": 100,
+      "novel_template_cases": 100,
+      "sha256": "a2d2f572e61c7b75975b9b406894e0601544587ada8d644b38bd078f9be03189"
+    },
+    "transfer_probe": {
+      "file": "transfer_probe.jsonl",
+      "groups": 16,
+      "cases": 32,
+      "sha256": "154976b2644d799d8626f0c3380248e659113b94e0c2be2985853a8b0915c09d"
+    }
+  }
+}

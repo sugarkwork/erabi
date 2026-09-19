@@ -1,0 +1,44 @@
+{
+  "version": "M3.6_cal",
+  "description": "Calibration and fresh evaluation datasets for bounded synthetic rule calibration.",
+  "splits": {
+    "calibration": {
+      "file": "calibration.jsonl",
+      "cases": 200,
+      "groups": 100,
+      "unique_fingerprints": 200,
+      "stats": {
+        "total_groups": 100,
+        "total_cases": 200,
+        "gf_groups": 50,
+        "er_composite_groups": 35,
+        "er_comparison_groups": 7,
+        "er_boundary_groups": 8,
+        "attempts": 106
+      },
+      "sha256": "9b2338c57f39bc8b7442d7ad17cad4b90dcc67eb743b1ebc72eaa47019e56069"
+    },
+    "fresh_eval": {
+      "file": "fresh_eval.jsonl",
+      "cases": 200,
+      "groups": 100,
+      "unique_fingerprints": 200,
+      "stats": {
+        "total_groups": 100,
+        "total_cases": 200,
+        "gf_groups": 50,
+        "er_composite_groups": 35,
+        "er_comparison_groups": 7,
+        "er_boundary_groups": 8,
+        "attempts": 107
+      },
+      "sha256": "ddd2be564dc8df077856bcdd20ab7b18adac5f338f7c4e9b81d61df2f5b37be7"
+    }
+  },
+  "invariance_checks": {
+    "cal_fresh_overlap": 0,
+    "cal_existing_overlap": 0,
+    "fresh_existing_overlap": 0,
+    "internal_duplicates": 0
+  }
+}

@@ -1,0 +1,757 @@
+{
+  "scope": "Recomputed from uploaded saved logits, not real-model inference; old individual predictions taken from previously uploaded followup ZIP.",
+  "datasets": {
+    "eval_v2": {
+      "B0": {
+        "n": 200,
+        "correct": 89,
+        "accuracy": 0.445,
+        "mean_nll": 2.263967323118355,
+        "mean_brier": 0.9048565417871621,
+        "uniform_nll": 0.8958797346140276,
+        "pairs": {
+          "different": {
+            "pairs": 47,
+            "both_correct": 3,
+            "one_correct": 34,
+            "zero_correct": 10,
+            "pred_same": 43
+          },
+          "same": {
+            "pairs": 53,
+            "both_correct": 16,
+            "one_correct": 17,
+            "zero_correct": 20,
+            "pred_same": 35
+          }
+        },
+        "mismatches": [],
+        "pmax_bins": [
+          {
+            "lo": 0,
+            "hi": 0.5,
+            "n": 0,
+            "correct": 0,
+            "mean_pmax": null
+          },
+          {
+            "lo": 0.5,
+            "hi": 0.7,
+            "n": 55,
+            "correct": 25,
+            "mean_pmax": 0.5819571739784735
+          },
+          {
+            "lo": 0.7,
+            "hi": 0.9,
+            "n": 49,
+            "correct": 21,
+            "mean_pmax": 0.822491800382437
+          },
+          {
+            "lo": 0.9,
+            "hi": 1.000001,
+            "n": 96,
+            "correct": 43,
+            "mean_pmax": 0.9626073005626484
+          }
+        ],
+        "subsets": {
+          "goal_following": {
+            "n": 100,
+            "correct": 26
+          },
+          "explicit_rule": {
+            "n": 100,
+            "correct": 63
+          },
+          "goal_c1": {
+            "n": 50,
+            "correct": 19
+          },
+          "goal_c2": {
+            "n": 50,
+            "correct": 7
+          }
+        }
+      },
+      "W_fix": {
+        "n": 200,
+        "correct": 106,
+        "accuracy": 0.53,
+        "mean_nll": 4.131465696114157,
+        "mean_brier": 0.8502969698680571,
+        "uniform_nll": 0.8958797346140276,
+        "pairs": {
+          "different": {
+            "pairs": 47,
+            "both_correct": 14,
+            "one_correct": 28,
+            "zero_correct": 5,
+            "pred_same": 15
+          },
+          "same": {
+            "pairs": 53,
+            "both_correct": 13,
+            "one_correct": 24,
+            "zero_correct": 16,
+            "pred_same": 25
+          }
+        },
+        "mismatches": [],
+        "pmax_bins": [
+          {
+            "lo": 0,
+            "hi": 0.5,
+            "n": 0,
+            "correct": 0,
+            "mean_pmax": null
+          },
+          {
+            "lo": 0.5,
+            "hi": 0.7,
+            "n": 26,
+            "correct": 14,
+            "mean_pmax": 0.6345369554073007
+          },
+          {
+            "lo": 0.7,
+            "hi": 0.9,
+            "n": 33,
+            "correct": 18,
+            "mean_pmax": 0.8045104422753129
+          },
+          {
+            "lo": 0.9,
+            "hi": 1.000001,
+            "n": 141,
+            "correct": 74,
+            "mean_pmax": 0.9903677985075598
+          }
+        ],
+        "subsets": {
+          "goal_following": {
+            "n": 100,
+            "correct": 42
+          },
+          "explicit_rule": {
+            "n": 100,
+            "correct": 64
+          },
+          "goal_c1": {
+            "n": 50,
+            "correct": 30
+          },
+          "goal_c2": {
+            "n": 50,
+            "correct": 12
+          }
+        }
+      },
+      "W_v2": {
+        "n": 200,
+        "correct": 117,
+        "accuracy": 0.585,
+        "mean_nll": 0.8223926533405378,
+        "mean_brier": 0.5186531161659668,
+        "uniform_nll": 0.8958797346140276,
+        "pairs": {
+          "different": {
+            "pairs": 47,
+            "both_correct": 8,
+            "one_correct": 29,
+            "zero_correct": 10,
+            "pred_same": 34
+          },
+          "same": {
+            "pairs": 53,
+            "both_correct": 28,
+            "one_correct": 16,
+            "zero_correct": 9,
+            "pred_same": 36
+          }
+        },
+        "mismatches": [],
+        "pmax_bins": [
+          {
+            "lo": 0,
+            "hi": 0.5,
+            "n": 82,
+            "correct": 33,
+            "mean_pmax": 0.37773432067949975
+          },
+          {
+            "lo": 0.5,
+            "hi": 0.7,
+            "n": 54,
+            "correct": 36,
+            "mean_pmax": 0.5456897985829922
+          },
+          {
+            "lo": 0.7,
+            "hi": 0.9,
+            "n": 19,
+            "correct": 7,
+            "mean_pmax": 0.8302596589548257
+          },
+          {
+            "lo": 0.9,
+            "hi": 1.000001,
+            "n": 45,
+            "correct": 41,
+            "mean_pmax": 0.9639029502465404
+          }
+        ],
+        "subsets": {
+          "goal_following": {
+            "n": 100,
+            "correct": 41
+          },
+          "explicit_rule": {
+            "n": 100,
+            "correct": 76
+          },
+          "goal_c1": {
+            "n": 50,
+            "correct": 20
+          },
+          "goal_c2": {
+            "n": 50,
+            "correct": 21
+          }
+        }
+      },
+      "W_v2_gradfix": {
+        "n": 200,
+        "correct": 162,
+        "accuracy": 0.81,
+        "mean_nll": 0.47608155578016825,
+        "mean_brier": 0.27547418363077997,
+        "uniform_nll": 0.8958797346140276,
+        "pairs": {
+          "different": {
+            "pairs": 47,
+            "both_correct": 12,
+            "one_correct": 34,
+            "zero_correct": 1,
+            "pred_same": 35
+          },
+          "same": {
+            "pairs": 53,
+            "both_correct": 52,
+            "one_correct": 0,
+            "zero_correct": 1,
+            "pred_same": 53
+          }
+        },
+        "mismatches": [],
+        "pmax_bins": [
+          {
+            "lo": 0,
+            "hi": 0.5,
+            "n": 18,
+            "correct": 8,
+            "mean_pmax": 0.45751663920368674
+          },
+          {
+            "lo": 0.5,
+            "hi": 0.7,
+            "n": 45,
+            "correct": 29,
+            "mean_pmax": 0.6010433556113585
+          },
+          {
+            "lo": 0.7,
+            "hi": 0.9,
+            "n": 33,
+            "correct": 27,
+            "mean_pmax": 0.7966307664200981
+          },
+          {
+            "lo": 0.9,
+            "hi": 1.000001,
+            "n": 104,
+            "correct": 98,
+            "mean_pmax": 0.9858533959734821
+          }
+        ],
+        "subsets": {
+          "goal_following": {
+            "n": 100,
+            "correct": 69
+          },
+          "explicit_rule": {
+            "n": 100,
+            "correct": 93
+          },
+          "goal_c1": {
+            "n": 50,
+            "correct": 36
+          },
+          "goal_c2": {
+            "n": 50,
+            "correct": 33
+          }
+        }
+      }
+    },
+    "smoke_cases": {
+      "B0": {
+        "n": 12,
+        "correct": 7,
+        "accuracy": 0.5833333333333334,
+        "mean_nll": 1.3799250690940583,
+        "mean_brier": 0.6261385980462993,
+        "uniform_nll": 1.0310347706500824,
+        "pairs": {
+          "different": {
+            "pairs": 2,
+            "both_correct": 0,
+            "one_correct": 2,
+            "zero_correct": 0,
+            "pred_same": 1
+          },
+          "same": {
+            "pairs": 0,
+            "both_correct": 0,
+            "one_correct": 0,
+            "zero_correct": 0,
+            "pred_same": 0
+          }
+        },
+        "mismatches": [],
+        "pmax_bins": [
+          {
+            "lo": 0,
+            "hi": 0.5,
+            "n": 1,
+            "correct": 0,
+            "mean_pmax": 0.38026980457031284
+          },
+          {
+            "lo": 0.5,
+            "hi": 0.7,
+            "n": 2,
+            "correct": 1,
+            "mean_pmax": 0.5859061559588916
+          },
+          {
+            "lo": 0.7,
+            "hi": 0.9,
+            "n": 2,
+            "correct": 2,
+            "mean_pmax": 0.8080508925945893
+          },
+          {
+            "lo": 0.9,
+            "hi": 1.000001,
+            "n": 7,
+            "correct": 4,
+            "mean_pmax": 0.9685611099716046
+          }
+        ]
+      },
+      "W_fix": {
+        "n": 12,
+        "correct": 7,
+        "accuracy": 0.5833333333333334,
+        "mean_nll": 3.016606208071817,
+        "mean_brier": 0.7579124287135036,
+        "uniform_nll": 1.0310347706500824,
+        "pairs": {
+          "different": {
+            "pairs": 2,
+            "both_correct": 0,
+            "one_correct": 2,
+            "zero_correct": 0,
+            "pred_same": 1
+          },
+          "same": {
+            "pairs": 0,
+            "both_correct": 0,
+            "one_correct": 0,
+            "zero_correct": 0,
+            "pred_same": 0
+          }
+        },
+        "mismatches": [],
+        "pmax_bins": [
+          {
+            "lo": 0,
+            "hi": 0.5,
+            "n": 1,
+            "correct": 1,
+            "mean_pmax": 0.4733911950105208
+          },
+          {
+            "lo": 0.5,
+            "hi": 0.7,
+            "n": 2,
+            "correct": 1,
+            "mean_pmax": 0.6051685597940103
+          },
+          {
+            "lo": 0.7,
+            "hi": 0.9,
+            "n": 3,
+            "correct": 2,
+            "mean_pmax": 0.8124621944805362
+          },
+          {
+            "lo": 0.9,
+            "hi": 1.000001,
+            "n": 6,
+            "correct": 3,
+            "mean_pmax": 0.9965974649483303
+          }
+        ]
+      },
+      "W_v2": {
+        "n": 12,
+        "correct": 9,
+        "accuracy": 0.75,
+        "mean_nll": 0.8317141261032214,
+        "mean_brier": 0.49038267740906655,
+        "uniform_nll": 1.0310347706500824,
+        "pairs": {
+          "different": {
+            "pairs": 2,
+            "both_correct": 0,
+            "one_correct": 2,
+            "zero_correct": 0,
+            "pred_same": 2
+          },
+          "same": {
+            "pairs": 0,
+            "both_correct": 0,
+            "one_correct": 0,
+            "zero_correct": 0,
+            "pred_same": 0
+          }
+        },
+        "mismatches": [],
+        "pmax_bins": [
+          {
+            "lo": 0,
+            "hi": 0.5,
+            "n": 5,
+            "correct": 3,
+            "mean_pmax": 0.41199480747268585
+          },
+          {
+            "lo": 0.5,
+            "hi": 0.7,
+            "n": 3,
+            "correct": 3,
+            "mean_pmax": 0.5425896211314472
+          },
+          {
+            "lo": 0.7,
+            "hi": 0.9,
+            "n": 0,
+            "correct": 0,
+            "mean_pmax": null
+          },
+          {
+            "lo": 0.9,
+            "hi": 1.000001,
+            "n": 4,
+            "correct": 3,
+            "mean_pmax": 0.954481434675869
+          }
+        ]
+      },
+      "W_v2_gradfix": {
+        "n": 12,
+        "correct": 8,
+        "accuracy": 0.6666666666666666,
+        "mean_nll": 1.514785288034475,
+        "mean_brier": 0.4984674250772605,
+        "uniform_nll": 1.0310347706500824,
+        "pairs": {
+          "different": {
+            "pairs": 2,
+            "both_correct": 0,
+            "one_correct": 2,
+            "zero_correct": 0,
+            "pred_same": 2
+          },
+          "same": {
+            "pairs": 0,
+            "both_correct": 0,
+            "one_correct": 0,
+            "zero_correct": 0,
+            "pred_same": 0
+          }
+        },
+        "mismatches": [],
+        "pmax_bins": [
+          {
+            "lo": 0,
+            "hi": 0.5,
+            "n": 2,
+            "correct": 1,
+            "mean_pmax": 0.4136777686431647
+          },
+          {
+            "lo": 0.5,
+            "hi": 0.7,
+            "n": 4,
+            "correct": 3,
+            "mean_pmax": 0.5933758242895755
+          },
+          {
+            "lo": 0.7,
+            "hi": 0.9,
+            "n": 2,
+            "correct": 1,
+            "mean_pmax": 0.7204209402990984
+          },
+          {
+            "lo": 0.9,
+            "hi": 1.000001,
+            "n": 4,
+            "correct": 3,
+            "mean_pmax": 0.9799595578354561
+          }
+        ]
+      }
+    },
+    "transfer_probe": {
+      "B0": {
+        "n": 32,
+        "correct": 18,
+        "accuracy": 0.5625,
+        "mean_nll": 1.0773208916444943,
+        "mean_brier": 0.5793112198234402,
+        "uniform_nll": 0.8631767256287433,
+        "pairs": {
+          "different": {
+            "pairs": 14,
+            "both_correct": 3,
+            "one_correct": 9,
+            "zero_correct": 2,
+            "pred_same": 9
+          },
+          "same": {
+            "pairs": 2,
+            "both_correct": 1,
+            "one_correct": 1,
+            "zero_correct": 0,
+            "pred_same": 1
+          }
+        },
+        "mismatches": [],
+        "pmax_bins": [
+          {
+            "lo": 0,
+            "hi": 0.5,
+            "n": 0,
+            "correct": 0,
+            "mean_pmax": null
+          },
+          {
+            "lo": 0.5,
+            "hi": 0.7,
+            "n": 5,
+            "correct": 0,
+            "mean_pmax": 0.6388083126031727
+          },
+          {
+            "lo": 0.7,
+            "hi": 0.9,
+            "n": 12,
+            "correct": 5,
+            "mean_pmax": 0.7948822927227334
+          },
+          {
+            "lo": 0.9,
+            "hi": 1.000001,
+            "n": 15,
+            "correct": 13,
+            "mean_pmax": 0.9767703036032593
+          }
+        ]
+      },
+      "W_fix": {
+        "n": 32,
+        "correct": 23,
+        "accuracy": 0.71875,
+        "mean_nll": 1.6564495523441831,
+        "mean_brier": 0.5260692560602312,
+        "uniform_nll": 0.8631767256287433,
+        "pairs": {
+          "different": {
+            "pairs": 14,
+            "both_correct": 8,
+            "one_correct": 5,
+            "zero_correct": 1,
+            "pred_same": 4
+          },
+          "same": {
+            "pairs": 2,
+            "both_correct": 0,
+            "one_correct": 2,
+            "zero_correct": 0,
+            "pred_same": 0
+          }
+        },
+        "mismatches": [],
+        "pmax_bins": [
+          {
+            "lo": 0,
+            "hi": 0.5,
+            "n": 0,
+            "correct": 0,
+            "mean_pmax": null
+          },
+          {
+            "lo": 0.5,
+            "hi": 0.7,
+            "n": 6,
+            "correct": 5,
+            "mean_pmax": 0.6024861488355852
+          },
+          {
+            "lo": 0.7,
+            "hi": 0.9,
+            "n": 3,
+            "correct": 1,
+            "mean_pmax": 0.8246735740525498
+          },
+          {
+            "lo": 0.9,
+            "hi": 1.000001,
+            "n": 23,
+            "correct": 17,
+            "mean_pmax": 0.9887432567949138
+          }
+        ]
+      },
+      "W_v2": {
+        "n": 32,
+        "correct": 20,
+        "accuracy": 0.625,
+        "mean_nll": 0.7412277047222721,
+        "mean_brier": 0.4734823244812104,
+        "uniform_nll": 0.8631767256287433,
+        "pairs": {
+          "different": {
+            "pairs": 14,
+            "both_correct": 7,
+            "one_correct": 5,
+            "zero_correct": 2,
+            "pred_same": 5
+          },
+          "same": {
+            "pairs": 2,
+            "both_correct": 0,
+            "one_correct": 1,
+            "zero_correct": 1,
+            "pred_same": 1
+          }
+        },
+        "mismatches": [],
+        "pmax_bins": [
+          {
+            "lo": 0,
+            "hi": 0.5,
+            "n": 11,
+            "correct": 4,
+            "mean_pmax": 0.34044960720728434
+          },
+          {
+            "lo": 0.5,
+            "hi": 0.7,
+            "n": 12,
+            "correct": 9,
+            "mean_pmax": 0.5619650218429127
+          },
+          {
+            "lo": 0.7,
+            "hi": 0.9,
+            "n": 5,
+            "correct": 3,
+            "mean_pmax": 0.7741283211626862
+          },
+          {
+            "lo": 0.9,
+            "hi": 1.000001,
+            "n": 4,
+            "correct": 4,
+            "mean_pmax": 0.9757843541626915
+          }
+        ]
+      },
+      "W_v2_gradfix": {
+        "n": 32,
+        "correct": 25,
+        "accuracy": 0.78125,
+        "mean_nll": 0.6737717490563278,
+        "mean_brier": 0.38748930352857947,
+        "uniform_nll": 0.8631767256287433,
+        "pairs": {
+          "different": {
+            "pairs": 14,
+            "both_correct": 8,
+            "one_correct": 5,
+            "zero_correct": 1,
+            "pred_same": 5
+          },
+          "same": {
+            "pairs": 2,
+            "both_correct": 2,
+            "one_correct": 0,
+            "zero_correct": 0,
+            "pred_same": 2
+          }
+        },
+        "mismatches": [],
+        "pmax_bins": [
+          {
+            "lo": 0,
+            "hi": 0.5,
+            "n": 4,
+            "correct": 2,
+            "mean_pmax": 0.4162176837468012
+          },
+          {
+            "lo": 0.5,
+            "hi": 0.7,
+            "n": 13,
+            "correct": 10,
+            "mean_pmax": 0.5864535097113963
+          },
+          {
+            "lo": 0.7,
+            "hi": 0.9,
+            "n": 10,
+            "correct": 9,
+            "mean_pmax": 0.8036913443010993
+          },
+          {
+            "lo": 0.9,
+            "hi": 1.000001,
+            "n": 5,
+            "correct": 4,
+            "mean_pmax": 0.9643406733847927
+          }
+        ]
+      }
+    }
+  },
+  "unchanged_data": {
+    "train": {
+      "sha256": "9cb6545fc3f3a982ce22942a66b97984f2c8e4bd328bcfb96acc1a860db0a7d9",
+      "identical_to_previous": true
+    },
+    "dev": {
+      "sha256": "623729415d6b00f3589f7aa4659adbb86aecb012d1073a2f608e64f9729dfce3",
+      "identical_to_previous": true
+    },
+    "eval_v2": {
+      "sha256": "e528ee7acc26c06a2a6db8c297e0b92c8fe25835235aeaf90bc121127266b9bc",
+      "identical_to_previous": true
+    }
+  }
+}

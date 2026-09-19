@@ -1,0 +1,226 @@
+{
+  "excluded_cases": 22,
+  "excluded_groups": 11,
+  "templates": {
+    "novel": 22
+  },
+  "by_rule": {
+    "composite_logic": 20,
+    "boundary": 2
+  },
+  "metrics": {
+    "B0": {
+      "count": 178,
+      "correct": 74,
+      "accuracy": 0.4157303370786517,
+      "nll": 2.3446706834458,
+      "brier": 0.9485649289380675,
+      "tasks": {
+        "goal_following": {
+          "correct": 26,
+          "count": 100
+        },
+        "boundary": {
+          "correct": 24,
+          "count": 36
+        },
+        "comparison": {
+          "correct": 24,
+          "count": 42
+        }
+      },
+      "pairs": {
+        "different_target": {
+          "groups": 39,
+          "both_correct": 2,
+          "same_prediction": 36,
+          "different_prediction": 3
+        },
+        "different_target/goal_following": {
+          "groups": 31,
+          "both_correct": 0,
+          "same_prediction": 30,
+          "different_prediction": 1
+        },
+        "same_target": {
+          "groups": 50,
+          "both_correct": 13,
+          "same_prediction": 32,
+          "different_prediction": 18
+        },
+        "same_target/boundary": {
+          "groups": 13,
+          "both_correct": 8,
+          "same_prediction": 12,
+          "different_prediction": 1
+        },
+        "same_target/comparison": {
+          "groups": 18,
+          "both_correct": 3,
+          "same_prediction": 3,
+          "different_prediction": 15
+        },
+        "same_target/goal_following": {
+          "groups": 19,
+          "both_correct": 2,
+          "same_prediction": 17,
+          "different_prediction": 2
+        },
+        "different_target/comparison": {
+          "groups": 3,
+          "both_correct": 0,
+          "same_prediction": 3,
+          "different_prediction": 0
+        },
+        "different_target/boundary": {
+          "groups": 5,
+          "both_correct": 2,
+          "same_prediction": 3,
+          "different_prediction": 2
+        }
+      }
+    },
+    "W_fix": {
+      "count": 178,
+      "correct": 88,
+      "accuracy": 0.4943820224719101,
+      "nll": 4.597411351940074,
+      "brier": 0.9277716310647408,
+      "tasks": {
+        "goal_following": {
+          "correct": 42,
+          "count": 100
+        },
+        "boundary": {
+          "correct": 23,
+          "count": 36
+        },
+        "comparison": {
+          "correct": 23,
+          "count": 42
+        }
+      },
+      "pairs": {
+        "different_target": {
+          "groups": 39,
+          "both_correct": 10,
+          "same_prediction": 11,
+          "different_prediction": 28
+        },
+        "different_target/goal_following": {
+          "groups": 31,
+          "both_correct": 5,
+          "same_prediction": 8,
+          "different_prediction": 23
+        },
+        "same_target": {
+          "groups": 50,
+          "both_correct": 10,
+          "same_prediction": 22,
+          "different_prediction": 28
+        },
+        "same_target/boundary": {
+          "groups": 13,
+          "both_correct": 0,
+          "same_prediction": 0,
+          "different_prediction": 13
+        },
+        "same_target/comparison": {
+          "groups": 18,
+          "both_correct": 9,
+          "same_prediction": 16,
+          "different_prediction": 2
+        },
+        "same_target/goal_following": {
+          "groups": 19,
+          "both_correct": 1,
+          "same_prediction": 6,
+          "different_prediction": 13
+        },
+        "different_target/comparison": {
+          "groups": 3,
+          "both_correct": 0,
+          "same_prediction": 3,
+          "different_prediction": 0
+        },
+        "different_target/boundary": {
+          "groups": 5,
+          "both_correct": 5,
+          "same_prediction": 0,
+          "different_prediction": 5
+        }
+      }
+    },
+    "W_v2": {
+      "count": 178,
+      "correct": 102,
+      "accuracy": 0.5730337078651685,
+      "nll": 0.8394796280687397,
+      "brier": 0.5222717151399805,
+      "tasks": {
+        "goal_following": {
+          "correct": 41,
+          "count": 100
+        },
+        "boundary": {
+          "correct": 36,
+          "count": 36
+        },
+        "comparison": {
+          "correct": 25,
+          "count": 42
+        }
+      },
+      "pairs": {
+        "different_target": {
+          "groups": 39,
+          "both_correct": 7,
+          "same_prediction": 27,
+          "different_prediction": 12
+        },
+        "different_target/goal_following": {
+          "groups": 31,
+          "both_correct": 1,
+          "same_prediction": 25,
+          "different_prediction": 6
+        },
+        "same_target": {
+          "groups": 50,
+          "both_correct": 25,
+          "same_prediction": 33,
+          "different_prediction": 17
+        },
+        "same_target/boundary": {
+          "groups": 13,
+          "both_correct": 13,
+          "same_prediction": 13,
+          "different_prediction": 0
+        },
+        "same_target/comparison": {
+          "groups": 18,
+          "both_correct": 3,
+          "same_prediction": 3,
+          "different_prediction": 15
+        },
+        "same_target/goal_following": {
+          "groups": 19,
+          "both_correct": 9,
+          "same_prediction": 17,
+          "different_prediction": 2
+        },
+        "different_target/comparison": {
+          "groups": 3,
+          "both_correct": 1,
+          "same_prediction": 2,
+          "different_prediction": 1
+        },
+        "different_target/boundary": {
+          "groups": 5,
+          "both_correct": 5,
+          "same_prediction": 0,
+          "different_prediction": 5
+        }
+      }
+    }
+  }
+}
