@@ -36,6 +36,7 @@
 - **Milestone 14（Data Scaling Law・層化nested 5分割12.5%/25%/50%/75%/100%同一条件学習・全7評価セット横断計測・General/Operator/Robustness飽和点50%~75%特定・Core retention容量特性特定・ERABI_DATA_SCALING_REPORT.md保全）**: **完了（スケーリング則確立）**。
 - **Milestone 14.1（Compute-Controlled Scaling Audit・U_ref=1960 updates固定・12.5%/50%/100%因果分離・12.5%でOperator +8.0pt/Robustness +5.6pt/Exception +11.7ptのcompute利得確認・Core/Phrasingのデータ多様性依存残存によるPattern C判定・ERABI_DATA_SCALING_REPORT.md統合）**: **完了（因果分離完了・M15へ自律移行）**。
 - **Milestone 15（Quantity vs Diversity・N=1138, U=980 updates完全固定下での多様性対照実験・Condition A/B/C比較・高多様性CがGeneral 100.0% / Operator 93.0% / Robustness 100.0% / eval_v2 97.5%(Paired 95.0%)で大差勝利・Phrasingにおける閾値効果特定・Gate完全突破・ERABI_QUANTITY_VS_DIVERSITY_REPORT.md保全）**: **完了（Gate完全通過・M16へ自律移行）**。
+- **Milestone 16（Diversity Attribution・Condition B基準単一軸アブレーション4条件・Group多様性欠落でCore 89.5%→48.0%半減/Operator多様性欠落で71.0%へ急落/Phrasing多様性欠落で51.7%へ急落/Domain多様性は事前学習語彙で耐性大・因果特定完了・DATA_DESIGN_FINDINGS.md保全）**: **完了（因果完全特定・M17へ自律移行）**。
 
 ---
 
@@ -808,6 +809,43 @@ W_fix（14/47）からW_v2（8/47）への両問正解減少（-6組）の要因
    - 言語的表現の言い換え（Phrasing）および例外処理は、均等配分による極端な希釈（22件/タスク）を受けると性能が低下する（48.3%）。表現空間が広大であるため、最低限必要な絶対件数（クリティカル・マス $\ge 100$ 件）が存在する。
 4. **Gate判定**:
    - 3つのFresh軸で高多様性の有意差を実証し、**Gate完全PASS**。Milestone 16へ自律移行。
+
+---
+
+## 24. Milestone 16: Diversity Attribution 実測結果
+
+詳細は [`DATA_DESIGN_FINDINGS.md`](file:///f:/ai/erabi-local/DATA_DESIGN_FINDINGS.md) および [`runs/rc2_m16_ablation/m16_ablation_results.json`](file:///f:/ai/erabi-local/runs/rc2_m16_ablation/m16_ablation_results.json) を参照。
+
+### 24.1 実験設計と単一軸アブレーション
+- **基準アンカー**: Condition B (Balanced, $N = 1,138$, $U = 980$ updates)
+- **実験手法**: $N$と$U$を完全に固定し、1軸だけ多様性を意図的に削減して因果を特定。
+  1. **`abl_no_phrasing`**: 言語表現多様性を削減（定型構文へ固定）
+  2. **`abl_no_domain`**: ドメイン多様性を削減（`domain='none'` へ縮退）
+  3. **`abl_no_operator`**: オペレータ多様性を削減（単純照合へ置換）
+  4. **`abl_no_group`**: Core意味状態多様性を削減（15グループへ集中）
+
+### 24.2 総合アブレーション・マトリクス
+
+| 評価スイート | 件数 | Baseline (B) | - Phrasing Div | - Domain Div | - Operator Div | - Group Div | 最大影響軸 (Max Drop) |
+|---|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
+| **Fresh General** | 120 | **100.0%** | 100.0% (+0.0%) | 100.0% (+0.0%) | 100.0% (+0.0%) | 100.0% (+0.0%) | **Phrasing** (0.0pt) |
+| **Fresh Operator** | 100 | **93.0%** | 86.0% (-7.0%) | 88.0% (-5.0%) | **71.0% (-22.0%)** | 92.0% (-1.0%) | **Operator (-22.0pt)** |
+| **Fresh Robustness** | 108 | **100.0%** | 100.0% (+0.0%) | 100.0% (+0.0%) | 100.0% (+0.0%) | 100.0% (+0.0%) | **Phrasing** (0.0pt) |
+| **Fresh Phrasing** | 120 | **69.2%** | **51.7% (-17.5%)** | 63.3% (-5.8%) | 72.5% (+3.3%) | 78.3% (+9.2%) | **Phrasing (-17.5pt)** |
+| **Core Retention (eval_v2)** | 200 | **89.5%** | 92.5% (+3.0%) | 93.5% (+4.0%) | 91.5% (+2.0%) | **48.0% (-41.5%)** | **Group (-41.5pt)** |
+| **Exception Handling** | 120 | **97.5%** | 100.0% (+2.5%) | 93.3% (-4.2%) | 97.5% (+0.0%) | 100.0% (+2.5%) | **Domain (-4.2pt)** |
+| **Smoke Cases** | 12 | **75.0%** | 83.3% (+8.3%) | 75.0% (+0.0%) | 75.0% (+0.0%) | **58.3% (-16.7%)** | **Group (-16.7pt)** |
+
+### 24.3 因果アトリビューションの結論
+1. **第1位: Group/Numerical State Diversity（影響度 -41.5pt）**:
+   - Stream Aのグループ数を15に狭めると、`eval_v2_core` が半減（89.5% $\to$ 48.0%）、対照ペア一致率は 79.0% $\to$ 20.0% へ激減。浅く広いグループ網羅がCore論理保持の最重要要因。
+2. **第2位: Operator Diversity（影響度 -22.0pt）**:
+   - 複合演算子を削ると `fresh_operator_eval` が 93.0% $\to$ 71.0% へ急落。演算ロジックは他タスク量で代替不可。
+3. **第3位: Phrasing Diversity（影響度 -17.5pt）**:
+   - 定型文固定により `fresh_phrasing_eval` が 69.2% $\to$ 51.7% へ低下。構文ショートカット防止に必須。
+4. **第4位: Domain Diversity（影響度 -4.2pt〜-5.8pt）**:
+   - 事前学習済みエンコーダの語彙表現により、表層ドメインの削減による影響は限定的。
+
 
 
 

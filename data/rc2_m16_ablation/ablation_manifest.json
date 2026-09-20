@@ -1,0 +1,99 @@
+{
+  "milestone": "Milestone 16 Diversity Attribution",
+  "baseline_condition": "cond_b_balanced",
+  "fixed_sample_size": 1138,
+  "baseline_profile": {
+    "total_records": 1138,
+    "stream_a_records": 356,
+    "stream_b_records": 782,
+    "distinct_task_families": 19,
+    "distinct_domains": 10,
+    "distinct_stream_a_groups": 243,
+    "task_family_entropy": 2.5893687555579823,
+    "domain_entropy": 1.6450701622447643,
+    "unique_contexts": 753,
+    "unique_inputs": 1017
+  },
+  "ablations": {
+    "abl_no_phrasing": {
+      "name": "Ablation 1: No Phrasing Diversity",
+      "description": "Diverse phrasing templates collapsed to single canonical template.",
+      "profile": {
+        "total_records": 1138,
+        "stream_a_records": 356,
+        "stream_b_records": 782,
+        "distinct_task_families": 19,
+        "distinct_domains": 10,
+        "distinct_stream_a_groups": 243,
+        "task_family_entropy": 2.5893687555579823,
+        "domain_entropy": 1.6450701622447643,
+        "unique_contexts": 753,
+        "unique_inputs": 989
+      },
+      "stream_a_file": "data\\rc2_m16_ablation\\abl_no_phrasing_stream_a.jsonl",
+      "stream_b_file": "data\\rc2_m16_ablation\\abl_no_phrasing_stream_b.jsonl",
+      "combined_file": "data\\rc2_m16_ablation\\abl_no_phrasing_combined.jsonl",
+      "sha256": "9aae8a5f1b51eef33570e53e14d0889aa9a9645643eb7267f02e448662ecb932"
+    },
+    "abl_no_domain": {
+      "name": "Ablation 2: No Domain Diversity",
+      "description": "Domain diversity and perturbations collapsed to generic domain='none'.",
+      "profile": {
+        "total_records": 1138,
+        "stream_a_records": 356,
+        "stream_b_records": 782,
+        "distinct_task_families": 19,
+        "distinct_domains": 1,
+        "distinct_stream_a_groups": 243,
+        "task_family_entropy": 2.5893687555579823,
+        "domain_entropy": -0.0,
+        "unique_contexts": 753,
+        "unique_inputs": 1017
+      },
+      "stream_a_file": "data\\rc2_m16_ablation\\abl_no_domain_stream_a.jsonl",
+      "stream_b_file": "data\\rc2_m16_ablation\\abl_no_domain_stream_b.jsonl",
+      "combined_file": "data\\rc2_m16_ablation\\abl_no_domain_combined.jsonl",
+      "sha256": "a326e877f015f8798238008d7fc767350b58e903fd8b35f94d2072837b70cdde"
+    },
+    "abl_no_operator": {
+      "name": "Ablation 3: No Operator Diversity",
+      "description": "Operator logic families (and, or, comparisons, overrides) replaced by simple lookups.",
+      "profile": {
+        "total_records": 1138,
+        "stream_a_records": 356,
+        "stream_b_records": 782,
+        "distinct_task_families": 9,
+        "distinct_domains": 10,
+        "distinct_stream_a_groups": 243,
+        "task_family_entropy": 2.0486756607382164,
+        "domain_entropy": 0.9642114820618567,
+        "unique_contexts": 667,
+        "unique_inputs": 877
+      },
+      "stream_a_file": "data\\rc2_m16_ablation\\abl_no_operator_stream_a.jsonl",
+      "stream_b_file": "data\\rc2_m16_ablation\\abl_no_operator_stream_b.jsonl",
+      "combined_file": "data\\rc2_m16_ablation\\abl_no_operator_combined.jsonl",
+      "sha256": "73c6002e77473fa0b8d57c4fd8e0fd42ce52c459626605ff9b4255e12ead4af7"
+    },
+    "abl_no_group": {
+      "name": "Ablation 4: No Group / Numerical State Diversity",
+      "description": "Stream A group coverage restricted from 243 groups to 15 groups.",
+      "profile": {
+        "total_records": 1138,
+        "stream_a_records": 356,
+        "stream_b_records": 782,
+        "distinct_task_families": 19,
+        "distinct_domains": 10,
+        "distinct_stream_a_groups": 15,
+        "task_family_entropy": 2.5893687555579823,
+        "domain_entropy": 1.6450701622447643,
+        "unique_contexts": 547,
+        "unique_inputs": 701
+      },
+      "stream_a_file": "data\\rc2_m16_ablation\\abl_no_group_stream_a.jsonl",
+      "stream_b_file": "data\\rc2_m16_ablation\\abl_no_group_stream_b.jsonl",
+      "combined_file": "data\\rc2_m16_ablation\\abl_no_group_combined.jsonl",
+      "sha256": "0979504d0be2158e2b396ada9231282666726234418a5006ea13555038b19309"
+    }
+  }
+}
