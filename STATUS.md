@@ -34,6 +34,7 @@
 - **GitHub Public Release（公開リポジトリセットアップ・バージョン管理対象選別・大容量重み/runs/zip/キャッシュ除外・全ソース/テスト/データ/文書/リリース設定追跡・https://github.com/sugarkwork/erabi-local へpush完了）**: **完了（公開完了）**。
 - **Milestone 13（RC1 Reproducibility Baseline・暗号ハッシュ検証一致・全4セット340問Top-1一致率100.0%・RTX A4000 p50=10.87ms / 89.0 req/s・RC2_BASELINE_LOCKED.md保全）**: **完了（基準完全固定）**。
 - **Milestone 14（Data Scaling Law・層化nested 5分割12.5%/25%/50%/75%/100%同一条件学習・全7評価セット横断計測・General/Operator/Robustness飽和点50%~75%特定・Core retention容量特性特定・ERABI_DATA_SCALING_REPORT.md保全）**: **完了（スケーリング則確立）**。
+- **Milestone 14.1（Compute-Controlled Scaling Audit・U_ref=1960 updates固定・12.5%/50%/100%因果分離・12.5%でOperator +8.0pt/Robustness +5.6pt/Exception +11.7ptのcompute利得確認・Core/Phrasingのデータ多様性依存残存によるPattern C判定・ERABI_DATA_SCALING_REPORT.md統合）**: **完了（因果分離完了・M15へ自律移行）**。
 
 ---
 
