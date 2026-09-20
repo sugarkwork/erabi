@@ -1,0 +1,25 @@
+=== Research Fresh rf_op_and_01 ===
+--- rf_op_and_01_s1 ---
+Context: クラウドDB自動フェイルオーバー規程：『レプリケーション遅延が1秒未満、かつセカンダリノードのCPU使用率が60%以下の場合に限り自動昇格を実行する』。現在の監視データ：レプリケーション遅延0.2秒、セカンダリCPU使用率52%。
+Question: フェイルオーバー実行判定：自動昇格を実行すべきか判定してください。
+Choices: [{'id': 'execute_auto_promote', 'text': 'セカンダリを自動昇格する'}, {'id': 'hold_manual_intervention', 'text': '自動昇格を見送り手動介入を要請する'}, {'id': 'reboot_cluster_nodes', 'text': 'クラスタ全ノードを強制再起動する'}]
+Target: {'kind': 'hard', 'choice_id': 'execute_auto_promote'}
+--- rf_op_and_01_s2 ---
+Context: クラウドDB自動フェイルオーバー規程：『レプリケーション遅延が1秒未満、かつセカンダリノードのCPU使用率が60%以下の場合に限り自動昇格を実行する』。現在の監視データ：レプリケーション遅延0.2秒、セカンダリCPU使用率78%。
+Question: フェイルオーバー実行判定：自動昇格を実行すべきか判定してください。
+Choices: [{'id': 'execute_auto_promote', 'text': 'セカンダリを自動昇格する'}, {'id': 'hold_manual_intervention', 'text': '自動昇格を見送り手動介入を要請する'}, {'id': 'reboot_cluster_nodes', 'text': 'クラスタ全ノードを強制再起動する'}]
+Target: {'kind': 'hard', 'choice_id': 'hold_manual_intervention'}
+
+=== Train tb_log_and_044 ===
+--- tb_log_and_044_s1 ---
+Context: 【判定ルール】レプリケーション遅延が1.0秒未満であり、かつセカンダリノードCPU使用率が60%以下である場合に自動昇格実行。超過時は手動対応待機。
+事象確認：監視ログ：遅延0.1秒、セカンダリCPU使用率42%。
+Question: 判定選定：自動昇格フェイルオーバーの複数条件に基づき適切な判断を選択してください。
+Choices: [{'id': 'execute_auto_promote', 'text': 'セカンダリノードの自動昇格を実行する'}, {'id': 'hold_manual_intervention', 'text': '自動昇格を見送り手動対応待機とする'}, {'id': 'restart_secondary_service', 'text': 'セカンダリノードのDBデーモンを再起動する'}]
+Target: {'kind': 'hard', 'choice_id': 'execute_auto_promote'}
+--- tb_log_and_044_s2 ---
+Context: 【判定ルール】レプリケーション遅延が1.0秒未満であり、かつセカンダリノードCPU使用率が60%以下である場合に自動昇格実行。超過時は手動対応待機。
+事象確認：監視ログ：遅延0.2秒、セカンダリCPU使用率75%。
+Question: 判定選定：自動昇格フェイルオーバーの複数条件に基づき適切な判断を選択してください。
+Choices: [{'id': 'execute_auto_promote', 'text': 'セカンダリノードの自動昇格を実行する'}, {'id': 'hold_manual_intervention', 'text': '自動昇格を見送り手動対応待機とする'}, {'id': 'restart_secondary_service', 'text': 'セカンダリノードのDBデーモンを再起動する'}]
+Target: {'kind': 'hard', 'choice_id': 'hold_manual_intervention'}

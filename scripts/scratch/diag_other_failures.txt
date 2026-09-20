@@ -1,0 +1,33 @@
+=== General Choice Failures ===
+ID: rf_gen_rout_02_s2, Target: severity_critical_outage_war_room, Pred: severity_low_performance_monitoring, p_pred: 0.713
+ID: rf_gen_rout_08_s2, Target: route_to_brand_culture_pr, Pred: blackmail_reporters_for_money, p_pred: 0.971
+ID: rf_gen_rout_10_s2, Target: direct_to_general_outpatient_clinic, Pred: direct_to_acute_stroke_care_unit, p_pred: 0.999
+ID: rf_gen_nli_11_s2, Target: nli_relation_contradiction, Pred: nli_relation_entailment, p_pred: 1.000
+ID: rf_gen_nli_12_s2, Target: nli_contradiction_denied, Pred: nli_entailment_derived, p_pred: 0.682
+ID: rf_gen_nli_15_s2, Target: logically_contradicted, Pred: logically_entailed, p_pred: 0.688
+ID: rf_gen_rel_31_s2, Target: effect_temporary_server_shutdown, Pred: cause_rodent_cable_damage, p_pred: 0.998
+ID: rf_gen_rel_32_s2, Target: problem_low_checkout_conversion, Pred: solution_reduce_form_fields, p_pred: 0.968
+ID: rf_gen_rel_33_s1, Target: prereq_full_backup_and_replica_sync, Pred: target_run_db_migration, p_pred: 0.994
+ID: rf_gen_rel_35_s1, Target: solution_ai_ocr_receipt_scanner, Pred: problem_manual_data_entry_overtime, p_pred: 0.898
+ID: rf_gen_rel_36_s2, Target: goal_one_class_architect_exam, Pred: prereq_architecture_degree_and_experience, p_pred: 1.000
+ID: rf_gen_rel_37_s1, Target: cause_material_cost_and_weak_yen, Pred: effect_price_hike_on_flagship_foods, p_pred: 0.863
+ID: rf_gen_rel_38_s1, Target: intervention_epinephrine_im_injection, Pred: condition_anaphylactic_shock_crisis, p_pred: 1.000
+ID: rf_gen_rel_39_s2, Target: action_passenger_vessel_departure, Pred: prereq_life_jackets_and_coast_guard_filing, p_pred: 0.893
+ID: rf_gen_rel_40_s2, Target: problem_factory_perimeter_noise, Pred: solution_acoustic_absorption_panels, p_pred: 1.000
+
+=== Perturbation Invariance Failures ===
+ID: rf_pert_pord_02_s2, Target: refund_in_store_points, Pred: refund_in_cash_full, p_pred: 0.995
+ID: rf_pert_pord_03_s2, Target: maintain_active_session, Pred: execute_automatic_logout, p_pred: 1.000
+ID: rf_pert_pord_07_s1, Target: apply_1000_yen_discount, Pred: deny_coupon_discount_under_limit, p_pred: 0.695
+ID: rf_pert_pord_08_s1, Target: permit_waterslide_entry, Pred: deny_waterslide_entry_under_height, p_pred: 0.970
+ID: rf_pert_cord_14_s1, Target: pass_lot_for_shipment, Pred: reject_lot_for_rework, p_pred: 0.570
+ID: rf_pert_cord_20_s1, Target: execute_instant_loan_disbursement, Pred: route_to_secondary_review_docs, p_pred: 1.000
+ID: rf_pert_fldr_28_s2, Target: deny_insurance_payout_post_departure, Pred: payout_travel_insurance_benefit, p_pred: 1.000
+ID: rf_pert_fldr_29_s2, Target: route_to_license_purchase_request, Pred: deploy_software_automatically, p_pred: 0.999
+ID: rf_pert_fldr_30_s2, Target: mark_direct_debit_failed_nsf, Pred: execute_direct_debit_transfer, p_pred: 0.999
+ID: rf_pert_reg_33_s2, Target: mandate_in_office_attendance, Pred: transition_to_remote_work, p_pred: 1.000
+ID: rf_pert_reg_34_s1, Target: permit_corporate_lan_connection, Pred: sever_network_connection_unencrypted, p_pred: 1.000
+ID: rf_pert_prn_42_s2, Target: reject_taxi_fare_unjustified, Pred: slash_all_taxi_tires, p_pred: 1.000
+ID: rf_pert_prn_43_s2, Target: charge_extra_fee_for_excess_companion, Pred: allow_all_companions_under_gold_rule, p_pred: 1.000
+ID: rf_pert_prn_45_s1, Target: permit_prescription_medicine_liquids, Pred: confiscate_liquids_over_100ml, p_pred: 1.000
+ID: rf_pert_neg_56_s2, Target: reject_applicant_insufficient_english, Pred: advance_to_second_round_interview, p_pred: 1.000

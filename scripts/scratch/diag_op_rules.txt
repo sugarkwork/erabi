@@ -1,0 +1,60 @@
+=== rf_op_and_01_s2 ===
+Context: クラウドDB自動フェイルオーバー規程：『レプリケーション遅延が1秒未満、かつセカンダリノードのCPU使用率が60%以下の場合に限り自動昇格を実行する』。現在の監視データ：レプリケーション遅延0.2秒、セカンダリCPU使用率78%。
+Question: フェイルオーバー実行判定：自動昇格を実行すべきか判定してください。
+Choices: [{'id': 'execute_auto_promote', 'text': 'セカンダリを自動昇格する'}, {'id': 'hold_manual_intervention', 'text': '自動昇格を見送り手動介入を要請する'}, {'id': 'reboot_cluster_nodes', 'text': 'クラスタ全ノードを強制再起動する'}]
+Target: {'kind': 'hard', 'choice_id': 'hold_manual_intervention'}
+
+=== rf_op_and_02_s2 ===
+Context: 製薬クリーンルーム入室基準：『入室バッジ認証が有効、かつ差圧計が15Pa以上を示している場合のみ自動ドアを解錠する』。計測値：認証OK、前室差圧11Pa。
+Question: 扉インターロック判定：自動解錠を許可するか選択してください。
+Choices: [{'id': 'unlock_entrance_door', 'text': '入室ドアを解錠する'}, {'id': 'keep_locked_alarm', 'text': 'ドア施錠を維持し差圧警告を発報する'}, {'id': 'vent_quarantine_room', 'text': '無菌室の空気を大気放散する'}]
+Target: {'kind': 'hard', 'choice_id': 'keep_locked_alarm'}
+
+=== rf_op_and_03_s2 ===
+Context: 高精度3Dプリンタ造形開始条件：『チャンバー温度が65℃に達し、かつノズル先端のオートレベリング誤差が0.02mm以内のとき造形を開始する』。現在の状態：チャンバー60℃、レベリング誤差0.012mm。
+Question: 造形開始判定：プリントシーケンスを進めるべきか選択してください。
+Choices: [{'id': 'start_print_sequence', 'text': '3Dプリント造形を開始する'}, {'id': 'wait_chamber_heating', 'text': '造形を待機し加熱を継続する'}, {'id': 'purge_filament_spool', 'text': 'フィラメントを全量排出廃棄する'}]
+Target: {'kind': 'hard', 'choice_id': 'wait_chamber_heating'}
+
+=== rf_op_and_04_s2 ===
+Context: 越境EC輸出税関申告：『インボイス記載価格が20万円以下、かつ該非判定書で非該当と証明されている貨物は簡易通関とする』。貨物情報：申告価格18万円、該非判定：軍民両用リスト規制該当社内判定。
+Question: 通関手続き選択：適用すべき通関ルートを選択してください。
+Choices: [{'id': 'route_simplified_customs', 'text': '簡易通関ルートで申告する'}, {'id': 'route_formal_export_license', 'text': '経済産業省個別輸出許可申請ルートへ回す'}, {'id': 'confiscate_cargo_customs', 'text': '貨物を税関没収手続きにする'}]
+Target: {'kind': 'hard', 'choice_id': 'route_formal_export_license'}
+
+=== rf_op_and_05_s2 ===
+Context: LNGタンカー着桟荷役基準：『平均風速が10m/s未満、かつ波高が1.0m未満のとき着桟荷役パイプを接続する』。気象実測値：風速12m/s、波高0.7m。
+Question: 荷役作業判定：ローディングアームの接続を行うか選択してください。
+Choices: [{'id': 'connect_loading_arms', 'text': 'ローディングアームを接続し荷役準備する'}, {'id': 'abort_and_standoff', 'text': '接続を見送り洋上待機を指示する'}, {'id': 'emergency_release_berth', 'text': '係留索を即時切断して緊急離桟する'}]
+Target: {'kind': 'hard', 'choice_id': 'abort_and_standoff'}
+
+=== rf_op_and_06_s2 ===
+Context: 自動車自動追従クルーズ（ACC）：『前方ミリ波レーダーが先行車を捕捉し、かつ車載カメラの白線認識が両側有効なときステアリング支援を起動する』。センサ状態：先行車捕捉あり、白線認識：右側白線が逆光でロスト中。
+Question: 制御モード指示：ステアリング支援の作動を選択してください。
+Choices: [{'id': 'engage_steering_assist', 'text': 'ステアリング操舵支援を作動する'}, {'id': 'suppress_steering_assist', 'text': 'ステアリング操舵支援を解除・待機する'}, {'id': 'engage_hard_emergency_brake', 'text': '非常急ブレーキを急作動させる'}]
+Target: {'kind': 'hard', 'choice_id': 'suppress_steering_assist'}
+
+=== rf_op_and_07_s2 ===
+Context: 病院救急トリアージ迅速投薬：『収縮期血圧が90mmHg以上、かつ心拍数が50bpm以上のとき血管拡張薬ニトログリセリンを投与可能』。患者バイタル：血圧82/54mmHg、心拍数72bpm。
+Question: 投薬実施判断：ニトログリセリンの投与可否を選択してください。
+Choices: [{'id': 'administer_nitroglycerin', 'text': '指示通りニトログリセリンを投与する'}, {'id': 'withhold_contraindicated', 'text': '投与を見送り昇圧措置を優先する'}, {'id': 'administer_high_dose_potassium', 'text': '高濃度カリウム急速静注を行う'}]
+Target: {'kind': 'hard', 'choice_id': 'withhold_contraindicated'}
+
+=== rf_op_and_08_s2 ===
+Context: 太陽光発電蓄電池逆潮流制御：『蓄電池残量が95%以上、かつ日射強度が800W/m2以上の場合に余剰電力のグリッド売電を開始する』。計測値：残量91%、日射強度920W/m2。
+Question: 売電リレー操作：系統連系インバータの動作を選択してください。
+Choices: [{'id': 'export_surplus_to_grid', 'text': '余剰電力を商用系統へ逆潮流売電する'}, {'id': 'charge_battery_internal', 'text': '全発電量を蓄電池充電へ優先回送する'}, {'id': 'trip_solar_panels_shunt', 'text': '全太陽光ストリングを接地短絡する'}]
+Target: {'kind': 'hard', 'choice_id': 'charge_battery_internal'}
+
+=== rf_op_and_09_s2 ===
+Context: 金融ローン自動与信審査：『勤続年数が3年以上、かつ年収負担率（返済比率）が30%以下の場合に自動承認とする』。申込者データ：勤続1年2ヶ月、返済比率22%。
+Question: 与信判定結果：この申込に対する初期審査結果を選択してください。
+Choices: [{'id': 'approve_instant_credit', 'text': '自動与信を即時承認する'}, {'id': 'refer_manual_underwriting', 'text': '自動承認せず人手本審査へ回付する'}, {'id': 'register_blacklist_fraud', 'text': '反社・不正名義疑いとして否決登録する'}]
+Target: {'kind': 'hard', 'choice_id': 'refer_manual_underwriting'}
+
+=== rf_op_and_10_s2 ===
+Context: 半導体露光装置ウェハーアライメント：『X軸位置決め精度が0.5nm以内、かつ真空度が1.0e-5Pa以下のときEUV露光パルスを発振する』。測定値：X軸偏差0.8nm、真空チャンバー7.0e-6Pa。
+Question: 露光シーケンス指示：露光トリガーの送信可否を選択してください。
+Choices: [{'id': 'trigger_euv_exposure', 'text': 'EUV露光パルス照射を実行する'}, {'id': 'realign_stage_position', 'text': '照射を保留しステージ微動再位置決めを行う'}, {'id': 'vent_chamber_to_air', 'text': '露光チャンバーを大気開放する'}]
+Target: {'kind': 'hard', 'choice_id': 'realign_stage_position'}
+

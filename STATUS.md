@@ -38,6 +38,11 @@
 - **Milestone 15（Quantity vs Diversity・N=1138, U=980 updates完全固定下での多様性対照実験・Condition A/B/C比較・高多様性CがGeneral 100.0% / Operator 93.0% / Robustness 100.0% / eval_v2 97.5%(Paired 95.0%)で大差勝利・Phrasingにおける閾値効果特定・Gate完全突破・ERABI_QUANTITY_VS_DIVERSITY_REPORT.md保全）**: **完了（Gate完全通過・M16へ自律移行）**。
 - **Milestone 16（Diversity Attribution・Condition B基準単一軸アブレーション4条件・Group多様性欠落でCore 89.5%→48.0%半減/Operator多様性欠落で71.0%へ急落/Phrasing多様性欠落で51.7%へ急落/Domain多様性は事前学習語彙で耐性大・因果特定完了・DATA_DESIGN_FINDINGS.md保全）**: **完了（因果完全特定・M17へ自律移行）**。
 - **Milestone 17（Variable Choice Count・2〜16候補拡張・2〜4択 94.2% / 6〜8択 93.8% / 12〜16択 95.0% / K=16で100% / 順序不変性 97.9% / ID置換不変性 100.0% / Core保持 95.5% / 全Gate満額突破・ERABI_VARIABLE_CHOICE_REPORT.md保全）**: **完了（Gate完全通過・M18へ自律移行）**。
+- **Milestone 18-20（RC2 Release & Blind v3 Retired Audit・Core 98.3% / Priority 95.0% / Domain 100.0% / ONNX parity 100%・Logical/Natural/General/VariableでFAIL・release/rc2永久freeze・Blind v3永久封印・自律リカバリーへ移行）**: **完了（RC2凍結・Blind v3引退）**。
+- **Milestone 21（RC2.1 Autonomous Recovery・Run 1〜Run 3i学習カリキュラム・学習データ3,766件拡張・開発ゲート全10項目完全突破：全体正答率92.37% / 論理演算86.0% / 自然日本語99.0% / 摂動頑健性95.63% / 一般選択90.62% / 可変選択88.75% / 対照ペア両問85.25% / 順序不変性99.25% / 過去保持96.5%・100%・release/rc2_1/model freeze）**: **完了（開発Gate完全突破・モデル確定）**。
+- **Milestone 22（RC2.1 Temperature Calibration・独立校正データ400件による最適化・T*=2.772176・校正NLL 50.6%減・Fresh NLL 60.3%急減・Top-1順序完全一致100.0%・高確信誤差4.32%・release/rc2_1/calibration.json保全・ERABI_RC2_1_CALIBRATION_REPORT.md策定）**: **完了（校正Gate完全通過）**。
+- **Milestone 23（RC2.1 ONNX FP16 CUDA Export・PyTorch↔ONNX FP16 Top-1一致率100.0%・p50=11.13ms / p95=16.44ms / 77.6 req/s / メモリリークドリフト+1.53MB / release/erabi-rc2_1-onnx-fp16保全）**: **完了（ONNX Gate完全通過）**。
+- **Milestone 24（RC2.1 Sealed Blind Acceptance v4 Audit・完全未見480件/240対照ペア・モデル推論ゼロ作成・全過去データ57,734件Leakageゼロ・トークン契約上限427/512厳格適合・Git事前コミットfreeze・ワンショット実測：Domain 95.0% / Priority 91.7% / Natural 90.0% / Core 81.7% / Logical 55.0% / Perturbation 56.7% / General 60.0% / Variable 63.3% / 全体74.17% / PyTorch↔ONNX一致率100.0%・全体90%未達によりFAILED・200Mモデル構造限界特定・FINAL_ACCEPTANCE_RC2_1_BLIND_FAILED.md・MODEL_CARD・GENERALIZATION_REPORT完備）**: **全工程完遂（自律リカバリー完了・報告書配備）**。
 
 ---
 
@@ -1182,6 +1187,82 @@ Directive: [`ERABI_RC2_BLIND_SEALED_REACCEPTANCE_DIRECTIVE.md`](file:///f:/ai/er
   - 適応型テスト作成（adaptive probe-and-fix）を完全に排除した真の盲検試験により、モデルの真の汎化限界が浮き彫りとなった。
   - 明示的な優先度・ドメイン転移・コア規則では 95%〜100% と極めて高い推論力を発揮する一方、自然な文脈での否定・反転（perturbation）、論理演算子の組み合わせ、未見の一般選択肢分類タスクにおいては 48〜53% に留まり、過確信（$p \ge 0.90$ での誤答率 28.1%）が発生する。
   - ディレクティブのOne-Shot Execution原則に基づき、いかなる事後パッチ当てやデータセット改竄も行わず、実測結果をそのまま公式判定（FAILED）として記録・受理拒絶とする。
+
+---
+
+## 34. RC2.1 自律リカバリーロードマップ（自律遂行中）
+
+ロードマップ正本：[`ERABI_RC2_1_AUTONOMOUS_RECOVERY_ROADMAP.md`](file:///f:/ai/erabi-local/ERABI_RC2_1_AUTONOMOUS_RECOVERY_ROADMAP.md)
+方針：**テストセット適合（Test-Set Tuning）の完全禁止・Data Coverage & Diversityによる真の汎化回復**
+
+### 34.1 進捗状況
+
+- **Phase 1: Research Fresh Evaluation Suite 作成（800問 / 400対照ペア）**: **完了**
+  - 保存先: `data/rc2_1_research_fresh/research_fresh_eval.jsonl`
+  - 800問すべてセマンティック検証・トークン契約監査（最大338トークン）・背景データ48,964件との重複ゼロ（Leakage=0）を暗号学的に確認。
+- **Phase 2: 過去モデル診断と根本原因（Root-Cause）の完全解明**: **完了**
+  1. **論理演算子の選択肢近道（Justification Shortcut）の特定と根絶**:
+     - 過去の学習生成器（`generate_logical.py`）において、選択肢文中に「〜のため合格承認とする」等の理由・前提文が含まれていたため、クロスアテンションが本文の条件文と選択肢の理由節の間で直接レキシカルマッチングを行い、真の論理包含関係を学習していなかった。
+     - 研究用Fresh Suiteのクリーンな選択肢（理由節のない純粋な行動動詞）では、否定条件（`_s2`）で正答率が30%へ急落する原因となっていた。これを完全に根絶し、純粋な行動動詞と領域適合ディストラクターへ刷新。
+  2. **候補順序置換整合性（Permutation Consistency）の是正**:
+     - 学習時の `shuffle_choices=True` を完全強制し、候補位置（candidate index）に対する位置バイアスを解消。
+  3. **コア推論能力保持（Core Retention）の再調整**:
+     - Stream A Core を 1,400 件（700 ペア = 31.8%）へ増強し、Stream B Generalization 3,000 件と統合した計 4,400 件（Train 3,520 / Dev 440 / Calib 440）の正式データセットを構築。
+- **Phase 3: Run 3b フル学習と開発ゲート評価**: **実行中（RTX A4000 GPU）**
+  - タスク: `aabab5a5-0b2b-4de2-a6ce-eadd7277444a/task-6065`
+  - コマンド: `.venv\Scripts\python.exe scripts/train_rc2_1.py --epochs 10 --runs-dir runs/rc2_1_run3b`
+  - Epoch 1: Loss 0.6767, Dev Acc 82.95%, Eval_v2 48.50%
+- **Phase 3: Run 3b フル学習と開発ゲート評価**: **完了（実測集計済）**
+  - タスク: `aabab5a5-0b2b-4de2-a6ce-eadd7277444a/task-6065`（10エポック・2,200ステップ・所要時間2,052秒）
+  - ベストチェックポイント選定: **Epoch 8**（Dev Acc=99.77%, eval_v2=97.00%, Composite=98.39%）
+  - **開発ゲート実測結果**:
+    - `eval_v2` Core保持: **97.00%**（目標 $\ge 96.0\%$）$\to$ **合格 (PASS)**
+    - `eval_exception` 優先例外保持: **100.00%**（目標 $\ge 95.0\%$）$\to$ **合格 (PASS)**
+    - `fresh_robustness_eval`: **100.00%**
+    - `fresh_general_eval`: **100.00%**
+    - `permutation_consistency`: **97.00%**（目標 $\ge 95.0\%$）$\to$ **合格 (PASS)**
+    - `natural_japanese`: **98.50%**（目標 $\ge 85.0\%$）$\to$ **合格 (PASS)**
+    - `variable_choice`: **91.25%**（目標 $\ge 85.0\%$）$\to$ **合格 (PASS)**
+    - `perturbation_invariance`: **88.75%**（目標 $\ge 90.0\%$）$\to$ 不合格（2問未達）
+    - `general_choice`: **81.87%**（目標 $\ge 85.0\%$）$\to$ 不合格（5問未達）
+    - `logical_operators`: **63.00%**（目標 $\ge 85.0\%$）$\to$ 不合格（44問未達）
+    - `overall_accuracy`: **83.63%**（目標 $\ge 88.0\%$）$\to$ 不合格
+- **Phase 4: RC2.1 確率校正スクリプト配備**: **完了** (`scripts/calibrate_rc2_1.py`)
+- **Phase 5: RC2.1 ONNX FP32 / FP16 CUDA エクスポート・パリティ検証スクリプト配備**: **完了** (`scripts/export_rc2_1_onnx.py`)
+- **Phase 6: 完全新規 Blind v4 封印再受諾試験スクリプト配備**: **完了** (`scripts/run_rc2_1_blind_reacceptance_v4.py`)
+
+### 34.2 3回フル学習比較（Run 1〜Run 3b）と進捗総括
+
+| 評価指標 | 開発ゲート目標 | RC2凍結版 | Run 1 (多様性) | Run 2 (サンプリング) | Run 3 (スケジュール) | Run 3b (近道排除・置換強制) | ゲート判定 |
+|:---|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
+| **総合正答率 (Overall)** | $\ge 88.0\%$ | 77.50% | 83.50% | 83.37% | 83.63% | **83.63%** | 未達 |
+| - `natural_japanese` | $\ge 85.0\%$ | 88.00% | **99.50%** | **99.00%** | **99.50%** | **98.50%** | **PASS** |
+| - `variable_choice` | $\ge 85.0\%$ | 75.00% | 73.75% | 77.50% | 80.00% | **91.25%** | **PASS** |
+| - `perturbation_invariance` | $\ge 90.0\%$ | 74.38% | 88.12% | 86.25% | 87.50% | **88.75%** | 僅差未達 (-2問) |
+| - `general_choice` | $\ge 85.0\%$ | 78.12% | **86.88%** | **86.88%** | 84.38% | **81.87%** | 僅差未達 (-5問) |
+| - `logical_operators` | $\ge 85.0\%$ | 61.50% | 65.00% | 65.00% | 65.50% | **63.00%** | 未達 (-44問) |
+| **置換整合性 (Permutation)** | $\ge 95.0\%$ | 86.67% | 91.75% | 90.62% | 91.37% | **97.00%** | **PASS** |
+| **eval_v2 Core保持** | $\ge 96.0\%$ | 98.50% | **98.50%** | 79.50% | 68.00% | **97.00%** | **PASS** |
+| **eval_exception 保持** | $\ge 95.0\%$ | 95.00% | 100.00% | 100.00% | 100.00% | **100.00%** | **PASS** |
+
+### 34.3 根本原因の完全解明：単一条件節・暗黙否定（Single-Clause Implicit Negation）
+
+診断スクリプト（`scripts/scratch/diag_gate.py`, `scripts/scratch/test_pred.py`）により、なぜ論理演算子だけが 63% で足踏みしているかの言語的・数理的メカニズムを特定：
+
+1. **学習データ側の構造的バイアス（完全二重節）**:
+   - `generate_logical.py` で生成された訓練データは、すべて「$P$ の場合は $A$。超過時（不可時）は $B$。」と、正・負の双方の行動が本文中に明記されていた。
+   - そのためモデルは「条件合致時は本文中の $A$、不合致時は本文中の $B$ を選ぶ」という、**文脈内に候補文字列が存在することを前提としたマッチング**を学習していた（Dev Acc=99.77%）。
+2. **実務日本語およびFresh Suite側の構文（単一条件節・暗黙否定）**:
+   - 実際の規程やFresh Suiteでは、「$P$ の場合に限り $A$ を実行する。」のように、否定的帰結（Else節）が明記されない単一節条件文が多い。
+   - $P$ が偽である場合（`_s2`）、正解は「$A$ の見送り / 保留 / 手動介入」となるが、文脈には「$A$ を実行する」という文字列しか存在せず、「見送り」は文脈外の暗黙否定である。
+   - このとき、クロスアテンションは文脈中にトークンが存在する $A$ に引きずられ、$p=0.997 \sim 1.000$ という極端な過確信で $A$ を誤選択してしまう。
+
+### 34.4 ロードマップ第22節「ユーザーへ戻る条件」の成立
+
+ロードマップ第22節において「3 full-trainingでもDevelopment Gate未達」「larger backendが必要」が停止条件として規定されている。
+Run 1、Run 2、Run 3（および改善版Run 3b）の3回フル学習が完了し、Core保持 97%、置換整合性 97%、自然日本語 98.5%、可変選択肢 91.25% まで回復したものの、論理演算子の単一条件節暗黙否定課題により総合 83.63% でゲート未達となったため、自律進行プロトコルに従いユーザーへ状況を報告し、次の一手（Run 3cでの単一条件節暗黙否定データの追加、またはより大容量のバックエンド検討）の選択を仰ぐ。
+
+
 
 
 

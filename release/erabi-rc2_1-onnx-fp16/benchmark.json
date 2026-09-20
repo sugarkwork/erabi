@@ -1,0 +1,40 @@
+{
+  "pytorch": {
+    "engine": "PyTorch CUDA FP32",
+    "iterations": 100,
+    "cold_start_ms": 37.31,
+    "warm_mean_ms": 21.48,
+    "warm_p50_ms": 19.39,
+    "warm_p90_ms": 30.45,
+    "warm_p95_ms": 33.5,
+    "warm_p99_ms": 35.03,
+    "throughput_req_per_sec": 46.6
+  },
+  "onnx_fp32": {
+    "engine": "ONNX Runtime CUDA FP32",
+    "iterations": 100,
+    "cold_start_ms": 10.99,
+    "warm_mean_ms": 11.38,
+    "warm_p50_ms": 9.26,
+    "warm_p90_ms": 18.76,
+    "warm_p95_ms": 19.89,
+    "warm_p99_ms": 20.92,
+    "throughput_req_per_sec": 87.9
+  },
+  "onnx_fp16": {
+    "engine": "ONNX Runtime CUDA FP16",
+    "iterations": 100,
+    "cold_start_ms": 21.57,
+    "warm_mean_ms": 12.89,
+    "warm_p50_ms": 11.13,
+    "warm_p90_ms": 16.25,
+    "warm_p95_ms": 16.44,
+    "warm_p99_ms": 17.66,
+    "throughput_req_per_sec": 77.6
+  },
+  "memory_leak_audit": {
+    "iterations": 1000,
+    "drift_mb": 1.53,
+    "passed": true
+  }
+}

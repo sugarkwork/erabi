@@ -1,0 +1,73 @@
+{
+  "version": "1.0",
+  "method": "temperature_scaling",
+  "temperature": 2.772176,
+  "calibration_dataset": "data\\rc2_1_train\\calibration.jsonl",
+  "model_dir": "F:\\ai\\erabi-local\\release\\rc2_1\\model",
+  "target_model_sha256": "0951b356db1c72527826adeffe5fc24e8fb8a4360ac1e780df3e06cefb78d02b",
+  "checkpoint_hashes": {
+    "config.json": "30031aeabbfcbd04bd6211903d5779ec31de10af157f1bfb49ab36344b41111d",
+    "model.safetensors": "0951b356db1c72527826adeffe5fc24e8fb8a4360ac1e780df3e06cefb78d02b",
+    "tokenizer.json": "ac84fa7889747f37393545a7fc14ce4f1f158b33460318cad93531e0aa8db109",
+    "tokenizer_config.json": "276e1525b9d4543bf789cfbd981155e82324d78a5dcf4fbc01803886899efc3e"
+  },
+  "created_at": "2026-09-20T19:44:13.005090+00:00",
+  "optimization": {
+    "initial_T": 1.0,
+    "initial_nll": 0.01662939249026834,
+    "initial_nll_scientific": "1.662939e-02",
+    "optimal_T": 2.772175803296264,
+    "optimal_nll": 0.008221766746004736,
+    "optimal_nll_scientific": "8.221767e-03",
+    "improvement": 0.008407625744263604,
+    "eval_count": 12,
+    "success": true,
+    "is_at_boundary": false,
+    "bounds": [
+      0.05,
+      20.0
+    ]
+  },
+  "fresh_eval_metrics": {
+    "t_1_0": {
+      "accuracy": 0.92375,
+      "mean_nll": 0.7790944361571098,
+      "mean_brier": 0.13761041642047073,
+      "high_conf_error_rate": 0.05821474773609314
+    },
+    "t_star": {
+      "accuracy": 0.92375,
+      "mean_nll": 0.30902028623431,
+      "mean_brier": 0.12240042562586652,
+      "high_conf_error_rate": 0.043243243243243246
+    }
+  },
+  "gate_checks": {
+    "gate_top1_parity_100": {
+      "threshold": 1.0,
+      "actual": 1.0,
+      "passed": true
+    },
+    "gate_fresh_nll_non_worsening": {
+      "threshold": 0.7790944361571098,
+      "actual": 0.30902028623431,
+      "passed": true
+    },
+    "gate_fresh_brier_non_worsening": {
+      "threshold": 0.13761041642047073,
+      "actual": 0.12240042562586652,
+      "passed": true
+    },
+    "gate_high_conf_error_le_5": {
+      "threshold": 0.05,
+      "actual": 0.043243243243243246,
+      "passed": true
+    },
+    "gate_model_hash_binding": {
+      "expected_hash": "0951b356db1c72527826adeffe5fc24e8fb8a4360ac1e780df3e06cefb78d02b",
+      "actual_hash": "0951b356db1c72527826adeffe5fc24e8fb8a4360ac1e780df3e06cefb78d02b",
+      "passed": true
+    }
+  },
+  "all_passed": true
+}
