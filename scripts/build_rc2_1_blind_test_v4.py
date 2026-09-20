@@ -212,8 +212,13 @@ def run_semantic_and_structural_audit(cases: List[Dict[str, Any]]) -> Dict[str, 
             audit_results["errors"].append(f"Case {c['id']} has empty question")
             audit_results["is_valid"] = False
         for ch in c["choices"]:
-            if not ch.get("id", "").strip() or not ch.get("text", "").strip():
+            cid = ch.get("id", "")
+            if not cid.strip() or not ch.get("text", "").strip():
                 audit_results["errors"].append(f"Case {c['id']} has malformed choice: {ch}")
+                audit_results["is_valid"] = False
+            import re
+            if not re.match(r"^[A-Za-z0-9_-]{1,64}$", cid):
+                audit_results["errors"].append(f"Case {c['id']} choice id '{cid}' violates schema [A-Za-z0-9_-]{{1,64}}")
                 audit_results["is_valid"] = False
 
     audit_results["error_count"] = len(audit_results["errors"])

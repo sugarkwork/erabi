@@ -704,7 +704,7 @@ def get_perturbation_invariance_pairs() -> List[Dict[str, Any]]:
                 ("binary_cycle_condenser_hotwell_drain", "復水器ホットウェル大気排水"),
                 ("binary_cycle_nitrogen_purge_turbine", "タービンケーシング窒素パージ封入"),
                 ("binary_cycle_lube_oil_cooler_isolate", "軸受潤滑油冷却器通水遮断"),
-                ("binary_cycle_re injection_pump_halt", "地熱熱水還元井圧入ポンプ停止"),
+                ("binary_cycle_reinjection_pump_halt", "地熱熱水還元井圧入ポンプ停止"),
                 ("binary_cycle_generator_breaker_reverse", "発電機連系遮断器逆電力トリップ"),
                 ("binary_cycle_silica_scale_acid_clean", "シリカスケール酸洗浄ポンプ起動"),
                 ("binary_cycle_pentane_makeup_charge", "新規ペンタン冷媒ドラム缶充填"),
