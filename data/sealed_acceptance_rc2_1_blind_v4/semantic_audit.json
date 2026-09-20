@@ -1,0 +1,29 @@
+{
+  "timestamp_utc": "2026-09-20T19:52:35.416663+00:00",
+  "total_cases": 480,
+  "total_pairs": 240,
+  "is_valid": true,
+  "errors": [],
+  "warnings": [],
+  "families": {
+    "core_rules": 60,
+    "logical_operators": 60,
+    "priority_exception": 60,
+    "natural_japanese": 60,
+    "domain_transfer": 60,
+    "general_choice": 60,
+    "variable_choice": 60,
+    "perturbation_invariance": 60
+  },
+  "k_distribution": {
+    "3": 60,
+    "4": 120,
+    "6": 60,
+    "8": 60,
+    "2": 60,
+    "12": 60,
+    "16": 60
+  },
+  "pair_integrity": {},
+  "error_count": 0
+}

@@ -1,0 +1,44 @@
+{
+  "suite_name": "data/sealed_acceptance_rc2_1_blind_v4",
+  "filename": "sealed_test_rc2_1_blind_v4.jsonl",
+  "sha256": "b862d3bf771ad257265a3a1e608e065847adc23cd7e66801b1171b259813bc45",
+  "created_at_utc": "2026-09-20T19:52:42.178384+00:00",
+  "total_cases": 480,
+  "total_pairs": 240,
+  "families": {
+    "core_rules": 60,
+    "logical_operators": 60,
+    "priority_exception": 60,
+    "natural_japanese": 60,
+    "domain_transfer": 60,
+    "general_choice": 60,
+    "variable_choice": 60,
+    "perturbation_invariance": 60
+  },
+  "k_distribution": {
+    "3": 60,
+    "4": 120,
+    "6": 60,
+    "8": 60,
+    "2": 60,
+    "12": 60,
+    "16": 60
+  },
+  "token_audit": {
+    "max_tokens": 427,
+    "min_tokens": 113,
+    "avg_tokens": 209.78,
+    "violations_count": 0,
+    "is_contract_compliant": true
+  },
+  "semantic_audit": {
+    "is_valid": true,
+    "error_count": 0
+  },
+  "overlap_audit": {
+    "total_records_checked": 57734,
+    "leakage_count": 0,
+    "is_leak_free": true
+  },
+  "zero_model_inference_verified": true
+}
