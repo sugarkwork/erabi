@@ -1,0 +1,23 @@
+{
+  "milestone": "Milestone 18 Natural Japanese Robustness",
+  "natural_families": [
+    "polite_keigo",
+    "colloquial_spoken",
+    "bullet_points",
+    "long_context_email",
+    "redundant_filler",
+    "omitted_subject",
+    "inverted_conditional",
+    "negation_clause",
+    "double_negation",
+    "exception_tadashi",
+    "principle_gensoku",
+    "exclusion_clause"
+  ],
+  "eval_cases": 120,
+  "train_cases": 1138,
+  "sha256": {
+    "eval": "a44d6a22134074c2d3ad0c70ffe12a19c7ccce2ccd1b0a32051842ccef9580dd",
+    "train_combined": "ab7c4477d4993313eef51089e427f43f8456abb3155b38b95bc1343c51bcf91c"
+  }
+}

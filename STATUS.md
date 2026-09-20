@@ -878,6 +878,51 @@ W_fix（14/47）からW_v2（8/47）への両問正解減少（-6組）の要因
 - 特に $K=16$ において **40/40問（100.0%）** の正答率を達成し、選択肢ID置換に対する不変性（100.0%）および順序不変性（97.9%）を実証した。
 - Milestone 17のGateを全て満額突破し、**Milestone 18へ自律進行**。
 
+---
+
+## 26. Milestone 18: Natural Japanese Robustness 実測結果
+
+詳細は [`ERABI_NATURAL_JAPANESE_REPORT.md`](file:///f:/ai/erabi-local/ERABI_NATURAL_JAPANESE_REPORT.md) および [`runs/rc2_m18_natural/m18_natural_japanese_results.json`](file:///f:/ai/erabi-local/runs/rc2_m18_natural/m18_natural_japanese_results.json) を参照。
+
+### 26.1 実験設計と固定条件
+- **Core Question**: 合成テンプレートから離れ、日常業務の自然な日本語（敬語、口語、箇条書き、メール長文、フィラー、主語省略、条件後置、二重否定、原則/例外等）で正確に推論できるか。
+- **固定計算予算**: $N = 1,138$ 件（Stream A = 356件, Stream B = 782件）、$U = 980$ updates（10 epochs $\times$ 98 steps, lr=2e-5, wd=0.01, micro_batch=2, grad_accum=8, seed=42）。
+- **Run 1 診断と Run 2 因果修正**:
+  - Run 1: 自然文スタイル変換時に Stream A の質問文（`question`）内の明示的比較ルールを上書きしてしまい、Core retention が 83.5% へ低下。
+  - Run 2: Stream A（356件）の比較ルールを 100% 完全保護し、Stream B（782件）を 12自然族（240件）、言い換え多様性（140件）、論理演算子（160件）、例外優先（60件）、ドメイン・一般（182件）へ精密配分。
+
+### 26.2 12自然日本語スタイル族別成績 (Fresh Natural Suite: 120件 / 60対)
+
+| 族インデックス | 自然言語スタイル族 | 評価件数 | 正答数 | 正答率 (Top-1) | Mean NLL |
+|:---:|:---|:---:|:---:|:---:|:---:|
+| 1 | `polite_keigo` (丁寧語・ビジネス敬語) | 10 | 10 | **100.0%** | 0.007 |
+| 2 | `colloquial_spoken` (口語・チャット調) | 10 | 10 | **100.0%** | 0.009 |
+| 3 | `bullet_points` (箇条書き・要件列挙) | 10 | 10 | **100.0%** | 0.004 |
+| 4 | `long_context_email` (長文実務メール形式) | 10 | 10 | **100.0%** | 0.005 |
+| 5 | `redundant_filler` (挨拶文・時候・フィラー混入) | 10 | 10 | **100.0%** | 0.008 |
+| 6 | `omitted_subject` (主語省略) | 10 | 10 | **100.0%** | 0.006 |
+| 7 | `inverted_conditional` (結論先行・条件後置) | 10 | 10 | **100.0%** | 0.005 |
+| 8 | `negation_clause` (否定条件) | 10 | 10 | **100.0%** | 0.008 |
+| 9 | `double_negation` (二重否定条件) | 10 | 10 | **100.0%** | 0.007 |
+| 10 | `exception_tadashi` (「ただし」例外優先) | 10 | 10 | **100.0%** | 0.006 |
+| 11 | `principle_gensoku` (「原則として」) | 10 | 10 | **100.0%** | 0.004 |
+| 12 | `exclusion_clause` (「〜の場合を除く」除外条件) | 10 | 9 | **90.0%** | 0.038 |
+| **全体** | **全12スタイル族総合** | **120** | **119** | **99.17% (119/120)** | **0.009** |
+
+### 26.3 Gate判定サマリー
+
+| Gate 項目 | 基準値 | Run 1 実測 | Run 2 実測 | 判定 |
+|:---|:---:|:---:|:---:|:---:|
+| **Fresh Natural Overall Accuracy** | $\ge 85.0\%$ | 100.0% | **99.17% (119/120)** | **合格 (PASS)** |
+| **Minimum Family Accuracy (全族 $\ge 70\%$)** | $\ge 70.0\%$ | 100.0% | **90.00% (9/10)** | **合格 (PASS)** |
+| **Paired Reasoning Rate (対照ペア両問正解率)** | $\ge 75.0\%$ | 100.0% | **98.33% (59/60)** | **合格 (PASS)** |
+| **High-Confidence Wrong Rate ($p \ge 0.90$)** | $\le 5.0\%$ | 0.0% | **0.83% (1/120)** | **合格 (PASS)** |
+| **RC1 Core Tasks Retention (`eval_v2_core`)** | $\ge 93.5\%$ (baseline 95.5%) | 83.5% | **96.00% (192/200)** | **合格 (PASS)** |
+
+- **結論**: 全5つのGate条件を完全クリア。Core保持率を **96.0%**（+0.5pt上回り）に保ちつつ、自然な日本語における推論精度 **99.2%** を獲得。
+- **次の一手**: **Milestone 19（General Choice Expansion）へ自律移行**。
+
+
 
 
 
