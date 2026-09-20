@@ -1,0 +1,9 @@
+{
+  "milestone": "Milestone 22 RC2 Calibration",
+  "calibration_cases": 100,
+  "fresh_calibration_eval_cases": 100,
+  "sha256": {
+    "calibration": "fa787b71bc04d776610048f49336ebc3ee427d6a2710b035e1515e04f5c6ac89",
+    "fresh_calibration_eval": "39655cbc54b4916c0223d244c7a2854d5413c88ea6751af89b2734a0bac641a3"
+  }
+}

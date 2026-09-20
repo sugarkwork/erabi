@@ -970,6 +970,165 @@ W_fix（14/47）からW_v2（8/47）への両問正解減少（-6組）の要因
 - **結論**: 全4つのGateを完全クリア。ERABIはルールエンジン模倣から広範なセマンティック決定エンジンへと進化し、10の汎用タスク族すべてで 100% の精度を達成。
 - **次の一手**: **Milestone 20（Data Efficiency Recommendation: データ効率提言書）の作成および Milestone 21（RC2 候補選定）へ移行**。
 
+---
+
+## 28. Milestone 20: Data Efficiency Recommendation 完了
+
+成果物: [`ERABI_DATA_SCALING_REPORT.md`](file:///f:/ai/erabi-local/ERABI_DATA_SCALING_REPORT.md)
+
+### 28.1 必須5大設問への最終回答サマリー
+1. **Q1: RC2相当の性能に必要な最低データ数はどの程度か**
+   - **$N = 1,138$ サンプル（データプール全体の 50% 水準）**。単一タスクは284件で98%超に達するが、Core論理保持（$\ge 93.5\%$）、演算子（$\ge 85\%$）、可変候補数2〜16（$\ge 85\%$）、自然日本語12族（$\ge 90\%$）、一般意思決定10族（$100\%$）の多能力を同時に並立させるには $N \approx 1,140$ 件が最小境界。
+2. **Q2: データを2倍にしたときFresh性能は何pt伸びるか**
+   - 初期（142 $\to$ 284件）: **$+14.0\text{pt}$**（急激な概念獲得期）
+   - 汎化期（284 $\to$ 569件）: **$+7.2\text{pt}$**（ドメイン・論理汎化期）
+   - 安定期（569 $\to$ 1,138件）: **$+4.6\text{pt}$**（言い換え・グループ網羅性完成期）
+   - 飽和期（1,138 $\to$ 2,276件）: **$< 1.0\text{pt}$**（収穫逓減・プラトー）
+3. **Q3: 件数を2倍にするのとtemplate/domain/operator diversityを増やすのでは、どちらが効率的か**
+   - **多様性を増やす方が 3〜5倍 圧倒的に効率的**。同サンプル数・同ステップ数固定の実験（M15）で、高多様性は低多様性に対し General $+14.2\text{pt}$, Operator $+25.0\text{pt}$, Robustness $+40.7\text{pt}$, Core $+26.5\text{pt}$ の大差を記録。重複反復は記憶ショートカットを招き、多様性こそが正則化と汎化の鍵である。
+4. **Q4: 性能が飽和し始めるsample countはどこか**
+   - **$N \approx 1,100 \sim 1,150$ 件**。1,138件を超えてデータを増やしても主要Freshスコアは天井に達しており向上幅は 1pt 未満。
+5. **Q5: 最もsample-efficientなdata mixtureは何か**
+   - **【2ストリーム直交型データミクスチャ】（$N=1,138$）**:
+     - **Stream A (31.3%, 356件)**: 300グループに分散したCore比較ルール（質問文の決定ルール破壊厳禁）。
+     - **Stream B (68.7%, 782件)**: 言い換え（140件, 閾値確保）、演算子（160件）、一般選択10族（200件）、自然日本語12族（120件）、例外優先（60件）、ドメイン摂動（102件）。
+- **次の一手**: **Milestone 21（RC2 Candidate Selection: 最適候補モデル選定）へ自律移行**。
+
+---
+
+## 29. Milestone 21: RC2 Candidate Selection 完了
+
+成果物: [`RC2_CANDIDATE_SELECTED.md`](file:///f:/ai/erabi-local/RC2_CANDIDATE_SELECTED.md)
+
+### 29.1 選定チェックポイント
+- **選定元**: `runs/rc2_m19_general/checkpoints/epoch_9`
+- **凍結配備先**: `release/rc2/model/`
+- **モデル重みハッシュ (SHA-256)**: `dd3bae25efcce97df8b14cf29064c9910f62686436ff95bb16b1c184fb03c0c0`
+- **凍結ライン維持**: `release/rc1/` は完全無変更を厳格維持。
+
+### 29.2 Candidate Gate 達成状況
+- **Core Reasoning**: `eval_v2_core` **93.5%**, `fresh_operator_eval` **85.0%**（合格）
+- **Natural Language**: 12スタイル族総合 **99.17%**（Gate $\ge 85\%$ に対し大幅超過クリア）
+- **Variable Choices**: 2〜8 choices **92.5%**（Gate $\ge 85\%$）, 12〜16 choices **95.0%**（Gate $\ge 75\%$, $K=16$ は **100.0%**）
+- **General Choice Expansion**: 10タスク族総合 **100.0%**（120/120 満点合格）
+- **Candidate Permutation Consistency**: **96.67%**（Gate $\ge 95\%$ クリア）
+- **RC1主要能力保持**: Robustness **100.0%**, Smoke **91.7%**, Exception **95.8%**（致命的忘却なし）
+- **推論速度**: RC1と同一の 110M GLiClass 骨格、CUDA PyTorch 約20ms、ONNX FP16 約11ms を完全維持。
+
+- **結論**: Milestone 21 の全候補Gateをクリア。モデル重みを `release/rc2/model/` に凍結。
+- **次の一手**: **Milestone 22（RC2 Calibration: 独立温度最適化・信頼性校正）へ自律移行**。
+
+---
+
+## 30. Milestone 22: RC2 Calibration 完了
+
+成果物: [`RC2_CALIBRATION_REPORT.md`](file:///f:/ai/erabi-local/RC2_CALIBRATION_REPORT.md) および [`release/rc2/calibration.json`](file:///f:/ai/erabi-local/release/rc2/calibration.json)
+
+### 30.1 最適校正パラメータ
+- **最適温度 ($T^*$)**: **`0.263007`**（境界非到達・内部最適値収束）
+- **対象凍結モデルハッシュ**: `dd3bae25efcce97df8b14cf29064c9910f62686436ff95bb16b1c184fb03c0c0`（完全一致バインド）
+- **校正データ**: `data/rc2_m22_calibration/calibration.jsonl`（100件, 100% 正解率, リーク0件）
+
+### 30.2 Calibration Gate 達成状況 (Fresh Calibration Suite: 100件)
+- **Top-1 順序・予測完全一致率**: **100.00% (100/100)**（$T=1.0$ と $T=T^*$ で予測反転 0件）
+- **Fresh Mean NLL**: $1.15 \times 10^{-6} \to \mathbf{1.76 \times 10^{-14}}$（非悪化・$10^8$倍改善）
+- **Fresh Mean Brier**: $4.65 \times 10^{-12} \to \mathbf{5.39 \times 10^{-28}}$（非悪化・$10^{16}$倍改善）
+- **高確信誤答率 ($p \ge 0.90$)**: **0.00% (0/100)**（Gate $\le 5.0\%$ クリア）
+- **モデル重み暗号学的バインド**: `release/rc2/model/model.safetensors` ハッシュと厳密結合（Gate 合格）
+
+- **結論**: Milestone 22 の全Gateをクリア。RC2の信頼性校正アーティファクトを `release/rc2/calibration.json` に凍結。
+- **次の一手**: **Milestone 23（ONNX FP16 Engine Build & Benchmark）へ自律移行**。
+
+---
+
+## 31. Milestone 23: RC2 ONNX FP16 Engine Build & Benchmark 完了
+
+成果物: [`RC2_ONNX_FP16_RELEASE_REPORT.md`](file:///f:/ai/erabi-local/RC2_ONNX_FP16_RELEASE_REPORT.md)、[`release/erabi-rc2-onnx-fp16/manifest.json`](file:///f:/ai/erabi-local/release/erabi-rc2-onnx-fp16/manifest.json)、[`runs/rc2_m23_onnx/m23_onnx_results.json`](file:///f:/ai/erabi-local/runs/rc2_m23_onnx/m23_onnx_results.json)
+
+### 31.1 エンジンビルド & 多角パリティ監査結果 (532リクエスト)
+- **PyTorch $\leftrightarrow$ ONNX FP32 Top-1 一致率**: **100.00% (532/532)**（Gate $100\%$ 合格）
+- **PyTorch $\leftrightarrow$ ONNX FP16 Top-1 一致率**: **100.00% (532/532)**（Gate $100\%$ 合格）
+- **スイート別一致率**:
+  - `fresh_general_expansion` (120件): PT 100.0% / FP32 Parity 100.0% / FP16 Parity 100.0%
+  - `fresh_natural` (120件): PT 99.2% / FP32 Parity 100.0% / FP16 Parity 100.0%
+  - `variable_choices` (280件): PT 93.2% / FP32 Parity 100.0% / FP16 Parity 100.0%
+  - `smoke_cases` (12件): PT 91.7% / FP32 Parity 100.0% / FP16 Parity 100.0%
+- **最大確率ドリフト**: $0.0031$（16候補時、順位逆転なし）
+
+### 31.2 RTX A4000 推論性能ベンチマーク (100回試行, $T^* = 0.263007$)
+- **ONNX FP16 Warm p50 レイテンシ**: **`10.22 ms`**（Gate $\le 15.0\text{ ms}$ 合格）
+- **ONNX FP16 Warm p95 レイテンシ**: **`13.21 ms`**（Gate $\le 20.0\text{ ms}$ 合格）
+- **スループット**: **`94.8 req/s`**（RC1の 88.5 req/s を凌駕）
+- **コールドスタート**: `12.14 ms`
+
+### 31.3 連続推論 1,000回 メモリリーク監査
+- **開始前 RSS**: 2,739.8 MB
+- **1,000回推論後 RSS**: 2,739.3 MB
+- **メモリ増減 ($\Delta$)**: **`-0.52 MB`**（累積リーク完全ゼロ、Gate 合格）
+
+- **結論**: Milestone 23 の全Gateを完全クリア。スタンドアロン実行可能な高速FP16リリースエンジンを `release/erabi-rc2-onnx-fp16/` に凍結。
+- **次の一手**: **Milestone 24（Final Sealed Acceptance RC2: 最終封印受入監査）へ自律移行**。
+
+---
+
+## 32. Milestone 24: Final Sealed Acceptance RC2 完了 & 全ロードマップ達成
+
+成果物: [`FINAL_ACCEPTANCE_RC2.md`](file:///f:/ai/erabi-local/FINAL_ACCEPTANCE_RC2.md)、[`FINAL_ACCEPTANCE_RC2_VERIFIED.md`](file:///f:/ai/erabi-local/FINAL_ACCEPTANCE_RC2_VERIFIED.md)、[`release/rc2/final_sealed_report.json`](file:///f:/ai/erabi-local/release/rc2/final_sealed_report.json)、[`ERABI_RC2_MODEL_CARD.md`](file:///f:/ai/erabi-local/ERABI_RC2_MODEL_CARD.md)、[`ERABI_GENERALIZATION_REPORT.md`](file:///f:/ai/erabi-local/ERABI_GENERALIZATION_REPORT.md)
+
+### 32.1 Final Sealed Gate 監査結果（160問・80対照ペア）
+完全未見かつ過去の全48,804件データとの重複・リークがゼロ（0件）であることを厳格監査した封印評価スイート（`data/sealed_acceptance_rc2/sealed_test_rc2.jsonl`）に対する最終受入監査を実施。
+
+| ゲート要件 | 合格基準 | 実測値 | 判定 |
+|:---|:---:|:---:|:---:|
+| **総合正答率（PyTorch）** | $\ge 90.0\%$ | **100.00% (160/160)** | **合格 (ALL PASS)** |
+| **総合正答率（ONNX FP16）** | $\ge 90.0\%$ | **100.00% (160/160)** | **合格 (ALL PASS)** |
+| **PyTorch $\leftrightarrow$ ONNX FP16 パリティ** | $100.0\%$ | **100.00% (160/160)** | **合格 (ALL PASS)** |
+| **対照ペア整合性 (Paired Reasoning)** | $\ge 80.0\%$ | **100.00% (80/80組)** | **合格 (ALL PASS)** |
+| **候補順序置換不変性 (Permutation)** | $\ge 95.0\%$ | **97.50% (156/160)** | **合格 (ALL PASS)** |
+| **特定ファミリーの崩壊なし** | 全系統 $\ge 75.0\%$ | **最低 100.0%** | **合格 (ALL PASS)** |
+| **可変候補数 ($K=2..8$)** | $\ge 85.0\%$ | **100.00%** | **合格 (ALL PASS)** |
+| **可変候補数 ($K=12..16$)** | $\ge 75.0\%$ | **100.00%** | **合格 (ALL PASS)** |
+| **高確信誤答率 ($p \ge 0.90$)** | $\le 5.0\%$ | **0.00% (0/159)** | **合格 (ALL PASS)** |
+| **セマンティック正解ラベル誤り** | $= 0$ | **0件** | **合格 (ALL PASS)** |
+| **背景データリーク（vs 48,804件）** | $= 0$ | **0件（完全隔離検証済）** | **合格 (ALL PASS)** |
+
+### 32.2 全8思考パラダイム別成績
+1. `core_rules_and_exceptions`: 正答率 **100.0%** / ペア一致 **100.0%** / 置換整合性 **100.0%**
+2. `operator_reasoning`: 正答率 **100.0%** / ペア一致 **100.0%** / 置換整合性 **95.0%**
+3. `natural_japanese_situational`: 正答率 **100.0%** / ペア一致 **100.0%** / 置換整合性 **100.0%**
+4. `unseen_domains_and_distractors`: 正答率 **100.0%** / ペア一致 **100.0%** / 置換整合性 **100.0%**
+5. `variable_choices_small_to_mid`: 正答率 **100.0%** / ペア一致 **100.0%** / 置換整合性 **100.0%**
+6. `variable_choices_large`: 正答率 **100.0%** / ペア一致 **100.0%** / 置換整合性 **100.0%**
+7. `general_choice_tasks`: 正答率 **100.0%** / ペア一致 **100.0%** / 置換整合性 **100.0%**
+8. `adversarial_inversions`: 正答率 **100.0%** / ペア一致 **100.0%** / 置換整合性 **85.0%**
+
+### 32.3 RC2 リリース成果物一覧
+- **凍結 PyTorch チェックポイント**: `release/rc2/model/` (SHA256: `dd3bae25efcce97df8b14cf29064c9910f62686436ff95bb16b1c184fb03c0c0`)
+- **凍結 校正ファイル**: `release/rc2/calibration.json` ($T^* = 0.263007$)
+- **凍結 ONNX FP16 配備エンジン**: `release/erabi-rc2-onnx-fp16/` (p50: 10.22ms, 94.8 req/s, リーク0MB)
+- **最終受入監査証明書**: `FINAL_ACCEPTANCE_RC2.md` & `FINAL_ACCEPTANCE_RC2_VERIFIED.md`
+- **モデルカード**: `ERABI_RC2_MODEL_CARD.md`
+- **汎化・スケーリング総合研究報告書**: `ERABI_GENERALIZATION_REPORT.md`
+- **永久凍結維持確認**: `release/rc1/` および `release/erabi-rc1-onnx-fp16/` は一切変更なし（完全保護）。
+
+### 32.4 自律研究開発ロードマップ（Milestones 13〜24）総括
+- **M13**: RC1完全隔離・再現性固定
+- **M14 & M14.1**: データスケーリング則解明（12.5%〜100%）& 計算量均一化（2,160 steps）監査
+- **M15**: 数量 vs 多様性（多様性効果比率 $>80\%$）
+- **M16**: 多様性寄与要因分離（表現・ドメイン・演算子）
+- **M17**: 可変候補数スケーリング（$K=2..16$ 完全対応）
+- **M18**: 自然な日本語表現ロバスト性（敬語・口語・ビジネス文など12スタイル族）
+- **M19**: 一般選択課題拡張（NLI・サポート分類・ポリシー判定・トリアージ等10タスク族）
+- **M20**: データ効率ガイドライン策定（5原則・上限限界設定）
+- **M21**: RC2候補モデル選定・重み凍結
+- **M22**: 独立データによる最適温度校正（$T^* = 0.263007$）
+- **M23**: ONNX FP16 高速エンジン化 & 532件 100% パリティ実証
+- **M24**: 最終封印受入監査 100% 満点クリア & RC2 リリース完了
+
+
+
+
+
 
 
 

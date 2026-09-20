@@ -1,0 +1,45 @@
+{
+  "version": "1.0",
+  "method": "temperature_scaling",
+  "temperature": 0.26300678784841447,
+  "calibration_dataset": "data/rc2_m22_calibration/calibration.jsonl",
+  "model_dir": "F:\\ai\\erabi-local\\release\\rc2\\model",
+  "target_model_sha256": "dd3bae25efcce97df8b14cf29064c9910f62686436ff95bb16b1c184fb03c0c0",
+  "checkpoint_hashes": {
+    "config.json": "30031aeabbfcbd04bd6211903d5779ec31de10af157f1bfb49ab36344b41111d",
+    "model.safetensors": "dd3bae25efcce97df8b14cf29064c9910f62686436ff95bb16b1c184fb03c0c0",
+    "tokenizer.json": "ac84fa7889747f37393545a7fc14ce4f1f158b33460318cad93531e0aa8db109",
+    "tokenizer_config.json": "276e1525b9d4543bf789cfbd981155e82324d78a5dcf4fbc01803886899efc3e"
+  },
+  "created_at": "2026-09-20T04:14:21.286522+00:00",
+  "optimization": {
+    "initial_T": 1.0,
+    "initial_nll": 7.695876257837566e-08,
+    "initial_nll_scientific": "7.695876e-08",
+    "optimal_T": 0.26300678784841447,
+    "optimal_nll": 0.0,
+    "optimal_nll_scientific": "0.000000e+00",
+    "improvement": 7.695876257837566e-08,
+    "eval_count": 38,
+    "success": true,
+    "is_at_boundary": false,
+    "bounds": [
+      0.1,
+      10.0
+    ]
+  },
+  "fresh_eval_metrics": {
+    "t_1_0": {
+      "accuracy": 1.0,
+      "mean_nll": 3.018670890110967e-07,
+      "mean_brier": 7.934754684056252e-12,
+      "high_conf_error_rate": 0.0
+    },
+    "t_star": {
+      "accuracy": 1.0,
+      "mean_nll": 0.0,
+      "mean_brier": 2.6178677825958185e-39,
+      "high_conf_error_rate": 0.0
+    }
+  }
+}

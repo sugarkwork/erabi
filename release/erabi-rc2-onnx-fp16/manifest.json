@@ -1,0 +1,95 @@
+{
+  "release": "erabi-rc2-onnx-fp16",
+  "version": "rc2-fp16",
+  "created_at": "2026-09-20T04:19:04.967044+00:00",
+  "model_file": "model.onnx",
+  "file_size_bytes": 374187048,
+  "calibrated_temperature": 0.26300678784841447,
+  "parity": {
+    "fresh_general_expansion": {
+      "total_cases": 120,
+      "pytorch_accuracy": 1.0,
+      "onnx_fp32_accuracy": 1.0,
+      "onnx_fp16_accuracy": 1.0,
+      "fp32_top1_parity": 1.0,
+      "fp16_top1_parity": 1.0,
+      "max_logit_diff_fp32": 0.02436685562133789,
+      "max_logit_diff_fp16": 0.11174654960632324,
+      "max_prob_drift_fp32": 4.0308641685176896e-33,
+      "max_prob_drift_fp16": 3.3384368701771195e-32
+    },
+    "fresh_natural": {
+      "total_cases": 120,
+      "pytorch_accuracy": 0.9916666666666667,
+      "onnx_fp32_accuracy": 0.9916666666666667,
+      "onnx_fp16_accuracy": 0.9916666666666667,
+      "fp32_top1_parity": 1.0,
+      "fp16_top1_parity": 1.0,
+      "max_logit_diff_fp32": 0.03365898132324219,
+      "max_logit_diff_fp16": 0.10234546661376953,
+      "max_prob_drift_fp32": 1.3113021850585938e-06,
+      "max_prob_drift_fp16": 9.298324584960938e-06
+    },
+    "variable_choices": {
+      "total_cases": 280,
+      "pytorch_accuracy": 0.9321428571428572,
+      "onnx_fp32_accuracy": 0.9321428571428572,
+      "onnx_fp16_accuracy": 0.9321428571428572,
+      "fp32_top1_parity": 1.0,
+      "fp16_top1_parity": 1.0,
+      "max_logit_diff_fp32": 0.0899057388305664,
+      "max_logit_diff_fp16": 0.18647480010986328,
+      "max_prob_drift_fp32": 0.01942858099937439,
+      "max_prob_drift_fp16": 0.003136157989501953
+    },
+    "smoke_cases": {
+      "total_cases": 12,
+      "pytorch_accuracy": 0.9166666666666666,
+      "onnx_fp32_accuracy": 0.9166666666666666,
+      "onnx_fp16_accuracy": 0.9166666666666666,
+      "fp32_top1_parity": 1.0,
+      "fp16_top1_parity": 1.0,
+      "max_logit_diff_fp32": 0.027814149856567383,
+      "max_logit_diff_fp16": 0.04041290283203125,
+      "max_prob_drift_fp32": 4.3083225875761855e-10,
+      "max_prob_drift_fp16": 5.121663093632378e-10
+    }
+  },
+  "benchmark": {
+    "engine": "ONNX Runtime CUDA FP16",
+    "iterations": 100,
+    "cold_start_ms": 12.14,
+    "warm_mean_ms": 10.54,
+    "warm_p50_ms": 10.22,
+    "warm_p90_ms": 11.03,
+    "warm_p95_ms": 13.21,
+    "warm_p99_ms": 16.56,
+    "throughput_req_per_sec": 94.8
+  },
+  "gate_checks": {
+    "gate_onnx_fp32_parity_100": {
+      "passed": true,
+      "threshold": 1.0
+    },
+    "gate_onnx_fp16_parity_100": {
+      "passed": true,
+      "threshold": 1.0
+    },
+    "gate_p50_latency_le_15ms": {
+      "passed": true,
+      "actual_ms": 10.22,
+      "threshold_ms": 15.0
+    },
+    "gate_p95_latency_le_20ms": {
+      "passed": true,
+      "actual_ms": 13.21,
+      "threshold_ms": 20.0
+    },
+    "gate_zero_memory_leak": {
+      "passed": true,
+      "drift_mb": -0.5234375,
+      "threshold_mb": 50.0
+    }
+  },
+  "all_passed": true
+}

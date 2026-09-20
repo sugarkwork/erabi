@@ -1,0 +1,6 @@
+{
+  "config.json": "30031aeabbfcbd04bd6211903d5779ec31de10af157f1bfb49ab36344b41111d",
+  "model.safetensors": "dd3bae25efcce97df8b14cf29064c9910f62686436ff95bb16b1c184fb03c0c0",
+  "tokenizer.json": "ac84fa7889747f37393545a7fc14ce4f1f158b33460318cad93531e0aa8db109",
+  "tokenizer_config.json": "276e1525b9d4543bf789cfbd981155e82324d78a5dcf4fbc01803886899efc3e"
+}
