@@ -1,0 +1,38 @@
+{
+  "milestone": "Milestone 17 Variable Choice Count",
+  "supported_choice_counts": [
+    2,
+    3,
+    4,
+    6,
+    8,
+    12,
+    16
+  ],
+  "eval_cases_per_k": {
+    "2": 40,
+    "3": 40,
+    "4": 40,
+    "6": 40,
+    "8": 40,
+    "12": 40,
+    "16": 40
+  },
+  "train_cases_per_k": {
+    "2": 254,
+    "3": 254,
+    "4": 127,
+    "6": 126,
+    "8": 126,
+    "12": 126,
+    "16": 125
+  },
+  "total_train_records": 1138,
+  "total_eval_records": 280,
+  "files": {
+    "eval": "data\\rc2_m17_choices\\variable_choice_eval.jsonl",
+    "train_stream_a": "data\\rc2_m17_choices\\train_variable_choices_stream_a.jsonl",
+    "train_stream_b": "data\\rc2_m17_choices\\train_variable_choices_stream_b.jsonl",
+    "train_combined": "data\\rc2_m17_choices\\train_variable_choices_combined.jsonl"
+  }
+}

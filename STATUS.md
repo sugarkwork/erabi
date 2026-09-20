@@ -37,6 +37,7 @@
 - **Milestone 14.1（Compute-Controlled Scaling Audit・U_ref=1960 updates固定・12.5%/50%/100%因果分離・12.5%でOperator +8.0pt/Robustness +5.6pt/Exception +11.7ptのcompute利得確認・Core/Phrasingのデータ多様性依存残存によるPattern C判定・ERABI_DATA_SCALING_REPORT.md統合）**: **完了（因果分離完了・M15へ自律移行）**。
 - **Milestone 15（Quantity vs Diversity・N=1138, U=980 updates完全固定下での多様性対照実験・Condition A/B/C比較・高多様性CがGeneral 100.0% / Operator 93.0% / Robustness 100.0% / eval_v2 97.5%(Paired 95.0%)で大差勝利・Phrasingにおける閾値効果特定・Gate完全突破・ERABI_QUANTITY_VS_DIVERSITY_REPORT.md保全）**: **完了（Gate完全通過・M16へ自律移行）**。
 - **Milestone 16（Diversity Attribution・Condition B基準単一軸アブレーション4条件・Group多様性欠落でCore 89.5%→48.0%半減/Operator多様性欠落で71.0%へ急落/Phrasing多様性欠落で51.7%へ急落/Domain多様性は事前学習語彙で耐性大・因果特定完了・DATA_DESIGN_FINDINGS.md保全）**: **完了（因果完全特定・M17へ自律移行）**。
+- **Milestone 17（Variable Choice Count・2〜16候補拡張・2〜4択 94.2% / 6〜8択 93.8% / 12〜16択 95.0% / K=16で100% / 順序不変性 97.9% / ID置換不変性 100.0% / Core保持 95.5% / 全Gate満額突破・ERABI_VARIABLE_CHOICE_REPORT.md保全）**: **完了（Gate完全通過・M18へ自律移行）**。
 
 ---
 
@@ -845,6 +846,38 @@ W_fix（14/47）からW_v2（8/47）への両問正解減少（-6組）の要因
    - 定型文固定により `fresh_phrasing_eval` が 69.2% $\to$ 51.7% へ低下。構文ショートカット防止に必須。
 4. **第4位: Domain Diversity（影響度 -4.2pt〜-5.8pt）**:
    - 事前学習済みエンコーダの語彙表現により、表層ドメインの削減による影響は限定的。
+
+---
+
+## 25. Milestone 17: Variable Choice Count 実測結果
+
+詳細は [`ERABI_VARIABLE_CHOICE_REPORT.md`](file:///f:/ai/erabi-local/ERABI_VARIABLE_CHOICE_REPORT.md) および [`runs/rc2_m17_choices/m17_variable_choice_results.json`](file:///f:/ai/erabi-local/runs/rc2_m17_choices/m17_variable_choice_results.json) を参照。
+
+### 25.1 候補数別評価結果 ($K \in [2, 3, 4, 6, 8, 12, 16]$)
+
+| 選択肢数 ($K$) | 評価件数 | 正答数 | 正答率 (Top-1) | Mean NLL | Mean Brier | Gate基準 | Gate合否 |
+|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
+| **K = 2** | 40 | 38 | **95.0%** | 0.1924 | 0.0821 | $\ge 90\%$ | **PASS** |
+| **K = 3** | 40 | 38 | **95.0%** | 0.5142 | 0.0990 | $\ge 90\%$ | **PASS** |
+| **K = 4** | 40 | 37 | **92.5%** | 0.4288 | 0.1249 | $\ge 90\%$ | **PASS** |
+| **K = 6** | 40 | 37 | **92.5%** | 0.5494 | 0.1100 | $\ge 85\%$ | **PASS** |
+| **K = 8** | 40 | 38 | **95.0%** | 0.5886 | 0.1035 | $\ge 85\%$ | **PASS** |
+| **K = 12** | 40 | 36 | **90.0%** | 1.4913 | 0.2098 | $\ge 75\%$ | **PASS** |
+| **K = 16** | 40 | 40 | **100.0%** | 0.0002 | 0.0000 | $\ge 75\%$ | **PASS (満点)** |
+
+### 25.2 ブラケット集計 & 頑健性指標
+- **2〜4 Choices**: **94.2%** (Gate: $\ge 90\%$) $\rightarrow$ **合格 (PASS)**
+- **6〜8 Choices**: **93.8%** (Gate: $\ge 85\%$) $\rightarrow$ **合格 (PASS)**
+- **12〜16 Choices**: **95.0%** (Gate: $\ge 75\%$) $\rightarrow$ **合格 (PASS)**
+- **Candidate Permutation Consistency**: **97.9%** (Gate: $\ge 95\%$) $\rightarrow$ **合格 (PASS)**
+- **Choice ID Invariance**: **100.0%** (Gate: $\ge 95\%$) $\rightarrow$ **合格 (PASS)**
+- **RC1 Core Tasks Retention (`eval_v2_core`)**: **95.5%** (Paired: 91.0%, Gate: 退行 $\le 2\text{pt}$, $\ge 95.5\%$) $\rightarrow$ **合格 (PASS)**
+
+### 25.3 科学的総括
+- 単純なフラット均等サンプリングではなく、2〜3選択肢に50%のアンカーを置きつつ、4〜16選択肢へ動的ディストラクター（Plausible / Close / Irrelevant）を注入する学習スケジュールにより、シャープな二値論理判断と多肢弁別能力が完全に両立した。
+- 特に $K=16$ において **40/40問（100.0%）** の正答率を達成し、選択肢ID置換に対する不変性（100.0%）および順序不変性（97.9%）を実証した。
+- Milestone 17のGateを全て満額突破し、**Milestone 18へ自律進行**。
+
 
 
 
