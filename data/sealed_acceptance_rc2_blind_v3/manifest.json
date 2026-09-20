@@ -1,11 +1,8 @@
 {
-  "suite_name": "data/sealed_acceptance_rc2_blind_v2",
-  "status": "INVALID_DATASET",
-  "invalidation_reason": "Contract violation: 62 cases with K=12,16 exceeded the hard 512-token architectural limit (e.g. 513 to 734 tokens). Per Section 10 of directive, the suite is retired as INVALID_DATASET and superseded by blind_v3.",
-  "superseded_by": "data/sealed_acceptance_rc2_blind_v3",
-  "filename": "sealed_test_rc2_blind_v2.jsonl",
-  "sha256": "fd4f932a4c216d1f9f29b2b976498fcfde07bb5552779953ea8ef91e72cc85bc",
-  "created_at_utc": "2026-09-20T05:57:54.002530+00:00",
+  "suite_name": "data/sealed_acceptance_rc2_blind_v3",
+  "filename": "sealed_test_rc2_blind_v3.jsonl",
+  "sha256": "4352d3b3d4acee00afa88e144d170219ca2e25765ba59ad21b597632d59ba11a",
+  "created_at_utc": "2026-09-20T06:05:20.901715+00:00",
   "total_cases": 480,
   "total_pairs": 240,
   "families": {
@@ -26,6 +23,13 @@
     "2": 60,
     "12": 60,
     "16": 60
+  },
+  "token_audit": {
+    "max_tokens": 435,
+    "min_tokens": 99,
+    "avg_tokens": 258.67,
+    "violations_count": 0,
+    "is_contract_compliant": true
   },
   "semantic_audit": {
     "is_valid": true,
