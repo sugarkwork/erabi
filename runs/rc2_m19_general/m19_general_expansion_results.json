@@ -1,0 +1,1307 @@
+{
+  "milestone": "Milestone 19 — General Choice Expansion",
+  "timestamp": "2026-09-20 13:09:20",
+  "best_checkpoint": "F:\\ai\\erabi-local\\runs\\rc2_m19_general\\checkpoints\\epoch_9",
+  "train_meta": {
+    "best_epoch": 9,
+    "best_dev_score": 0.965,
+    "epoch_dev_scores": {
+      "5": {
+        "dev_general_acc": 0.95,
+        "eval_v2_dev_acc": 0.92,
+        "dev_composite": 0.935
+      },
+      "6": {
+        "dev_general_acc": 0.95,
+        "eval_v2_dev_acc": 0.96,
+        "dev_composite": 0.955
+      },
+      "7": {
+        "dev_general_acc": 0.95,
+        "eval_v2_dev_acc": 0.97,
+        "dev_composite": 0.96
+      },
+      "8": {
+        "dev_general_acc": 0.95,
+        "eval_v2_dev_acc": 0.96,
+        "dev_composite": 0.955
+      },
+      "9": {
+        "dev_general_acc": 0.95,
+        "eval_v2_dev_acc": 0.98,
+        "dev_composite": 0.965
+      },
+      "10": {
+        "dev_general_acc": 0.95,
+        "eval_v2_dev_acc": 0.97,
+        "dev_composite": 0.96
+      }
+    },
+    "total_train_time_sec": 1149.9314312934875,
+    "total_optimizer_steps": 980,
+    "peak_vram_mb": 4027.6552734375
+  },
+  "fresh_general_expansion_results": {
+    "overall_accuracy": 1.0,
+    "total_cases": 120,
+    "correct_cases": 120,
+    "mean_nll": 9.738304137581786e-10,
+    "mean_brier": 2.1739262019424864e-17,
+    "paired_total": 60,
+    "paired_both_rate": 1.0,
+    "high_confidence_wrong_count": 0,
+    "high_confidence_wrong_rate": 0.0,
+    "permutation_consistency": 0.9666666666666667,
+    "by_family": {
+      "support_routing": {
+        "total": 12,
+        "correct": 12,
+        "accuracy": 1.0,
+        "mean_nll": 6.681507199369487e-13,
+        "mean_brier": 1.7800825379226238e-24
+      },
+      "short_nli": {
+        "total": 12,
+        "correct": 12,
+        "accuracy": 1.0,
+        "mean_nll": 5.551115123125786e-16,
+        "mean_brier": 1.1889407402383871e-30
+      },
+      "semantic_relation": {
+        "total": 12,
+        "correct": 12,
+        "accuracy": 1.0,
+        "mean_nll": 0.0,
+        "mean_brier": 2.1190344850820714e-40
+      },
+      "intent_selection": {
+        "total": 12,
+        "correct": 12,
+        "accuracy": 1.0,
+        "mean_nll": 8.355538483335907e-13,
+        "mean_brier": 2.7804096580440295e-24
+      },
+      "policy_choice": {
+        "total": 12,
+        "correct": 12,
+        "accuracy": 1.0,
+        "mean_nll": 0.0,
+        "mean_brier": 1.3991764986179391e-35
+      },
+      "instruction_separation": {
+        "total": 12,
+        "correct": 12,
+        "accuracy": 1.0,
+        "mean_nll": 1.7328052356374722e-09,
+        "mean_brier": 1.199637288541641e-17
+      },
+      "negative_goal": {
+        "total": 12,
+        "correct": 12,
+        "accuracy": 1.0,
+        "mean_nll": 1.8545165403372364e-12,
+        "mean_brier": 1.1725215957909131e-23
+      },
+      "reverse_criterion": {
+        "total": 12,
+        "correct": 12,
+        "accuracy": 1.0,
+        "mean_nll": 9.203748874143395e-14,
+        "mean_brier": 3.1262602036269324e-26
+      },
+      "lightweight_prioritization": {
+        "total": 12,
+        "correct": 12,
+        "accuracy": 1.0,
+        "mean_nll": 8.002048088235452e-09,
+        "mean_brier": 2.0539623099186026e-16
+      },
+      "structured_triage": {
+        "total": 12,
+        "correct": 12,
+        "accuracy": 1.0,
+        "mean_nll": 0.0,
+        "mean_brier": 3.6699116843459875e-34
+      }
+    },
+    "cases": [
+      {
+        "id": "genexp_support_routing_000_case1",
+        "family": "support_routing",
+        "target": "billing",
+        "pred": "billing",
+        "correct": true,
+        "p_pred": 0.9999999999989073,
+        "p_target": 0.9999999999989073
+      },
+      {
+        "id": "genexp_support_routing_000_case2",
+        "family": "support_routing",
+        "target": "cancellation",
+        "pred": "cancellation",
+        "correct": true,
+        "p_pred": 0.9999999999999991,
+        "p_target": 0.9999999999999991
+      },
+      {
+        "id": "genexp_support_routing_001_case1",
+        "family": "support_routing",
+        "target": "billing",
+        "pred": "billing",
+        "correct": true,
+        "p_pred": 0.999999999998525,
+        "p_target": 0.999999999998525
+      },
+      {
+        "id": "genexp_support_routing_001_case2",
+        "family": "support_routing",
+        "target": "cancellation",
+        "pred": "cancellation",
+        "correct": true,
+        "p_pred": 0.9999999999999991,
+        "p_target": 0.9999999999999991
+      },
+      {
+        "id": "genexp_support_routing_002_case1",
+        "family": "support_routing",
+        "target": "billing",
+        "pred": "billing",
+        "correct": true,
+        "p_pred": 0.9999999999987486,
+        "p_target": 0.9999999999987486
+      },
+      {
+        "id": "genexp_support_routing_002_case2",
+        "family": "support_routing",
+        "target": "cancellation",
+        "pred": "cancellation",
+        "correct": true,
+        "p_pred": 0.9999999999999991,
+        "p_target": 0.9999999999999991
+      },
+      {
+        "id": "genexp_support_routing_003_case1",
+        "family": "support_routing",
+        "target": "billing",
+        "pred": "billing",
+        "correct": true,
+        "p_pred": 0.9999999999987474,
+        "p_target": 0.9999999999987474
+      },
+      {
+        "id": "genexp_support_routing_003_case2",
+        "family": "support_routing",
+        "target": "cancellation",
+        "pred": "cancellation",
+        "correct": true,
+        "p_pred": 0.9999999999999991,
+        "p_target": 0.9999999999999991
+      },
+      {
+        "id": "genexp_support_routing_004_case1",
+        "family": "support_routing",
+        "target": "billing",
+        "pred": "billing",
+        "correct": true,
+        "p_pred": 0.9999999999984137,
+        "p_target": 0.9999999999984137
+      },
+      {
+        "id": "genexp_support_routing_004_case2",
+        "family": "support_routing",
+        "target": "cancellation",
+        "pred": "cancellation",
+        "correct": true,
+        "p_pred": 0.9999999999999991,
+        "p_target": 0.9999999999999991
+      },
+      {
+        "id": "genexp_support_routing_005_case1",
+        "family": "support_routing",
+        "target": "billing",
+        "pred": "billing",
+        "correct": true,
+        "p_pred": 0.9999999999986455,
+        "p_target": 0.9999999999986455
+      },
+      {
+        "id": "genexp_support_routing_005_case2",
+        "family": "support_routing",
+        "target": "cancellation",
+        "pred": "cancellation",
+        "correct": true,
+        "p_pred": 0.9999999999999991,
+        "p_target": 0.9999999999999991
+      },
+      {
+        "id": "genexp_short_nli_000_case1",
+        "family": "short_nli",
+        "target": "entailment",
+        "pred": "entailment",
+        "correct": true,
+        "p_pred": 1.0,
+        "p_target": 1.0
+      },
+      {
+        "id": "genexp_short_nli_000_case2",
+        "family": "short_nli",
+        "target": "contradiction",
+        "pred": "contradiction",
+        "correct": true,
+        "p_pred": 0.9999999999999989,
+        "p_target": 0.9999999999999989
+      },
+      {
+        "id": "genexp_short_nli_001_case1",
+        "family": "short_nli",
+        "target": "entailment",
+        "pred": "entailment",
+        "correct": true,
+        "p_pred": 1.0,
+        "p_target": 1.0
+      },
+      {
+        "id": "genexp_short_nli_001_case2",
+        "family": "short_nli",
+        "target": "contradiction",
+        "pred": "contradiction",
+        "correct": true,
+        "p_pred": 0.9999999999999989,
+        "p_target": 0.9999999999999989
+      },
+      {
+        "id": "genexp_short_nli_002_case1",
+        "family": "short_nli",
+        "target": "entailment",
+        "pred": "entailment",
+        "correct": true,
+        "p_pred": 1.0,
+        "p_target": 1.0
+      },
+      {
+        "id": "genexp_short_nli_002_case2",
+        "family": "short_nli",
+        "target": "contradiction",
+        "pred": "contradiction",
+        "correct": true,
+        "p_pred": 0.9999999999999989,
+        "p_target": 0.9999999999999989
+      },
+      {
+        "id": "genexp_short_nli_003_case1",
+        "family": "short_nli",
+        "target": "entailment",
+        "pred": "entailment",
+        "correct": true,
+        "p_pred": 1.0,
+        "p_target": 1.0
+      },
+      {
+        "id": "genexp_short_nli_003_case2",
+        "family": "short_nli",
+        "target": "contradiction",
+        "pred": "contradiction",
+        "correct": true,
+        "p_pred": 0.9999999999999989,
+        "p_target": 0.9999999999999989
+      },
+      {
+        "id": "genexp_short_nli_004_case1",
+        "family": "short_nli",
+        "target": "entailment",
+        "pred": "entailment",
+        "correct": true,
+        "p_pred": 1.0,
+        "p_target": 1.0
+      },
+      {
+        "id": "genexp_short_nli_004_case2",
+        "family": "short_nli",
+        "target": "contradiction",
+        "pred": "contradiction",
+        "correct": true,
+        "p_pred": 0.9999999999999989,
+        "p_target": 0.9999999999999989
+      },
+      {
+        "id": "genexp_short_nli_005_case1",
+        "family": "short_nli",
+        "target": "entailment",
+        "pred": "entailment",
+        "correct": true,
+        "p_pred": 1.0,
+        "p_target": 1.0
+      },
+      {
+        "id": "genexp_short_nli_005_case2",
+        "family": "short_nli",
+        "target": "contradiction",
+        "pred": "contradiction",
+        "correct": true,
+        "p_pred": 0.9999999999999989,
+        "p_target": 0.9999999999999989
+      },
+      {
+        "id": "genexp_semantic_relation_000_case1",
+        "family": "semantic_relation",
+        "target": "cause_effect",
+        "pred": "cause_effect",
+        "correct": true,
+        "p_pred": 1.0,
+        "p_target": 1.0
+      },
+      {
+        "id": "genexp_semantic_relation_000_case2",
+        "family": "semantic_relation",
+        "target": "prerequisite",
+        "pred": "prerequisite",
+        "correct": true,
+        "p_pred": 1.0,
+        "p_target": 1.0
+      },
+      {
+        "id": "genexp_semantic_relation_001_case1",
+        "family": "semantic_relation",
+        "target": "cause_effect",
+        "pred": "cause_effect",
+        "correct": true,
+        "p_pred": 1.0,
+        "p_target": 1.0
+      },
+      {
+        "id": "genexp_semantic_relation_001_case2",
+        "family": "semantic_relation",
+        "target": "prerequisite",
+        "pred": "prerequisite",
+        "correct": true,
+        "p_pred": 1.0,
+        "p_target": 1.0
+      },
+      {
+        "id": "genexp_semantic_relation_002_case1",
+        "family": "semantic_relation",
+        "target": "cause_effect",
+        "pred": "cause_effect",
+        "correct": true,
+        "p_pred": 1.0,
+        "p_target": 1.0
+      },
+      {
+        "id": "genexp_semantic_relation_002_case2",
+        "family": "semantic_relation",
+        "target": "prerequisite",
+        "pred": "prerequisite",
+        "correct": true,
+        "p_pred": 1.0,
+        "p_target": 1.0
+      },
+      {
+        "id": "genexp_semantic_relation_003_case1",
+        "family": "semantic_relation",
+        "target": "cause_effect",
+        "pred": "cause_effect",
+        "correct": true,
+        "p_pred": 1.0,
+        "p_target": 1.0
+      },
+      {
+        "id": "genexp_semantic_relation_003_case2",
+        "family": "semantic_relation",
+        "target": "prerequisite",
+        "pred": "prerequisite",
+        "correct": true,
+        "p_pred": 1.0,
+        "p_target": 1.0
+      },
+      {
+        "id": "genexp_semantic_relation_004_case1",
+        "family": "semantic_relation",
+        "target": "cause_effect",
+        "pred": "cause_effect",
+        "correct": true,
+        "p_pred": 1.0,
+        "p_target": 1.0
+      },
+      {
+        "id": "genexp_semantic_relation_004_case2",
+        "family": "semantic_relation",
+        "target": "prerequisite",
+        "pred": "prerequisite",
+        "correct": true,
+        "p_pred": 1.0,
+        "p_target": 1.0
+      },
+      {
+        "id": "genexp_semantic_relation_005_case1",
+        "family": "semantic_relation",
+        "target": "cause_effect",
+        "pred": "cause_effect",
+        "correct": true,
+        "p_pred": 1.0,
+        "p_target": 1.0
+      },
+      {
+        "id": "genexp_semantic_relation_005_case2",
+        "family": "semantic_relation",
+        "target": "prerequisite",
+        "pred": "prerequisite",
+        "correct": true,
+        "p_pred": 1.0,
+        "p_target": 1.0
+      },
+      {
+        "id": "genexp_intent_selection_000_case1",
+        "family": "intent_selection",
+        "target": "compare",
+        "pred": "compare",
+        "correct": true,
+        "p_pred": 0.9999999999983291,
+        "p_target": 0.9999999999983291
+      },
+      {
+        "id": "genexp_intent_selection_000_case2",
+        "family": "intent_selection",
+        "target": "purchase",
+        "pred": "purchase",
+        "correct": true,
+        "p_pred": 0.9999999999999998,
+        "p_target": 0.9999999999999998
+      },
+      {
+        "id": "genexp_intent_selection_001_case1",
+        "family": "intent_selection",
+        "target": "compare",
+        "pred": "compare",
+        "correct": true,
+        "p_pred": 0.9999999999983291,
+        "p_target": 0.9999999999983291
+      },
+      {
+        "id": "genexp_intent_selection_001_case2",
+        "family": "intent_selection",
+        "target": "purchase",
+        "pred": "purchase",
+        "correct": true,
+        "p_pred": 0.9999999999999998,
+        "p_target": 0.9999999999999998
+      },
+      {
+        "id": "genexp_intent_selection_002_case1",
+        "family": "intent_selection",
+        "target": "compare",
+        "pred": "compare",
+        "correct": true,
+        "p_pred": 0.9999999999983291,
+        "p_target": 0.9999999999983291
+      },
+      {
+        "id": "genexp_intent_selection_002_case2",
+        "family": "intent_selection",
+        "target": "purchase",
+        "pred": "purchase",
+        "correct": true,
+        "p_pred": 0.9999999999999998,
+        "p_target": 0.9999999999999998
+      },
+      {
+        "id": "genexp_intent_selection_003_case1",
+        "family": "intent_selection",
+        "target": "compare",
+        "pred": "compare",
+        "correct": true,
+        "p_pred": 0.9999999999983291,
+        "p_target": 0.9999999999983291
+      },
+      {
+        "id": "genexp_intent_selection_003_case2",
+        "family": "intent_selection",
+        "target": "purchase",
+        "pred": "purchase",
+        "correct": true,
+        "p_pred": 0.9999999999999998,
+        "p_target": 0.9999999999999998
+      },
+      {
+        "id": "genexp_intent_selection_004_case1",
+        "family": "intent_selection",
+        "target": "compare",
+        "pred": "compare",
+        "correct": true,
+        "p_pred": 0.9999999999983291,
+        "p_target": 0.9999999999983291
+      },
+      {
+        "id": "genexp_intent_selection_004_case2",
+        "family": "intent_selection",
+        "target": "purchase",
+        "pred": "purchase",
+        "correct": true,
+        "p_pred": 0.9999999999999998,
+        "p_target": 0.9999999999999998
+      },
+      {
+        "id": "genexp_intent_selection_005_case1",
+        "family": "intent_selection",
+        "target": "compare",
+        "pred": "compare",
+        "correct": true,
+        "p_pred": 0.9999999999983291,
+        "p_target": 0.9999999999983291
+      },
+      {
+        "id": "genexp_intent_selection_005_case2",
+        "family": "intent_selection",
+        "target": "purchase",
+        "pred": "purchase",
+        "correct": true,
+        "p_pred": 0.9999999999999998,
+        "p_target": 0.9999999999999998
+      },
+      {
+        "id": "genexp_policy_choice_000_case1",
+        "family": "policy_choice",
+        "target": "full_refund",
+        "pred": "full_refund",
+        "correct": true,
+        "p_pred": 1.0,
+        "p_target": 1.0
+      },
+      {
+        "id": "genexp_policy_choice_000_case2",
+        "family": "policy_choice",
+        "target": "no_refund",
+        "pred": "no_refund",
+        "correct": true,
+        "p_pred": 1.0,
+        "p_target": 1.0
+      },
+      {
+        "id": "genexp_policy_choice_001_case1",
+        "family": "policy_choice",
+        "target": "full_refund",
+        "pred": "full_refund",
+        "correct": true,
+        "p_pred": 1.0,
+        "p_target": 1.0
+      },
+      {
+        "id": "genexp_policy_choice_001_case2",
+        "family": "policy_choice",
+        "target": "no_refund",
+        "pred": "no_refund",
+        "correct": true,
+        "p_pred": 1.0,
+        "p_target": 1.0
+      },
+      {
+        "id": "genexp_policy_choice_002_case1",
+        "family": "policy_choice",
+        "target": "full_refund",
+        "pred": "full_refund",
+        "correct": true,
+        "p_pred": 1.0,
+        "p_target": 1.0
+      },
+      {
+        "id": "genexp_policy_choice_002_case2",
+        "family": "policy_choice",
+        "target": "no_refund",
+        "pred": "no_refund",
+        "correct": true,
+        "p_pred": 1.0,
+        "p_target": 1.0
+      },
+      {
+        "id": "genexp_policy_choice_003_case1",
+        "family": "policy_choice",
+        "target": "full_refund",
+        "pred": "full_refund",
+        "correct": true,
+        "p_pred": 1.0,
+        "p_target": 1.0
+      },
+      {
+        "id": "genexp_policy_choice_003_case2",
+        "family": "policy_choice",
+        "target": "no_refund",
+        "pred": "no_refund",
+        "correct": true,
+        "p_pred": 1.0,
+        "p_target": 1.0
+      },
+      {
+        "id": "genexp_policy_choice_004_case1",
+        "family": "policy_choice",
+        "target": "full_refund",
+        "pred": "full_refund",
+        "correct": true,
+        "p_pred": 1.0,
+        "p_target": 1.0
+      },
+      {
+        "id": "genexp_policy_choice_004_case2",
+        "family": "policy_choice",
+        "target": "no_refund",
+        "pred": "no_refund",
+        "correct": true,
+        "p_pred": 1.0,
+        "p_target": 1.0
+      },
+      {
+        "id": "genexp_policy_choice_005_case1",
+        "family": "policy_choice",
+        "target": "full_refund",
+        "pred": "full_refund",
+        "correct": true,
+        "p_pred": 1.0,
+        "p_target": 1.0
+      },
+      {
+        "id": "genexp_policy_choice_005_case2",
+        "family": "policy_choice",
+        "target": "no_refund",
+        "pred": "no_refund",
+        "correct": true,
+        "p_pred": 1.0,
+        "p_target": 1.0
+      },
+      {
+        "id": "genexp_instruction_separation_000_case1",
+        "family": "instruction_separation",
+        "target": "halt_immediately",
+        "pred": "halt_immediately",
+        "correct": true,
+        "p_pred": 0.9999999965343904,
+        "p_target": 0.9999999965343904
+      },
+      {
+        "id": "genexp_instruction_separation_000_case2",
+        "family": "instruction_separation",
+        "target": "continue_job",
+        "pred": "continue_job",
+        "correct": true,
+        "p_pred": 0.9999999999999991,
+        "p_target": 0.9999999999999991
+      },
+      {
+        "id": "genexp_instruction_separation_001_case1",
+        "family": "instruction_separation",
+        "target": "halt_immediately",
+        "pred": "halt_immediately",
+        "correct": true,
+        "p_pred": 0.9999999965343904,
+        "p_target": 0.9999999965343904
+      },
+      {
+        "id": "genexp_instruction_separation_001_case2",
+        "family": "instruction_separation",
+        "target": "continue_job",
+        "pred": "continue_job",
+        "correct": true,
+        "p_pred": 0.9999999999999991,
+        "p_target": 0.9999999999999991
+      },
+      {
+        "id": "genexp_instruction_separation_002_case1",
+        "family": "instruction_separation",
+        "target": "halt_immediately",
+        "pred": "halt_immediately",
+        "correct": true,
+        "p_pred": 0.9999999965343904,
+        "p_target": 0.9999999965343904
+      },
+      {
+        "id": "genexp_instruction_separation_002_case2",
+        "family": "instruction_separation",
+        "target": "continue_job",
+        "pred": "continue_job",
+        "correct": true,
+        "p_pred": 0.9999999999999991,
+        "p_target": 0.9999999999999991
+      },
+      {
+        "id": "genexp_instruction_separation_003_case1",
+        "family": "instruction_separation",
+        "target": "halt_immediately",
+        "pred": "halt_immediately",
+        "correct": true,
+        "p_pred": 0.9999999965343904,
+        "p_target": 0.9999999965343904
+      },
+      {
+        "id": "genexp_instruction_separation_003_case2",
+        "family": "instruction_separation",
+        "target": "continue_job",
+        "pred": "continue_job",
+        "correct": true,
+        "p_pred": 0.9999999999999991,
+        "p_target": 0.9999999999999991
+      },
+      {
+        "id": "genexp_instruction_separation_004_case1",
+        "family": "instruction_separation",
+        "target": "halt_immediately",
+        "pred": "halt_immediately",
+        "correct": true,
+        "p_pred": 0.9999999965343904,
+        "p_target": 0.9999999965343904
+      },
+      {
+        "id": "genexp_instruction_separation_004_case2",
+        "family": "instruction_separation",
+        "target": "continue_job",
+        "pred": "continue_job",
+        "correct": true,
+        "p_pred": 0.9999999999999991,
+        "p_target": 0.9999999999999991
+      },
+      {
+        "id": "genexp_instruction_separation_005_case1",
+        "family": "instruction_separation",
+        "target": "halt_immediately",
+        "pred": "halt_immediately",
+        "correct": true,
+        "p_pred": 0.9999999965343904,
+        "p_target": 0.9999999965343904
+      },
+      {
+        "id": "genexp_instruction_separation_005_case2",
+        "family": "instruction_separation",
+        "target": "continue_job",
+        "pred": "continue_job",
+        "correct": true,
+        "p_pred": 0.9999999999999991,
+        "p_target": 0.9999999999999991
+      },
+      {
+        "id": "genexp_negative_goal_000_case1",
+        "family": "negative_goal",
+        "target": "isolate_network",
+        "pred": "isolate_network",
+        "correct": true,
+        "p_pred": 0.999999999996326,
+        "p_target": 0.999999999996326
+      },
+      {
+        "id": "genexp_negative_goal_000_case2",
+        "family": "negative_goal",
+        "target": "format_disk",
+        "pred": "format_disk",
+        "correct": true,
+        "p_pred": 0.9999999999999649,
+        "p_target": 0.9999999999999649
+      },
+      {
+        "id": "genexp_negative_goal_001_case1",
+        "family": "negative_goal",
+        "target": "isolate_network",
+        "pred": "isolate_network",
+        "correct": true,
+        "p_pred": 0.999999999996326,
+        "p_target": 0.999999999996326
+      },
+      {
+        "id": "genexp_negative_goal_001_case2",
+        "family": "negative_goal",
+        "target": "format_disk",
+        "pred": "format_disk",
+        "correct": true,
+        "p_pred": 0.9999999999999649,
+        "p_target": 0.9999999999999649
+      },
+      {
+        "id": "genexp_negative_goal_002_case1",
+        "family": "negative_goal",
+        "target": "isolate_network",
+        "pred": "isolate_network",
+        "correct": true,
+        "p_pred": 0.999999999996326,
+        "p_target": 0.999999999996326
+      },
+      {
+        "id": "genexp_negative_goal_002_case2",
+        "family": "negative_goal",
+        "target": "format_disk",
+        "pred": "format_disk",
+        "correct": true,
+        "p_pred": 0.9999999999999649,
+        "p_target": 0.9999999999999649
+      },
+      {
+        "id": "genexp_negative_goal_003_case1",
+        "family": "negative_goal",
+        "target": "isolate_network",
+        "pred": "isolate_network",
+        "correct": true,
+        "p_pred": 0.999999999996326,
+        "p_target": 0.999999999996326
+      },
+      {
+        "id": "genexp_negative_goal_003_case2",
+        "family": "negative_goal",
+        "target": "format_disk",
+        "pred": "format_disk",
+        "correct": true,
+        "p_pred": 0.9999999999999649,
+        "p_target": 0.9999999999999649
+      },
+      {
+        "id": "genexp_negative_goal_004_case1",
+        "family": "negative_goal",
+        "target": "isolate_network",
+        "pred": "isolate_network",
+        "correct": true,
+        "p_pred": 0.999999999996326,
+        "p_target": 0.999999999996326
+      },
+      {
+        "id": "genexp_negative_goal_004_case2",
+        "family": "negative_goal",
+        "target": "format_disk",
+        "pred": "format_disk",
+        "correct": true,
+        "p_pred": 0.9999999999999649,
+        "p_target": 0.9999999999999649
+      },
+      {
+        "id": "genexp_negative_goal_005_case1",
+        "family": "negative_goal",
+        "target": "isolate_network",
+        "pred": "isolate_network",
+        "correct": true,
+        "p_pred": 0.999999999996326,
+        "p_target": 0.999999999996326
+      },
+      {
+        "id": "genexp_negative_goal_005_case2",
+        "family": "negative_goal",
+        "target": "format_disk",
+        "pred": "format_disk",
+        "correct": true,
+        "p_pred": 0.9999999999999649,
+        "p_target": 0.9999999999999649
+      },
+      {
+        "id": "genexp_reverse_criterion_000_case1",
+        "family": "reverse_criterion",
+        "target": "share_cleartext",
+        "pred": "share_cleartext",
+        "correct": true,
+        "p_pred": 0.9999999999998159,
+        "p_target": 0.9999999999998159
+      },
+      {
+        "id": "genexp_reverse_criterion_000_case2",
+        "family": "reverse_criterion",
+        "target": "use_vault",
+        "pred": "use_vault",
+        "correct": true,
+        "p_pred": 1.0,
+        "p_target": 1.0
+      },
+      {
+        "id": "genexp_reverse_criterion_001_case1",
+        "family": "reverse_criterion",
+        "target": "share_cleartext",
+        "pred": "share_cleartext",
+        "correct": true,
+        "p_pred": 0.9999999999998159,
+        "p_target": 0.9999999999998159
+      },
+      {
+        "id": "genexp_reverse_criterion_001_case2",
+        "family": "reverse_criterion",
+        "target": "use_vault",
+        "pred": "use_vault",
+        "correct": true,
+        "p_pred": 1.0,
+        "p_target": 1.0
+      },
+      {
+        "id": "genexp_reverse_criterion_002_case1",
+        "family": "reverse_criterion",
+        "target": "share_cleartext",
+        "pred": "share_cleartext",
+        "correct": true,
+        "p_pred": 0.9999999999998159,
+        "p_target": 0.9999999999998159
+      },
+      {
+        "id": "genexp_reverse_criterion_002_case2",
+        "family": "reverse_criterion",
+        "target": "use_vault",
+        "pred": "use_vault",
+        "correct": true,
+        "p_pred": 1.0,
+        "p_target": 1.0
+      },
+      {
+        "id": "genexp_reverse_criterion_003_case1",
+        "family": "reverse_criterion",
+        "target": "share_cleartext",
+        "pred": "share_cleartext",
+        "correct": true,
+        "p_pred": 0.9999999999998159,
+        "p_target": 0.9999999999998159
+      },
+      {
+        "id": "genexp_reverse_criterion_003_case2",
+        "family": "reverse_criterion",
+        "target": "use_vault",
+        "pred": "use_vault",
+        "correct": true,
+        "p_pred": 1.0,
+        "p_target": 1.0
+      },
+      {
+        "id": "genexp_reverse_criterion_004_case1",
+        "family": "reverse_criterion",
+        "target": "share_cleartext",
+        "pred": "share_cleartext",
+        "correct": true,
+        "p_pred": 0.9999999999998159,
+        "p_target": 0.9999999999998159
+      },
+      {
+        "id": "genexp_reverse_criterion_004_case2",
+        "family": "reverse_criterion",
+        "target": "use_vault",
+        "pred": "use_vault",
+        "correct": true,
+        "p_pred": 1.0,
+        "p_target": 1.0
+      },
+      {
+        "id": "genexp_reverse_criterion_005_case1",
+        "family": "reverse_criterion",
+        "target": "share_cleartext",
+        "pred": "share_cleartext",
+        "correct": true,
+        "p_pred": 0.9999999999998159,
+        "p_target": 0.9999999999998159
+      },
+      {
+        "id": "genexp_reverse_criterion_005_case2",
+        "family": "reverse_criterion",
+        "target": "use_vault",
+        "pred": "use_vault",
+        "correct": true,
+        "p_pred": 1.0,
+        "p_target": 1.0
+      },
+      {
+        "id": "genexp_lightweight_prioritization_000_case1",
+        "family": "lightweight_prioritization",
+        "target": "p0_immediate",
+        "pred": "p0_immediate",
+        "correct": true,
+        "p_pred": 1.0,
+        "p_target": 1.0
+      },
+      {
+        "id": "genexp_lightweight_prioritization_000_case2",
+        "family": "lightweight_prioritization",
+        "target": "p2_next_sprint",
+        "pred": "p2_next_sprint",
+        "correct": true,
+        "p_pred": 0.999999983995904,
+        "p_target": 0.999999983995904
+      },
+      {
+        "id": "genexp_lightweight_prioritization_001_case1",
+        "family": "lightweight_prioritization",
+        "target": "p0_immediate",
+        "pred": "p0_immediate",
+        "correct": true,
+        "p_pred": 1.0,
+        "p_target": 1.0
+      },
+      {
+        "id": "genexp_lightweight_prioritization_001_case2",
+        "family": "lightweight_prioritization",
+        "target": "p2_next_sprint",
+        "pred": "p2_next_sprint",
+        "correct": true,
+        "p_pred": 0.999999983995904,
+        "p_target": 0.999999983995904
+      },
+      {
+        "id": "genexp_lightweight_prioritization_002_case1",
+        "family": "lightweight_prioritization",
+        "target": "p0_immediate",
+        "pred": "p0_immediate",
+        "correct": true,
+        "p_pred": 1.0,
+        "p_target": 1.0
+      },
+      {
+        "id": "genexp_lightweight_prioritization_002_case2",
+        "family": "lightweight_prioritization",
+        "target": "p2_next_sprint",
+        "pred": "p2_next_sprint",
+        "correct": true,
+        "p_pred": 0.999999983995904,
+        "p_target": 0.999999983995904
+      },
+      {
+        "id": "genexp_lightweight_prioritization_003_case1",
+        "family": "lightweight_prioritization",
+        "target": "p0_immediate",
+        "pred": "p0_immediate",
+        "correct": true,
+        "p_pred": 1.0,
+        "p_target": 1.0
+      },
+      {
+        "id": "genexp_lightweight_prioritization_003_case2",
+        "family": "lightweight_prioritization",
+        "target": "p2_next_sprint",
+        "pred": "p2_next_sprint",
+        "correct": true,
+        "p_pred": 0.999999983995904,
+        "p_target": 0.999999983995904
+      },
+      {
+        "id": "genexp_lightweight_prioritization_004_case1",
+        "family": "lightweight_prioritization",
+        "target": "p0_immediate",
+        "pred": "p0_immediate",
+        "correct": true,
+        "p_pred": 1.0,
+        "p_target": 1.0
+      },
+      {
+        "id": "genexp_lightweight_prioritization_004_case2",
+        "family": "lightweight_prioritization",
+        "target": "p2_next_sprint",
+        "pred": "p2_next_sprint",
+        "correct": true,
+        "p_pred": 0.999999983995904,
+        "p_target": 0.999999983995904
+      },
+      {
+        "id": "genexp_lightweight_prioritization_005_case1",
+        "family": "lightweight_prioritization",
+        "target": "p0_immediate",
+        "pred": "p0_immediate",
+        "correct": true,
+        "p_pred": 1.0,
+        "p_target": 1.0
+      },
+      {
+        "id": "genexp_lightweight_prioritization_005_case2",
+        "family": "lightweight_prioritization",
+        "target": "p2_next_sprint",
+        "pred": "p2_next_sprint",
+        "correct": true,
+        "p_pred": 0.999999983995904,
+        "p_target": 0.999999983995904
+      },
+      {
+        "id": "genexp_structured_triage_000_case1",
+        "family": "structured_triage",
+        "target": "hardware_failure",
+        "pred": "hardware_failure",
+        "correct": true,
+        "p_pred": 1.0,
+        "p_target": 1.0
+      },
+      {
+        "id": "genexp_structured_triage_000_case2",
+        "family": "structured_triage",
+        "target": "network_partition",
+        "pred": "network_partition",
+        "correct": true,
+        "p_pred": 1.0,
+        "p_target": 1.0
+      },
+      {
+        "id": "genexp_structured_triage_001_case1",
+        "family": "structured_triage",
+        "target": "hardware_failure",
+        "pred": "hardware_failure",
+        "correct": true,
+        "p_pred": 1.0,
+        "p_target": 1.0
+      },
+      {
+        "id": "genexp_structured_triage_001_case2",
+        "family": "structured_triage",
+        "target": "network_partition",
+        "pred": "network_partition",
+        "correct": true,
+        "p_pred": 1.0,
+        "p_target": 1.0
+      },
+      {
+        "id": "genexp_structured_triage_002_case1",
+        "family": "structured_triage",
+        "target": "hardware_failure",
+        "pred": "hardware_failure",
+        "correct": true,
+        "p_pred": 1.0,
+        "p_target": 1.0
+      },
+      {
+        "id": "genexp_structured_triage_002_case2",
+        "family": "structured_triage",
+        "target": "network_partition",
+        "pred": "network_partition",
+        "correct": true,
+        "p_pred": 1.0,
+        "p_target": 1.0
+      },
+      {
+        "id": "genexp_structured_triage_003_case1",
+        "family": "structured_triage",
+        "target": "hardware_failure",
+        "pred": "hardware_failure",
+        "correct": true,
+        "p_pred": 1.0,
+        "p_target": 1.0
+      },
+      {
+        "id": "genexp_structured_triage_003_case2",
+        "family": "structured_triage",
+        "target": "network_partition",
+        "pred": "network_partition",
+        "correct": true,
+        "p_pred": 1.0,
+        "p_target": 1.0
+      },
+      {
+        "id": "genexp_structured_triage_004_case1",
+        "family": "structured_triage",
+        "target": "hardware_failure",
+        "pred": "hardware_failure",
+        "correct": true,
+        "p_pred": 1.0,
+        "p_target": 1.0
+      },
+      {
+        "id": "genexp_structured_triage_004_case2",
+        "family": "structured_triage",
+        "target": "network_partition",
+        "pred": "network_partition",
+        "correct": true,
+        "p_pred": 1.0,
+        "p_target": 1.0
+      },
+      {
+        "id": "genexp_structured_triage_005_case1",
+        "family": "structured_triage",
+        "target": "hardware_failure",
+        "pred": "hardware_failure",
+        "correct": true,
+        "p_pred": 1.0,
+        "p_target": 1.0
+      },
+      {
+        "id": "genexp_structured_triage_005_case2",
+        "family": "structured_triage",
+        "target": "network_partition",
+        "pred": "network_partition",
+        "correct": true,
+        "p_pred": 1.0,
+        "p_target": 1.0
+      }
+    ]
+  },
+  "retention_results": {
+    "eval_v2_core": {
+      "total_cases": 200,
+      "correct": 187,
+      "accuracy": 0.935,
+      "mean_nll": 0.8583704996478548,
+      "mean_brier": 0.11488091036723874,
+      "paired_total": 100,
+      "paired_both_rate": 0.89
+    },
+    "fresh_general_eval": {
+      "total_cases": 120,
+      "correct": 115,
+      "accuracy": 0.9583333333333334,
+      "mean_nll": 1.0195315861739278,
+      "mean_brier": 0.08333333330007156,
+      "paired_total": 60,
+      "paired_both_rate": 0.9166666666666666
+    },
+    "fresh_operator_eval": {
+      "total_cases": 100,
+      "correct": 85,
+      "accuracy": 0.85,
+      "mean_nll": 2.424166069972225,
+      "mean_brier": 0.2733796123995345,
+      "paired_total": 50,
+      "paired_both_rate": 0.7
+    },
+    "fresh_robustness_eval": {
+      "total_cases": 108,
+      "correct": 108,
+      "accuracy": 1.0,
+      "mean_nll": 4.3035132895989396e-09,
+      "mean_brier": 3.984643070915716e-15,
+      "paired_total": 54,
+      "paired_both_rate": 1.0
+    },
+    "fresh_phrasing_eval": {
+      "total_cases": 120,
+      "correct": 91,
+      "accuracy": 0.7583333333333333,
+      "mean_nll": 4.600666705950583,
+      "mean_brier": 0.46367328489610515,
+      "paired_total": 60,
+      "paired_both_rate": 0.6833333333333333
+    },
+    "fresh_natural_eval": {
+      "total_cases": 120,
+      "correct": 119,
+      "accuracy": 0.9916666666666667,
+      "mean_nll": 0.021692551730572975,
+      "mean_brier": 0.014289931461966129,
+      "paired_total": 60,
+      "paired_both_rate": 0.9833333333333333
+    },
+    "eval_exception": {
+      "total_cases": 120,
+      "correct": 115,
+      "accuracy": 0.9583333333333334,
+      "mean_nll": 0.22828704708719363,
+      "mean_brier": 0.07982412061429883,
+      "paired_total": 60,
+      "paired_both_rate": 0.9166666666666666
+    },
+    "smoke_cases": {
+      "total_cases": 12,
+      "correct": 11,
+      "accuracy": 0.9166666666666666,
+      "mean_nll": 1.9217087927607166,
+      "mean_brier": 0.16668180384413256,
+      "paired_total": 2,
+      "paired_both_rate": 1.0
+    }
+  },
+  "gate_checks": {
+    "gate_overall_acc_ge_85": {
+      "threshold": 0.85,
+      "actual": 1.0,
+      "passed": true
+    },
+    "gate_each_family_ge_75": {
+      "threshold": 0.75,
+      "actual": 1.0,
+      "passed": true
+    },
+    "gate_core_retention_ge_93_5": {
+      "threshold": 0.935,
+      "actual": 0.935,
+      "passed": true
+    },
+    "gate_permutation_ge_95": {
+      "threshold": 0.95,
+      "actual": 0.9666666666666667,
+      "passed": true
+    }
+  },
+  "all_passed": true
+}

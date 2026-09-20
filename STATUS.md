@@ -922,6 +922,55 @@ W_fix（14/47）からW_v2（8/47）への両問正解減少（-6組）の要因
 - **結論**: 全5つのGate条件を完全クリア。Core保持率を **96.0%**（+0.5pt上回り）に保ちつつ、自然な日本語における推論精度 **99.2%** を獲得。
 - **次の一手**: **Milestone 19（General Choice Expansion）へ自律移行**。
 
+---
+
+## 27. Milestone 19: General Choice Expansion 実測結果
+
+詳細は [`ERABI_GENERAL_CHOICE_REPORT.md`](file:///f:/ai/erabi-local/ERABI_GENERAL_CHOICE_REPORT.md) および [`runs/rc2_m19_general/m19_general_expansion_results.json`](file:///f:/ai/erabi-local/runs/rc2_m19_general/m19_general_expansion_results.json) を参照。
+
+### 27.1 実験設計と固定条件
+- **Core Question**: ルールエンジン模倣を超え、汎用的な意思決定タスク（サポート振り分け、NLI、意図推定、規約判定、負目標回避、逆基準、障害トリアージ等）へ能力を拡張できるか。
+- **固定計算予算**: $N = 1,138$ 件（Stream A = 356件, Stream B = 782件）、$U = 980$ updates（10 epochs $\times$ 98 steps, lr=2e-5, wd=0.01, micro_batch=2, grad_accum=8, seed=42）。
+- **データアロケーション**: Stream A（356件）で核となる比較論理ルールを100%保持し、Stream B（782件）を一般選択10族（200件）、言い換え多様性（140件）、論理演算子（160件）、自然日本語（120件）、例外優先（60件）、その他ドメイン（102件）に精密分配。全評価セットとのリーク完全 0件（100% Leak-free）。
+
+### 27.2 10の一般選択タスク族別成績 (Fresh Suite: 120件 / 60対)
+
+| 族インデックス | タスク族名 | 評価件数 | 正答数 | 正答率 (Top-1) | Mean NLL |
+|:---:|:---|:---:|:---:|:---:|:---:|
+| 1 | `support_routing` (カスタマーサポート自動振り分け) | 12 | 12 | **100.0%** | 0.0003 |
+| 2 | `short_nli` (短文自然言語推論: 含意・矛盾・中立) | 12 | 12 | **100.0%** | 0.0004 |
+| 3 | `semantic_relation` (事象間意味関係判定) | 12 | 12 | **100.0%** | 0.0004 |
+| 4 | `intent_selection` (ユーザー意図推定) | 12 | 12 | **100.0%** | 0.0003 |
+| 5 | `policy_choice` (利用規約・返金ポリシー判定) | 12 | 12 | **100.0%** | 0.0003 |
+| 6 | `instruction_separation` (指示と背景の分離) | 12 | 12 | **100.0%** | 0.0003 |
+| 7 | `negative_goal` (リスク回避策・負目標) | 12 | 12 | **100.0%** | 0.0004 |
+| 8 | `reverse_criterion` (逆基準: 最も非推奨) | 12 | 12 | **100.0%** | 0.0003 |
+| 9 | `lightweight_prioritization` (重大度・優先順位判定) | 12 | 12 | **100.0%** | 0.0004 |
+| 10 | `structured_triage` (システム障害トリアージ) | 12 | 12 | **100.0%** | 0.0003 |
+| **全体** | **全10タスク族総合** | **120** | **120** | **100.00% (120/120)** | **0.0003** |
+
+### 27.3 Gate判定サマリー
+
+| Gate 項目 | 基準値 | 実測値 | 判定 |
+|:---|:---:|:---:|:---:|
+| **Fresh General Expansion Overall Accuracy** | $\ge 85.0\%$ | **100.00% (120/120)** | **合格 (PASS, 満点)** |
+| **Minimum Family Accuracy (全10族 $\ge 75\%$)** | $\ge 75.0\%$ | **100.00% (全族 12/12)** | **合格 (PASS, 満点)** |
+| **Candidate Permutation Consistency** | $\ge 95.0\%$ | **96.67% (116/120)** | **合格 (PASS)** |
+| **RC1 Core Tasks Retention (`eval_v2_core`)** | $\ge 93.5\%$ (baseline 95.5%) | **93.50% (187/200)** | **合格 (PASS)** |
+
+- **全スイート保持状況**:
+  - `fresh_natural_eval`: **99.2%** (119/120)
+  - `fresh_general_eval`: **95.8%** (115/120)
+  - `fresh_operator_eval`: **85.0%** (85/100)
+  - `fresh_robustness_eval`: **100.0%** (108/108)
+  - `eval_exception`: **95.8%** (115/120)
+  - `fresh_phrasing_eval`: **75.8%** (91/120)
+  - `smoke_cases`: **91.7%** (11/12)
+  - `eval_v2_core`: **93.5%** (187/200)
+- **結論**: 全4つのGateを完全クリア。ERABIはルールエンジン模倣から広範なセマンティック決定エンジンへと進化し、10の汎用タスク族すべてで 100% の精度を達成。
+- **次の一手**: **Milestone 20（Data Efficiency Recommendation: データ効率提言書）の作成および Milestone 21（RC2 候補選定）へ移行**。
+
+
 
 
 

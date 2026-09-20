@@ -1,0 +1,21 @@
+{
+  "milestone": "Milestone 19 General Choice Expansion",
+  "families": [
+    "support_routing",
+    "short_nli",
+    "semantic_relation",
+    "intent_selection",
+    "policy_choice",
+    "instruction_separation",
+    "negative_goal",
+    "reverse_criterion",
+    "lightweight_prioritization",
+    "structured_triage"
+  ],
+  "eval_cases": 120,
+  "train_cases": 1138,
+  "sha256": {
+    "eval": "996d2ea174e887599b16a4607f91c1b4692d08157714093391483e0bef0094b7",
+    "train_combined": "7ff7cffda5897b11864075f36cd8c58f1d7febf38ca729ced76f41f9e655ce0d"
+  }
+}
