@@ -1,0 +1,17 @@
+{
+  "timestamp_utc": "2026-09-20T22:08:42.315568+00:00",
+  "total_cases_audited": 480,
+  "max_token_length": 438,
+  "avg_token_length": 225.15,
+  "p95_token_length": 326,
+  "length_bins": {
+    "<=128": 0,
+    "129-256": 361,
+    "257-384": 112,
+    "385-450": 7,
+    ">450": 0
+  },
+  "violations_count": 0,
+  "is_contract_compliant": true,
+  "violations": []
+}

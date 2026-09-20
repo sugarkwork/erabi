@@ -1,0 +1,48 @@
+{
+  "suite_name": "ERABI RC3 Development Bridge Benchmark",
+  "created_utc": "2026-09-20T22:08:42.930717+00:00",
+  "total_cases": 480,
+  "total_pairs": 240,
+  "families": {
+    "core_rules": 60,
+    "logical_operators": 60,
+    "priority_exception": 60,
+    "natural_japanese": 60,
+    "domain_transfer": 60,
+    "general_choice": 60,
+    "variable_choice": 60,
+    "perturbation_invariance": 60
+  },
+  "k_distribution": {
+    "2": 40,
+    "3": 130,
+    "4": 190,
+    "6": 60,
+    "8": 30,
+    "12": 10,
+    "16": 20
+  },
+  "token_stats": {
+    "max": 438,
+    "avg": 225.15,
+    "p95": 326,
+    "bins": {
+      "<=128": 0,
+      "129-256": 361,
+      "257-384": 112,
+      "385-450": 7,
+      ">450": 0
+    }
+  },
+  "audits": {
+    "semantic_audit_passed": true,
+    "token_audit_passed": true,
+    "zero_leakage_passed": true
+  },
+  "file_hashes": {
+    "rc3_bridge_benchmark.jsonl": "e6a7f30ec42ded7b8843dce951910e77a5b120587598c73948de3e9425332922",
+    "semantic_audit.json": "b4a611f8a9c8f8e6c2879a455432965f0f59cbefdc633040ff07af5dc8f24980",
+    "token_audit.json": "837e5237476e43a16d03d17c008ed710f63b644f42442bfdf9b1c19b3697c5ce",
+    "overlap_audit.json": "2360546c6d2ce58132867ffdd1ab2f4bd1b07de221e8ac9591e2508fdc8309ea"
+  }
+}

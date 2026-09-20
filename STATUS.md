@@ -43,6 +43,12 @@
 - **Milestone 22（RC2.1 Temperature Calibration・独立校正データ400件による最適化・T*=2.772176・校正NLL 50.6%減・Fresh NLL 60.3%急減・Top-1順序完全一致100.0%・高確信誤差4.32%・release/rc2_1/calibration.json保全・ERABI_RC2_1_CALIBRATION_REPORT.md策定）**: **完了（校正Gate完全通過）**。
 - **Milestone 23（RC2.1 ONNX FP16 CUDA Export・PyTorch↔ONNX FP16 Top-1一致率100.0%・p50=11.13ms / p95=16.44ms / 77.6 req/s / メモリリークドリフト+1.53MB / release/erabi-rc2_1-onnx-fp16保全）**: **完了（ONNX Gate完全通過）**。
 - **Milestone 24（RC2.1 Sealed Blind Acceptance v4 Audit・完全未見480件/240対照ペア・モデル推論ゼロ作成・全過去データ57,734件Leakageゼロ・トークン契約上限427/512厳格適合・Git事前コミットfreeze・ワンショット実測：Domain 95.0% / Priority 91.7% / Natural 90.0% / Core 81.7% / Logical 55.0% / Perturbation 56.7% / General 60.0% / Variable 63.3% / 全体74.17% / PyTorch↔ONNX一致率100.0%・全体90%未達によりFAILED・200Mモデル構造限界特定・FINAL_ACCEPTANCE_RC2_1_BLIND_FAILED.md・MODEL_CARD・GENERALIZATION_REPORT完備）**: **全工程完遂（自律リカバリー完了・報告書配備）**。
+- **Milestone 25（RC2.1 Freeze & Blind v4 Retirement・RC2.1 release/rc2_1/model永久freeze・Blind v4永久引退・再学習/選択への転用禁止・SHA256固定・commit 98854e4）**: **完了（確定保全）**。
+- **Milestone 26（Blind v4 Forensic Decomposition・124件全誤答を5クラスターに完全分解・Cluster 1 High-Cardinality 41.9% / Cluster 2 Propositional Inversion 28.2% / Cluster 5 Boundary 14.5% / Cluster 3 Abstract Semantic 13.7% / Cluster 4 Lexical 1.6%・BLIND_V4_FORENSIC_REPORT.md策定）**: **完了（Gate完全通過）**。
+- **Milestone 27（Frozen-Model Controlled Factorial Diagnostics・凍結RC2.1で非学習推論610回実施・Exp A: K=16でも100%・Exp B: 440 tokensでも100%・Exp C: Lexical Overlapで正答率63.3%(-36.7pt急落)・Exp D: 曖昧表現100%・Pattern C(Distractor Lexical Attraction)特定・FACTORIAL_DIAGNOSTICS_REPORT.md策定）**: **完了（Gate完全通過）**。
+- **Milestone 28（Development Bridge Benchmark Construction・新対照ベンチマーク480件/240対照ペア・data/rc3_bridge/・Blind v4文章完全ゼロ・過去58,214件Leakageゼロ・トークン契約上限438/450適合・RC3_BRIDGE_BENCHMARK_REPORT.md策定）**: **完了（Gate完全通過）**。
+- **Milestone 29（Minimal Architecture A/B Comparison・Bridge 480件対照実験・Condition A All-in-One: 76.04% / 25.8ms / K16 80.0% vs Condition B Candidate-Separated: 68.96%(-7.08pt) / 71.1ms / K16 55.0%(-25.0pt)・分離方式がPromotion Gate不通過・All-in-One方式が圧倒的優位を実証・ARCHITECTURE_AB_COMPARISON_REPORT.md策定）**: **完了（Gate完全判定・Condition A採用確定）**。
+- **Milestone 30（RC3 Full Training・データ拡充・論理演算/反転/排他・語彙重複ハードネガティブ・多肢K=16・高水準Core Retention統合学習）**: **進行中（データセット構築着手）**。
 
 ---
 
