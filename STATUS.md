@@ -1125,6 +1125,65 @@ W_fix（14/47）からW_v2（8/47）への両問正解減少（-6組）の要因
 - **M23**: ONNX FP16 高速エンジン化 & 532件 100% パリティ実証
 - **M24**: 最終封印受入監査 100% 満点クリア & RC2 リリース完了
 
+---
+
+## 33. Milestone 24.1: Adaptive Test Contamination是正・最終独立受理試験 (Blind Sealed Re-Acceptance)
+
+Directive: [`ERABI_RC2_BLIND_SEALED_REACCEPTANCE_DIRECTIVE.md`](file:///f:/ai/erabi-local/ERABI_RC2_BLIND_SEALED_REACCEPTANCE_DIRECTIVE.md)  
+成果物: [`FINAL_ACCEPTANCE_RC2_BLIND_FAILED.md`](file:///f:/ai/erabi-local/FINAL_ACCEPTANCE_RC2_BLIND_FAILED.md)、[`release/rc2/blind_reacceptance_report_v3.json`](file:///f:/ai/erabi-local/release/rc2/blind_reacceptance_report_v3.json)、[`BLIND_ACCEPTANCE_PRECOMMIT_V3.md`](file:///f:/ai/erabi-local/BLIND_ACCEPTANCE_PRECOMMIT_V3.md)、[`BLIND_ACCEPTANCE_V2_INVALIDATED.md`](file:///f:/ai/erabi-local/BLIND_ACCEPTANCE_V2_INVALIDATED.md)
+
+### 33.1 是正措置とプロトコルの履行
+1. **旧適応型ベンチマークの退役**:
+   - `release/rc2/final_sealed_report.json` に `"status": "retired_adaptive_benchmark"` を明記。
+   - `FINAL_ACCEPTANCE_RC2.md` および `ERABI_RC2_MODEL_CARD.md` に適応型テスト汚染に関する注記を追記。
+2. **Phase A（完全推論ゼロによるテスト作成）**:
+   - 480問・240対照ペア、8ファミリー $\times$ 30組、候補数 $K \in \{2, 3, 4, 6, 8, 12, 16\}$。
+   - テスト作成中およびデータ生成スクリプト実行中のモデル推論呼び出しは **厳格に0回（Zero Model Inference）**。
+   - 背景データ 48,964件（学習・開発・校正・過去ベンチマーク等 計107ファイル）に対するリーク監査: **0件重複（完全隔離）**。
+   - 独立プログラムによるセマンティック監査: **0エラー**。
+   - トークン長監査: 480問すべて最大435トークン（512トークン制限に対して 100% 契約準拠）。
+3. **Phase B（事前Gitコミット & SHA-256凍結）**:
+   - 推論実行前に全ファイルハッシュを `BLIND_ACCEPTANCE_PRECOMMIT_V3.md` に固定し、Gitコミット `acb16a2` を発行。
+4. **Phase C（One-Shot Blind Re-Acceptance 実行）**:
+   - `scripts/run_rc2_blind_reacceptance_v3.py` を一回限り完全無停止実行（事後除外・プロンプト修正一切なし）。
+
+### 33.2 最終受理判定スコアカード実測値
+
+| ゲート要件 | 合格閾値 | 盲検実測値 | 判定 |
+|:---|:---:|:---:|:---:|
+| **総合正答率（PyTorch）** | $\ge 90.0\%$ | **71.04% (341/480)** | **不合格 (FAILED)** |
+| **総合正答率（ONNX FP16）** | $\ge 90.0\%$ | **71.04% (341/480)** | **不合格 (FAILED)** |
+| **PyTorch $\leftrightarrow$ ONNX FP16 パリティ** | $100.0\%$ | **100.00% (480/480)** | **合格 (PASSED)** |
+| **対照ペア整合性 (Paired Reasoning Both Correct)** | $\ge 80.0\%$ | **55.00% (132/240組)** | **不合格 (FAILED)** |
+| **候補順序置換整合性 (Permutation Consistency)** | $\ge 95.0\%$ | **86.67% (416/480)** | **不合格 (FAILED)** |
+| **特定ファミリーの崩壊なし** | 全系統 $\ge 75.0\%$ | **最低 48.33%** | **不合格 (FAILED)** |
+| **可変候補数 ($K=2..8$) 正答率** | $\ge 85.0\%$ | **74.17% (267/360)** | **不合格 (FAILED)** |
+| **可変候補数 ($K=12..16$) 正答率** | $\ge 75.0\%$ | **61.67% (74/120)** | **不合格 (FAILED)** |
+| **高確信誤答率 ($p \ge 0.90$)** | $\le 5.0\%$ | **28.09% (25/89)** | **不合格 (FAILED)** |
+| **セマンティック正解ラベル誤り** | $= 0$ | **0件（プログラム検証済）** | **合格 (PASSED)** |
+| **背景データリーク（vs 48,964件）** | $= 0$ | **0件（重複監査済）** | **合格 (PASSED)** |
+
+### 33.3 思考パラダイム別内訳（8ファミリー $\times$ 60問 / 30組）
+
+| ファミリー | 件数 | PyTorch正答率 | ONNX正答率 | 対照ペア両問正解 | 置換整合性 | Mean NLL | 状態 |
+|:---|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
+| `core_rules` | 60 | **98.3%** | 98.3% | 96.7% (29/30) | 100.0% | 0.9931 | **PASS** |
+| `domain_transfer` | 60 | **100.0%** | 100.0% | 100.0% (30/30) | 98.3% | 0.0000 | **PASS** |
+| `priority_exception` | 60 | **95.0%** | 95.0% | 90.0% (27/30) | 95.0% | 2.6947 | **PASS** |
+| `variable_choice` | 60 | **71.7%** | 71.7% | 56.7% (17/30) | 86.7% | 12.1645 | **FAIL** |
+| `logical_operators` | 60 | **53.3%** | 53.3% | 30.0% (9/30) | 90.0% | 32.2634 | **FAIL** |
+| `natural_japanese` | 60 | **51.7%** | 51.7% | 10.0% (3/30) | 78.3% | 34.5356 | **FAIL** |
+| `general_choice` | 60 | **50.0%** | 50.0% | 26.7% (8/30) | 80.0% | 19.3627 | **FAIL** |
+| `perturbation_invariance` | 60 | **48.3%** | 48.3% | 30.0% (9/30) | 65.0% | 18.1736 | **FAIL** |
+
+### 33.4 結論と公式判定
+- **最終判定**: **`RE-ACCEPTANCE GATES FAILED`（正式受理拒絶）**。
+- **総括**:
+  - 適応型テスト作成（adaptive probe-and-fix）を完全に排除した真の盲検試験により、モデルの真の汎化限界が浮き彫りとなった。
+  - 明示的な優先度・ドメイン転移・コア規則では 95%〜100% と極めて高い推論力を発揮する一方、自然な文脈での否定・反転（perturbation）、論理演算子の組み合わせ、未見の一般選択肢分類タスクにおいては 48〜53% に留まり、過確信（$p \ge 0.90$ での誤答率 28.1%）が発生する。
+  - ディレクティブのOne-Shot Execution原則に基づき、いかなる事後パッチ当てやデータセット改竄も行わず、実測結果をそのまま公式判定（FAILED）として記録・受理拒絶とする。
+
+
 
 
 
