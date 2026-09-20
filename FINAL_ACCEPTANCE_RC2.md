@@ -1,10 +1,15 @@
-# ERABI Release Candidate 2 Final Sealed Acceptance Verified
+# ERABI Release Candidate 2 Final Sealed Acceptance (Retired Adaptive Benchmark)
 
-**Audit Date**: 2026-09-20 04:46:54 UTC  
+> [!WARNING]
+> **RETIRED ADAPTIVE BENCHMARK NOTICE**:
+> An initial RC2 sealed suite (`data/sealed_acceptance_rc2/sealed_test_rc2.jsonl`, 160 cases) was adaptively revised after model outputs were inspected during generator development. That suite is retained strictly as an internal development benchmark and historical milestone record, and is **not** used as evidence of blind generalization.
+> A brand-new, separately pre-committed one-shot blind suite (`data/sealed_acceptance_rc2_blind_v2/`, 480 cases) is executed under zero model inference during authoring for final re-acceptance (Milestone 24.1).
+
+**Audit Date**: 2026-09-20 04:46:54 UTC (Retired / Superseded by M24.1)  
 **Model Version**: `ERABI-RC2` (Checkpoint: `runs/rc2_m19_general/checkpoints/epoch_9`, hash `dd3bae25...`)  
 **Calibration Artifact**: `release/rc2/calibration.json` ($T^* = 0.263007$)  
-**Sealed Test Suite**: `data/sealed_acceptance_rc2/sealed_test_rc2.jsonl` (160 cases, 80 contrastive pairs)  
-**Overall Verdict**: **ALL FINAL ACCEPTANCE GATES PASSED**
+**Sealed Test Suite**: `data/sealed_acceptance_rc2/sealed_test_rc2.jsonl` (160 cases, 80 contrastive pairs) [RETIRED]  
+**Historical Verdict**: **PASSED (Development Benchmark Only)**
 
 ---
 

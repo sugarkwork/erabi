@@ -135,3 +135,6 @@ for c in response.choices:
 2. **Domain Boundaries**: ERABI is optimized for logical decision-making, policy routing, incident triage, and structured multi-choice classification. It is not designed for open-domain text generation or unconstrained chat.
 3. **High-Stakes Deployment**: In safety-critical environments, human-in-the-loop review must be triggered when the calibrated maximum probability falls below 0.80 ($p_{\max} < 0.80$).
 4. **Local Isolation**: ERABI must be executed locally on localhost. Never expose inference endpoints directly to public WAN without authentication and rate limiting.
+
+### 8.1 Evaluation Limitations
+An initial RC2 sealed suite was adaptively revised after model outputs were inspected. That suite is retained only as a development benchmark and is not used as evidence of blind generalization. A separately precommitted one-shot blind suite is used for final acceptance.

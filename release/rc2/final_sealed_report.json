@@ -1,5 +1,8 @@
 {
   "milestone": "Milestone 24 — Final Sealed Acceptance RC2",
+  "status": "retired_adaptive_benchmark",
+  "retirement_reason": "Adaptive benchmark contamination: prompts and generator were iteratively revised after observing test failures. Retained strictly as internal development artifact, not proof of blind generalization.",
+  "superseded_by": "data/sealed_acceptance_rc2_blind_v2/",
   "timestamp_utc": "2026-09-20T04:46:54.970256+00:00",
   "model_id": "ERABI-RC2",
   "calibrated_temperature": 0.26300678784841447,
