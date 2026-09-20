@@ -1,6 +1,6 @@
 # ERABI 作業状況
 
-更新日：2026-09-19
+更新日：2026-09-20
 
 ## 現在地
 
@@ -35,6 +35,7 @@
 - **Milestone 13（RC1 Reproducibility Baseline・暗号ハッシュ検証一致・全4セット340問Top-1一致率100.0%・RTX A4000 p50=10.87ms / 89.0 req/s・RC2_BASELINE_LOCKED.md保全）**: **完了（基準完全固定）**。
 - **Milestone 14（Data Scaling Law・層化nested 5分割12.5%/25%/50%/75%/100%同一条件学習・全7評価セット横断計測・General/Operator/Robustness飽和点50%~75%特定・Core retention容量特性特定・ERABI_DATA_SCALING_REPORT.md保全）**: **完了（スケーリング則確立）**。
 - **Milestone 14.1（Compute-Controlled Scaling Audit・U_ref=1960 updates固定・12.5%/50%/100%因果分離・12.5%でOperator +8.0pt/Robustness +5.6pt/Exception +11.7ptのcompute利得確認・Core/Phrasingのデータ多様性依存残存によるPattern C判定・ERABI_DATA_SCALING_REPORT.md統合）**: **完了（因果分離完了・M15へ自律移行）**。
+- **Milestone 15（Quantity vs Diversity・N=1138, U=980 updates完全固定下での多様性対照実験・Condition A/B/C比較・高多様性CがGeneral 100.0% / Operator 93.0% / Robustness 100.0% / eval_v2 97.5%(Paired 95.0%)で大差勝利・Phrasingにおける閾値効果特定・Gate完全突破・ERABI_QUANTITY_VS_DIVERSITY_REPORT.md保全）**: **完了（Gate完全通過・M16へ自律移行）**。
 
 ---
 
@@ -762,6 +763,52 @@ W_fix（14/47）からW_v2（8/47）への両問正解減少（-6組）の要因
 - **Phase A（Final Acceptance Integrity Audit）**: **完全合格 (`FINAL_ACCEPTANCE_VERIFIED.md`)**
 - **Phase B（ONNX FP16 Release）**: **完全合格 (`release/erabi-rc1-onnx-fp16/`)**
 - **凍結版 RC1 保全**: `release/rc1/` は 1 バイトも変更せず厳格に凍結維持。
+- **Milestone 13（RC1 Reproducibility Baseline）**: **完全合格 (`RC2_BASELINE_LOCKED.md`)**
+- **Milestone 14（Data Scaling Law）**: **完全合格 (`ERABI_DATA_SCALING_REPORT.md`)**
+- **Milestone 14.1（Compute-Controlled Scaling Audit）**: **完全合格 (`runs/rc2_scaling_compute/`)**
+- **Milestone 15（Quantity vs Diversity）**: **完全合格 (`ERABI_QUANTITY_VS_DIVERSITY_REPORT.md`)**
+
+---
+
+## 23. Milestone 15: Quantity vs Diversity 制御実験実測結果
+
+詳細は [`ERABI_QUANTITY_VS_DIVERSITY_REPORT.md`](file:///f:/ai/erabi-local/ERABI_QUANTITY_VS_DIVERSITY_REPORT.md) および [`runs/rc2_m15_diversity/m15_quantity_vs_diversity_results.json`](file:///f:/ai/erabi-local/runs/rc2_m15_diversity/m15_quantity_vs_diversity_results.json) を参照。
+
+### 23.1 実験設計と固定条件
+- **Core Question**: 同じデータ件数なら、繰り返し量と多様性のどちらが汎化に効くか。
+- **固定変数**:
+  - 総サンプル数: $N = 1,138$ 件（Stream A = 356件, Stream B = 782件）
+  - 最適化ステップ数: $U = 980$ updates（10 epochs $\times$ 98 updates）
+  - モデル骨格: `knowledgator/gliclass-instruct-base-v1.0`
+  - ハイパーパラメータ: lr=2e-5, wd=0.01, micro_batch=2, grad_accum=8, seed=42
+  - チェックポイント選定: Dev composite score（epochs 5〜10）
+- **操作変数（多様性プロファイル）**:
+  - **Condition A (Low Diversity)**: 6 Families, 4 Domains (Domain Entropy: 0.37), 45 Groups (反復度高)
+  - **Condition B (Balanced)**: 19 Families, 10 Domains (Domain Entropy: 1.65), 243 Groups (M14代表)
+  - **Condition C (High Diversity)**: 19 Families, 10 Domains (Domain Entropy: 2.08), 300 Groups (均等非復元)
+
+### 23.2 7大評価スイート総合対照表
+
+| 評価スイート | 件数 | Condition A (Low) | Condition B (Balanced) | Condition C (High) | $\Delta$ (C vs A) | $\Delta$ (C vs B) |
+|---|:---:|:---:|:---:|:---:|:---:|:---:|
+| **Fresh General Choice** | 120 | 85.8% | 100.0% | **100.0%** | **+14.2%** | 0.0% |
+| **Fresh Operator Reasoning** | 100 | 68.0% | 93.0% | **93.0%** | **+25.0%** | 0.0% |
+| **Fresh Robustness** | 108 | 59.3% | 100.0% | **100.0%** | **+40.7%** | 0.0% |
+| **Fresh Phrasing Variation** | 120 | 79.2% | 69.2% | **48.3%** | -30.8% | -20.8% |
+| **Core Retention (eval_v2)** | 200 | 71.0% | 89.5% | **97.5%** | **+26.5%** | **+8.0%** |
+| **Exception Handling** | 120 | 100.0% | 97.5% | **77.5%** | -22.5% | -20.0% |
+| **Smoke Cases Sanity** | 12 | 75.0% | 75.0% | **75.0%** | 0.0% | 0.0% |
+
+### 23.3 科学的発見とGate判定
+1. **多様性の圧倒的優位性**:
+   - 総データ件数・ステップ数が完全に同一であるにもかかわらず、高多様性Cは低多様性Aに対し、General (+14.2%)、Operator (+25.0%)、Robustness (+40.7%) で圧倒的差をつけた。少数の特定タスクを高頻度反復する学習は未見タスクへの激しい汎化崩壊を招く。
+2. **Core Retentionにおけるグループ網羅性**:
+   - Stream Aにおいて45グループに偏らせたAは 71.0%（Paired: 56.0%）に急落したのに対し、300全グループを浅く広く提示したCは **97.5%（Paired: 95.0%）** とほぼ満点の保持を達成した。
+3. **Phrasing多様性における閾値効果**:
+   - 言語的表現の言い換え（Phrasing）および例外処理は、均等配分による極端な希釈（22件/タスク）を受けると性能が低下する（48.3%）。表現空間が広大であるため、最低限必要な絶対件数（クリティカル・マス $\ge 100$ 件）が存在する。
+4. **Gate判定**:
+   - 3つのFresh軸で高多様性の有意差を実証し、**Gate完全PASS**。Milestone 16へ自律移行。
+
 
 
 

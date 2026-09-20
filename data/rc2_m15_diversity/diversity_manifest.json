@@ -1,0 +1,143 @@
+{
+  "milestone": "Milestone 15 Quantity vs Diversity",
+  "fixed_sample_size": 1138,
+  "conditions": {
+    "cond_a_low": {
+      "name": "Condition A (Low Diversity / High Repetition)",
+      "profile": {
+        "total_records": 1138,
+        "stream_a_records": 356,
+        "stream_b_records": 782,
+        "distinct_task_families": 6,
+        "distinct_domains": 4,
+        "distinct_stream_a_groups": 45,
+        "task_family_entropy": 1.4316213259963153,
+        "domain_entropy": 0.36864856435859983,
+        "unique_contexts": 410,
+        "unique_inputs": 702,
+        "family_distribution": {
+          "exception_priority": 291,
+          "and_logic": 29,
+          "phrasing_diversification_fix": 285,
+          "instruction_separation": 70,
+          "support_routing": 73,
+          "or_logic": 34
+        },
+        "domain_distribution": {
+          "none": 719,
+          "support": 21,
+          "server": 21,
+          "inventory": 21
+        }
+      },
+      "stream_a_file": "data\\rc2_m15_diversity\\cond_a_low_stream_a.jsonl",
+      "stream_b_file": "data\\rc2_m15_diversity\\cond_a_low_stream_b.jsonl",
+      "combined_file": "data\\rc2_m15_diversity\\cond_a_low_combined.jsonl",
+      "sha256": "9b891575fe0519f62540d79e59ba42b23ee6182e0d0da88824ff53b4ee798fcc"
+    },
+    "cond_b_balanced": {
+      "name": "Condition B (Balanced / Standard Proportional)",
+      "profile": {
+        "total_records": 1138,
+        "stream_a_records": 356,
+        "stream_b_records": 782,
+        "distinct_task_families": 19,
+        "distinct_domains": 10,
+        "distinct_stream_a_groups": 243,
+        "task_family_entropy": 2.5893687555579823,
+        "domain_entropy": 1.6450701622447643,
+        "unique_contexts": 753,
+        "unique_inputs": 1017,
+        "family_distribution": {
+          "exception_priority": 120,
+          "phrasing_diversification_fix": 120,
+          "and_logic": 20,
+          "default_exception": 20,
+          "first_match": 20,
+          "ge_vs_gt": 20,
+          "goal_switching": 20,
+          "le_vs_lt": 20,
+          "negation": 20,
+          "or_logic": 20,
+          "override": 20,
+          "priority_ranking": 20,
+          "domain_perturbation_robustness": 162,
+          "instruction_separation": 30,
+          "negative_goal": 30,
+          "short_nli": 30,
+          "intent_selection": 32,
+          "semantic_relation": 28,
+          "support_routing": 30
+        },
+        "domain_distribution": {
+          "none": 420,
+          "delivery": 60,
+          "game": 60,
+          "inventory": 58,
+          "server": 56,
+          "support": 56,
+          "factory": 20,
+          "finance": 20,
+          "medical": 16,
+          "smart_home": 16
+        }
+      },
+      "stream_a_file": "data\\rc2_m15_diversity\\cond_b_balanced_stream_a.jsonl",
+      "stream_b_file": "data\\rc2_m15_diversity\\cond_b_balanced_stream_b.jsonl",
+      "combined_file": "data\\rc2_m15_diversity\\cond_b_balanced_combined.jsonl",
+      "sha256": "23a6573a2e8baa7e83e5e16f4487e63525dfb1c558daeaa87cfeea1dcab08f37"
+    },
+    "cond_c_high": {
+      "name": "Condition C (High Diversity / Wide Coverage)",
+      "profile": {
+        "total_records": 1138,
+        "stream_a_records": 356,
+        "stream_b_records": 782,
+        "distinct_task_families": 19,
+        "distinct_domains": 10,
+        "distinct_stream_a_groups": 300,
+        "task_family_entropy": 2.675770668668979,
+        "domain_entropy": 2.0841997263537486,
+        "unique_contexts": 640,
+        "unique_inputs": 891,
+        "family_distribution": {
+          "and_logic": 40,
+          "default_exception": 40,
+          "domain_perturbation_robustness": 206,
+          "exception_priority": 22,
+          "first_match": 40,
+          "ge_vs_gt": 40,
+          "goal_switching": 40,
+          "instruction_separation": 22,
+          "intent_selection": 22,
+          "le_vs_lt": 40,
+          "negation": 40,
+          "negative_goal": 22,
+          "or_logic": 40,
+          "override": 40,
+          "phrasing_diversification_fix": 22,
+          "priority_ranking": 40,
+          "semantic_relation": 22,
+          "short_nli": 22,
+          "support_routing": 22
+        },
+        "domain_distribution": {
+          "delivery": 103,
+          "game": 103,
+          "inventory": 103,
+          "server": 103,
+          "support": 102,
+          "factory": 23,
+          "finance": 23,
+          "medical": 23,
+          "smart_home": 23,
+          "none": 176
+        }
+      },
+      "stream_a_file": "data\\rc2_m15_diversity\\cond_c_high_stream_a.jsonl",
+      "stream_b_file": "data\\rc2_m15_diversity\\cond_c_high_stream_b.jsonl",
+      "combined_file": "data\\rc2_m15_diversity\\cond_c_high_combined.jsonl",
+      "sha256": "4f4ec04935e6cfc3e1a205d2e7007f85206651c05e1dac96f71714cd12279e54"
+    }
+  }
+}
