@@ -31,7 +31,7 @@
 - **Milestone 12（Final Sealed Acceptance・完全未見Sealed Test 120件・全体正答率100.0% / 対照ペア両問100.0% / 順序不変性100.0% / 高信頼度誤差0.0% / 全Gate満額突破・FINAL_ACCEPTANCE_REPORT.md記録）**: **全工程完遂（正式受理）**。
 - **Phase A（Final Acceptance Integrity Audit・Freeze Lineage・全過去データ13240件Leakageゼロ・レンダリング自然文意味検証120/120・Raw Logits数学的再計算・Permutation Invariance・FINAL_ACCEPTANCE_VERIFIED.md保全）**: **完了（独立完全合格）**。
 - **Phase B（ONNX FP16 Release・ONNX Runtime CUDA FP16最適化・全4評価セット340問でTop1一致率100.0%・p50 11.14ms / p95 11.99ms / 88.5 req/s / 50%容量削減 / 1000回メモリドリフト-1.51MB・release/erabi-rc1-onnx-fp16/保全・テスト78/78件全PASS）**: **完了（正式リリース）**。
-- **GitHub Public Release（公開リポジトリセットアップ・バージョン管理対象選別・大容量重み/runs/zip/キャッシュ除外・全ソース/テスト/データ/文書/リリース設定追跡・https://github.com/sugarkwork/erabi-local へpush完了）**: **完了（公開完了）**。
+- **GitHub Public Release（公開リポジトリセットアップ・バージョン管理対象選別・大容量重み/runs/zip/キャッシュ除外・全ソース/テスト/データ/文書/リリース設定追跡・https://github.com/sugarkwork/erabi へpush完了）**: **完了（公開完了）**。
 - **Milestone 13（RC1 Reproducibility Baseline・暗号ハッシュ検証一致・全4セット340問Top-1一致率100.0%・RTX A4000 p50=10.87ms / 89.0 req/s・RC2_BASELINE_LOCKED.md保全）**: **完了（基準完全固定）**。
 - **Milestone 14（Data Scaling Law・層化nested 5分割12.5%/25%/50%/75%/100%同一条件学習・全7評価セット横断計測・General/Operator/Robustness飽和点50%~75%特定・Core retention容量特性特定・ERABI_DATA_SCALING_REPORT.md保全）**: **完了（スケーリング則確立）**。
 - **Milestone 14.1（Compute-Controlled Scaling Audit・U_ref=1960 updates固定・12.5%/50%/100%因果分離・12.5%でOperator +8.0pt/Robustness +5.6pt/Exception +11.7ptのcompute利得確認・Core/Phrasingのデータ多様性依存残存によるPattern C判定・ERABI_DATA_SCALING_REPORT.md統合）**: **完了（因果分離完了・M15へ自律移行）**。

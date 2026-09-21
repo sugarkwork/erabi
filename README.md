@@ -131,3 +131,11 @@ Invoke-RestMethod -Uri "http://127.0.0.1:8765/predict" -Method Post -ContentType
 | `tests/` | 高速なCPU単体テスト群 (31件) |
 | `examples/` | APIリクエスト例・レスポンス例・配線確認データ |
 | `runs/` | 評価実行結果・監査レポート・校正成果物・レビューバンドルの保存先 |
+
+## ライセンス
+
+ERABI original source code is licensed under the [MIT License](LICENSE).
+
+Third-party libraries, pretrained models, model weights, and upstream
+components remain subject to their respective licenses.
+See [THIRD_PARTY_LICENSES.md](THIRD_PARTY_LICENSES.md) for details.
