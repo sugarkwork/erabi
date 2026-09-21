@@ -1,0 +1,453 @@
+{
+  "domain_counts": {
+    "aerospace": 40,
+    "chemical_plant": 40,
+    "energy_grid": 40,
+    "manufacturing_qa": 40,
+    "maritime": 40,
+    "medical_device": 40,
+    "network_routing": 40,
+    "railway": 42,
+    "robotics": 42,
+    "satellite_telemetry": 38,
+    "semiconductor": 40,
+    "warehouse_safety": 38
+  },
+  "is_balanced": true,
+  "k_counts": {
+    "2": 120,
+    "3": 120,
+    "4": 120,
+    "6": 120
+  },
+  "lexical_overlap_by_k": {
+    "3": {
+      "coverage": 1.0,
+      "records": 120,
+      "with_lexical_overlap": 120
+    },
+    "4": {
+      "coverage": 1.0,
+      "records": 120,
+      "with_lexical_overlap": 120
+    },
+    "6": {
+      "coverage": 1.0,
+      "records": 120,
+      "with_lexical_overlap": 120
+    }
+  },
+  "lexical_overlap_gate": true,
+  "operator_balance": true,
+  "operator_counts": {
+    "and": 30,
+    "and_not_b": 30,
+    "double_negation": 31,
+    "implication": 30,
+    "nand": 30,
+    "nested_a_and_or": 30,
+    "nested_and_or": 29,
+    "nested_not_and": 30,
+    "nested_not_or": 30,
+    "nested_xor_and": 30,
+    "nor": 30,
+    "not": 30,
+    "not_a_or_b": 30,
+    "or": 30,
+    "polarity_reversal": 30,
+    "xor": 30
+  },
+  "operator_domain_counts": {
+    "and": 12,
+    "and_not_b": 12,
+    "double_negation": 12,
+    "implication": 12,
+    "nand": 12,
+    "nested_a_and_or": 12,
+    "nested_and_or": 12,
+    "nested_not_and": 12,
+    "nested_not_or": 12,
+    "nested_xor_and": 12,
+    "nor": 12,
+    "not": 12,
+    "not_a_or_b": 12,
+    "or": 12,
+    "polarity_reversal": 12,
+    "xor": 12
+  },
+  "operator_domain_gate": true,
+  "operator_spread": 2,
+  "pair_integrity": true,
+  "position_spread": 130,
+  "position_spread_by_k": {
+    "2": 0,
+    "3": 0,
+    "4": 0,
+    "6": 0
+  },
+  "target_choice_counts": {
+    "aero_primary": 20,
+    "aero_secondary": 20,
+    "chem_primary": 20,
+    "chem_secondary": 20,
+    "grid_primary": 20,
+    "grid_secondary": 20,
+    "med_primary": 20,
+    "med_secondary": 20,
+    "net_primary": 20,
+    "net_secondary": 20,
+    "qa_primary": 20,
+    "qa_secondary": 20,
+    "rail_primary": 21,
+    "rail_secondary": 21,
+    "robot_primary": 21,
+    "robot_secondary": 21,
+    "sat_primary": 19,
+    "sat_secondary": 19,
+    "sea_primary": 20,
+    "sea_secondary": 20,
+    "semi_primary": 20,
+    "semi_secondary": 20,
+    "warehouse_primary": 19,
+    "warehouse_secondary": 19
+  },
+  "target_position_counts": {
+    "1": 150,
+    "2": 150,
+    "3": 90,
+    "4": 50,
+    "5": 20,
+    "6": 20
+  },
+  "target_position_counts_by_k": {
+    "2": {
+      "1": 60,
+      "2": 60
+    },
+    "3": {
+      "1": 40,
+      "2": 40,
+      "3": 40
+    },
+    "4": {
+      "1": 30,
+      "2": 30,
+      "3": 30,
+      "4": 30
+    },
+    "6": {
+      "1": 20,
+      "2": 20,
+      "3": 20,
+      "4": 20,
+      "5": 20,
+      "6": 20
+    }
+  },
+  "target_spread": 2,
+  "truth_state_coverage": {
+    "and": {
+      "missing": [],
+      "observed": [
+        "000",
+        "001",
+        "010",
+        "011",
+        "100",
+        "110"
+      ],
+      "required": [
+        "000",
+        "010",
+        "100",
+        "110"
+      ]
+    },
+    "and_not_b": {
+      "missing": [],
+      "observed": [
+        "000",
+        "010",
+        "011",
+        "100",
+        "110"
+      ],
+      "required": [
+        "000",
+        "010",
+        "100",
+        "110"
+      ]
+    },
+    "double_negation": {
+      "missing": [],
+      "observed": [
+        "000",
+        "001",
+        "010",
+        "011",
+        "100",
+        "110",
+        "111"
+      ],
+      "required": [
+        "000",
+        "010",
+        "100",
+        "110"
+      ]
+    },
+    "implication": {
+      "missing": [],
+      "observed": [
+        "000",
+        "001",
+        "010",
+        "100",
+        "101",
+        "110",
+        "111"
+      ],
+      "required": [
+        "000",
+        "010",
+        "100",
+        "110"
+      ]
+    },
+    "nand": {
+      "missing": [],
+      "observed": [
+        "000",
+        "010",
+        "100",
+        "101",
+        "110",
+        "111"
+      ],
+      "required": [
+        "000",
+        "010",
+        "100",
+        "110"
+      ]
+    },
+    "nested_a_and_or": {
+      "missing": [],
+      "observed": [
+        "000",
+        "001",
+        "010",
+        "011",
+        "100",
+        "101",
+        "110",
+        "111"
+      ],
+      "required": [
+        "000",
+        "001",
+        "010",
+        "011",
+        "100",
+        "101",
+        "110",
+        "111"
+      ]
+    },
+    "nested_and_or": {
+      "missing": [],
+      "observed": [
+        "000",
+        "001",
+        "010",
+        "011",
+        "100",
+        "101",
+        "110",
+        "111"
+      ],
+      "required": [
+        "000",
+        "001",
+        "010",
+        "011",
+        "100",
+        "101",
+        "110",
+        "111"
+      ]
+    },
+    "nested_not_and": {
+      "missing": [],
+      "observed": [
+        "000",
+        "001",
+        "010",
+        "011",
+        "100",
+        "101",
+        "110",
+        "111"
+      ],
+      "required": [
+        "000",
+        "001",
+        "010",
+        "011",
+        "100",
+        "101",
+        "110",
+        "111"
+      ]
+    },
+    "nested_not_or": {
+      "missing": [],
+      "observed": [
+        "000",
+        "001",
+        "010",
+        "011",
+        "100",
+        "101",
+        "110",
+        "111"
+      ],
+      "required": [
+        "000",
+        "001",
+        "010",
+        "011",
+        "100",
+        "101",
+        "110",
+        "111"
+      ]
+    },
+    "nested_xor_and": {
+      "missing": [],
+      "observed": [
+        "000",
+        "001",
+        "010",
+        "011",
+        "100",
+        "101",
+        "110",
+        "111"
+      ],
+      "required": [
+        "000",
+        "001",
+        "010",
+        "011",
+        "100",
+        "101",
+        "110",
+        "111"
+      ]
+    },
+    "nor": {
+      "missing": [],
+      "observed": [
+        "000",
+        "010",
+        "011",
+        "100",
+        "101",
+        "110",
+        "111"
+      ],
+      "required": [
+        "000",
+        "010",
+        "100",
+        "110"
+      ]
+    },
+    "not": {
+      "missing": [],
+      "observed": [
+        "000",
+        "001",
+        "010",
+        "100",
+        "110"
+      ],
+      "required": [
+        "000",
+        "010",
+        "100",
+        "110"
+      ]
+    },
+    "not_a_or_b": {
+      "missing": [],
+      "observed": [
+        "000",
+        "001",
+        "010",
+        "100",
+        "101",
+        "110"
+      ],
+      "required": [
+        "000",
+        "010",
+        "100",
+        "110"
+      ]
+    },
+    "or": {
+      "missing": [],
+      "observed": [
+        "000",
+        "001",
+        "010",
+        "100",
+        "110"
+      ],
+      "required": [
+        "000",
+        "010",
+        "100",
+        "110"
+      ]
+    },
+    "polarity_reversal": {
+      "missing": [],
+      "observed": [
+        "000",
+        "010",
+        "011",
+        "100",
+        "101",
+        "110"
+      ],
+      "required": [
+        "000",
+        "010",
+        "100",
+        "110"
+      ]
+    },
+    "xor": {
+      "missing": [],
+      "observed": [
+        "000",
+        "001",
+        "010",
+        "011",
+        "100",
+        "110"
+      ],
+      "required": [
+        "000",
+        "010",
+        "100",
+        "110"
+      ]
+    }
+  },
+  "truth_state_gate": true
+}

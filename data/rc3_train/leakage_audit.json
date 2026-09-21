@@ -1,0 +1,13 @@
+{
+  "is_clean": true,
+  "overlaps_by_source": {
+    "rc3_bridge": 0,
+    "rc2_blind_v3": 0,
+    "eval_v2": 0,
+    "eval_exception": 0,
+    "fresh_operator": 0,
+    "fresh_robustness": 0,
+    "fresh_general": 0
+  },
+  "total_sources_audited": 8
+}

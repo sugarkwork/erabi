@@ -1,0 +1,18 @@
+{
+  "domain_overlaps": {
+    "logic_bridge__train_corpus": []
+  },
+  "exact_overlaps": {
+    "logic_bridge__train_corpus": 0
+  },
+  "group_overlaps": {
+    "logic_bridge__train_corpus": 0
+  },
+  "is_clean": true,
+  "normalized_overlaps": {
+    "logic_bridge__train_corpus": 0
+  },
+  "template_overlaps": {
+    "logic_bridge__train_corpus": []
+  }
+}

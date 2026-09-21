@@ -1,0 +1,39 @@
+{
+  "suite_name": "sealed_test_rc3_blind_v5",
+  "description": "ERABI Release Candidate 3 Sealed Acceptance Benchmark Suite (Milestone 34)",
+  "created_at_utc": "2026-09-21T03:26:15.804432+00:00",
+  "total_pairs": 240,
+  "total_cases": 480,
+  "file_sha256": "b039de5118776963d0f68af62af4588aa8bc9a66eaed4ec665be2315a2b6200b",
+  "file_size_bytes": 529040,
+  "families": {
+    "core_rules": 60,
+    "logical_operators": 60,
+    "priority_exception": 60,
+    "natural_japanese": 60,
+    "domain_transfer": 60,
+    "general_choice": 60,
+    "variable_choice": 60,
+    "perturbation_invariance": 60
+  },
+  "k_distribution": {
+    "2": 40,
+    "3": 120,
+    "4": 180,
+    "6": 80,
+    "8": 30,
+    "12": 10,
+    "16": 20
+  },
+  "token_stats": {
+    "max_tokens": 359,
+    "avg_tokens": 241.6,
+    "min_tokens": 143
+  },
+  "audits": {
+    "semantic_valid": true,
+    "token_compliant": true,
+    "leak_free": true,
+    "background_records_screened": 69504
+  }
+}

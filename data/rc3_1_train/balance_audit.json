@@ -1,0 +1,470 @@
+{
+  "domain_counts": {
+    "battery_recycling": 192,
+    "cold_chain": 240,
+    "data_center_cooling": 192,
+    "district_heating": 192,
+    "film_archive": 192,
+    "food_processing": 192,
+    "genomics_lab": 192,
+    "glass_fabrication": 192,
+    "port_crane": 192,
+    "retail_replenishment": 192,
+    "water_treatment": 192,
+    "weather_radar": 240
+  },
+  "is_balanced": true,
+  "k_counts": {
+    "2": 600,
+    "3": 600,
+    "4": 600,
+    "6": 600
+  },
+  "lexical_overlap_by_k": {
+    "3": {
+      "coverage": 1.0,
+      "records": 600,
+      "with_lexical_overlap": 600
+    },
+    "4": {
+      "coverage": 1.0,
+      "records": 600,
+      "with_lexical_overlap": 600
+    },
+    "6": {
+      "coverage": 1.0,
+      "records": 600,
+      "with_lexical_overlap": 600
+    }
+  },
+  "lexical_overlap_gate": true,
+  "operator_balance": true,
+  "operator_counts": {
+    "and": 151,
+    "and_not_b": 151,
+    "double_negation": 149,
+    "implication": 149,
+    "nand": 150,
+    "nested_a_and_or": 150,
+    "nested_and_or": 149,
+    "nested_not_and": 150,
+    "nested_not_or": 149,
+    "nested_xor_and": 152,
+    "nor": 150,
+    "not": 149,
+    "not_a_or_b": 150,
+    "or": 151,
+    "polarity_reversal": 149,
+    "xor": 151
+  },
+  "operator_domain_counts": {
+    "and": 12,
+    "and_not_b": 12,
+    "double_negation": 12,
+    "implication": 12,
+    "nand": 12,
+    "nested_a_and_or": 12,
+    "nested_and_or": 12,
+    "nested_not_and": 12,
+    "nested_not_or": 12,
+    "nested_xor_and": 12,
+    "nor": 12,
+    "not": 12,
+    "not_a_or_b": 12,
+    "or": 12,
+    "polarity_reversal": 12,
+    "xor": 12
+  },
+  "operator_domain_gate": true,
+  "operator_spread": 3,
+  "pair_integrity": true,
+  "position_spread": 650,
+  "position_spread_by_k": {
+    "2": 0,
+    "3": 0,
+    "4": 0,
+    "6": 0
+  },
+  "target_choice_counts": {
+    "battery_primary": 96,
+    "battery_secondary": 96,
+    "cold_primary": 120,
+    "cold_secondary": 120,
+    "crane_primary": 96,
+    "crane_secondary": 96,
+    "dc_primary": 96,
+    "dc_secondary": 96,
+    "film_primary": 96,
+    "film_secondary": 96,
+    "food_primary": 96,
+    "food_secondary": 96,
+    "gene_primary": 96,
+    "gene_secondary": 96,
+    "glass_primary": 96,
+    "glass_secondary": 96,
+    "heat_primary": 96,
+    "heat_secondary": 96,
+    "retail_primary": 96,
+    "retail_secondary": 96,
+    "water_primary": 96,
+    "water_secondary": 96,
+    "weather_primary": 120,
+    "weather_secondary": 120
+  },
+  "target_position_counts": {
+    "1": 750,
+    "2": 750,
+    "3": 450,
+    "4": 250,
+    "5": 100,
+    "6": 100
+  },
+  "target_position_counts_by_k": {
+    "2": {
+      "1": 300,
+      "2": 300
+    },
+    "3": {
+      "1": 200,
+      "2": 200,
+      "3": 200
+    },
+    "4": {
+      "1": 150,
+      "2": 150,
+      "3": 150,
+      "4": 150
+    },
+    "6": {
+      "1": 100,
+      "2": 100,
+      "3": 100,
+      "4": 100,
+      "5": 100,
+      "6": 100
+    }
+  },
+  "target_spread": 24,
+  "truth_state_coverage": {
+    "and": {
+      "missing": [],
+      "observed": [
+        "000",
+        "001",
+        "010",
+        "011",
+        "100",
+        "101",
+        "110",
+        "111"
+      ],
+      "required": [
+        "000",
+        "010",
+        "100",
+        "110"
+      ]
+    },
+    "and_not_b": {
+      "missing": [],
+      "observed": [
+        "000",
+        "001",
+        "010",
+        "011",
+        "100",
+        "101",
+        "110",
+        "111"
+      ],
+      "required": [
+        "000",
+        "010",
+        "100",
+        "110"
+      ]
+    },
+    "double_negation": {
+      "missing": [],
+      "observed": [
+        "000",
+        "001",
+        "010",
+        "011",
+        "100",
+        "110",
+        "111"
+      ],
+      "required": [
+        "000",
+        "010",
+        "100",
+        "110"
+      ]
+    },
+    "implication": {
+      "missing": [],
+      "observed": [
+        "000",
+        "001",
+        "010",
+        "100",
+        "101",
+        "110",
+        "111"
+      ],
+      "required": [
+        "000",
+        "010",
+        "100",
+        "110"
+      ]
+    },
+    "nand": {
+      "missing": [],
+      "observed": [
+        "000",
+        "001",
+        "010",
+        "011",
+        "100",
+        "101",
+        "110",
+        "111"
+      ],
+      "required": [
+        "000",
+        "010",
+        "100",
+        "110"
+      ]
+    },
+    "nested_a_and_or": {
+      "missing": [],
+      "observed": [
+        "000",
+        "001",
+        "010",
+        "011",
+        "100",
+        "101",
+        "110",
+        "111"
+      ],
+      "required": [
+        "000",
+        "001",
+        "010",
+        "011",
+        "100",
+        "101",
+        "110",
+        "111"
+      ]
+    },
+    "nested_and_or": {
+      "missing": [],
+      "observed": [
+        "000",
+        "001",
+        "010",
+        "011",
+        "100",
+        "101",
+        "110",
+        "111"
+      ],
+      "required": [
+        "000",
+        "001",
+        "010",
+        "011",
+        "100",
+        "101",
+        "110",
+        "111"
+      ]
+    },
+    "nested_not_and": {
+      "missing": [],
+      "observed": [
+        "000",
+        "001",
+        "010",
+        "011",
+        "100",
+        "101",
+        "110",
+        "111"
+      ],
+      "required": [
+        "000",
+        "001",
+        "010",
+        "011",
+        "100",
+        "101",
+        "110",
+        "111"
+      ]
+    },
+    "nested_not_or": {
+      "missing": [],
+      "observed": [
+        "000",
+        "001",
+        "010",
+        "011",
+        "100",
+        "101",
+        "110",
+        "111"
+      ],
+      "required": [
+        "000",
+        "001",
+        "010",
+        "011",
+        "100",
+        "101",
+        "110",
+        "111"
+      ]
+    },
+    "nested_xor_and": {
+      "missing": [],
+      "observed": [
+        "000",
+        "001",
+        "010",
+        "011",
+        "100",
+        "101",
+        "110",
+        "111"
+      ],
+      "required": [
+        "000",
+        "001",
+        "010",
+        "011",
+        "100",
+        "101",
+        "110",
+        "111"
+      ]
+    },
+    "nor": {
+      "missing": [],
+      "observed": [
+        "000",
+        "010",
+        "011",
+        "100",
+        "101",
+        "110"
+      ],
+      "required": [
+        "000",
+        "010",
+        "100",
+        "110"
+      ]
+    },
+    "not": {
+      "missing": [],
+      "observed": [
+        "000",
+        "001",
+        "010",
+        "011",
+        "100",
+        "101",
+        "110",
+        "111"
+      ],
+      "required": [
+        "000",
+        "010",
+        "100",
+        "110"
+      ]
+    },
+    "not_a_or_b": {
+      "missing": [],
+      "observed": [
+        "000",
+        "001",
+        "010",
+        "011",
+        "100",
+        "101",
+        "110",
+        "111"
+      ],
+      "required": [
+        "000",
+        "010",
+        "100",
+        "110"
+      ]
+    },
+    "or": {
+      "missing": [],
+      "observed": [
+        "000",
+        "001",
+        "010",
+        "011",
+        "100",
+        "101",
+        "110",
+        "111"
+      ],
+      "required": [
+        "000",
+        "010",
+        "100",
+        "110"
+      ]
+    },
+    "polarity_reversal": {
+      "missing": [],
+      "observed": [
+        "000",
+        "001",
+        "010",
+        "011",
+        "100",
+        "101",
+        "110",
+        "111"
+      ],
+      "required": [
+        "000",
+        "010",
+        "100",
+        "110"
+      ]
+    },
+    "xor": {
+      "missing": [],
+      "observed": [
+        "000",
+        "001",
+        "010",
+        "011",
+        "100",
+        "110",
+        "111"
+      ],
+      "required": [
+        "000",
+        "010",
+        "100",
+        "110"
+      ]
+    }
+  },
+  "truth_state_gate": true
+}

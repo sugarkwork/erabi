@@ -5,7 +5,7 @@
 **Total Test Cases**: 480  
 **Total Contrastive Pairs**: 240  
 **Target Output**: `data\rc3_bridge\rc3_bridge_benchmark.jsonl`  
-**Dataset SHA256**: `e6a7f30ec42ded7b8843dce951910e77a5b120587598c73948de3e9425332922`  
+**Dataset SHA256**: `95f551e136a80d426ca4eec093be84880c21e6b9fb1161d16bb4ba193b0cf558`  
 
 ---
 
@@ -62,7 +62,7 @@ In strict compliance with Milestone 28 of `ERABI_RC3_DIAGNOSTIC_FIRST_ARCHITECTU
 - **Hard Limit**: 512 tokens
 - **Safety Budget**: 450 tokens
 - **Max Measured Length**: **438 tokens**
-- **Average Length**: **225.15 tokens**
+- **Average Length**: **225.25 tokens**
 - **P95 Length**: **326 tokens**
 - **Violations (> 450 tokens)**: **0 cases (100% compliant)**
 
@@ -73,7 +73,7 @@ In strict compliance with Milestone 28 of `ERABI_RC3_DIAGNOSTIC_FIRST_ARCHITECTU
 - **Empty Fields**: **0**
 
 ### 3.3 Zero Data Leakage Audit
-- **Background Files Audited**: 114 files (58214 records)
+- **Background Files Audited**: 117 files (63834 records)
 - **Exact Context Matches**: **0**
 - **Exact Question Matches**: **0**
 - **Fingerprint Matches**: **0**
@@ -85,11 +85,11 @@ In strict compliance with Milestone 28 of `ERABI_RC3_DIAGNOSTIC_FIRST_ARCHITECTU
 
 | Artifact Path | SHA256 Hash |
 |:---|:---|
-| `data/rc3_bridge/rc3_bridge_benchmark.jsonl` | `e6a7f30ec42ded7b8843dce951910e77a5b120587598c73948de3e9425332922` |
-| `data/rc3_bridge/manifest.json` | `50a4a119f1ec2c112af96f9b373c5fbf076e8c2de06e9feaff562c251beb23bf` |
-| `data/rc3_bridge/semantic_audit.json` | `b4a611f8a9c8f8e6c2879a455432965f0f59cbefdc633040ff07af5dc8f24980` |
-| `data/rc3_bridge/token_audit.json` | `837e5237476e43a16d03d17c008ed710f63b644f42442bfdf9b1c19b3697c5ce` |
-| `data/rc3_bridge/overlap_audit.json` | `2360546c6d2ce58132867ffdd1ab2f4bd1b07de221e8ac9591e2508fdc8309ea` |
+| `data/rc3_bridge/rc3_bridge_benchmark.jsonl` | `95f551e136a80d426ca4eec093be84880c21e6b9fb1161d16bb4ba193b0cf558` |
+| `data/rc3_bridge/manifest.json` | `c4f8fb344531f7d94b56ae3121660fd451e244aa4a6c86c8de88a8bb913606e6` |
+| `data/rc3_bridge/semantic_audit.json` | `c2e91e3b90192da54eb01705bed8e93cfa239987e2fa5af99f9289a204034718` |
+| `data/rc3_bridge/token_audit.json` | `26414475026781cefc4e38090ade0cd62c5c22e1f8392fe53dca6ecd9367cf66` |
+| `data/rc3_bridge/overlap_audit.json` | `34dcb6a02e5298a44dc8c2a2215f69d40d174957c4f79ad781b14a6e12ba29e5` |
 
 ---
 

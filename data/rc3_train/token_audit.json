@@ -1,0 +1,10 @@
+{
+  "max_tokens": 442,
+  "min_tokens": 66,
+  "avg_tokens": 225.15,
+  "hard_ceiling": 512,
+  "design_target": 450,
+  "violations_count": 0,
+  "is_compliant": true,
+  "violations": []
+}

@@ -1,6 +1,6 @@
 {
   "suite_name": "ERABI RC3 Development Bridge Benchmark",
-  "created_utc": "2026-09-20T22:08:42.930717+00:00",
+  "created_utc": "2026-09-21T00:30:14.732031+00:00",
   "total_cases": 480,
   "total_pairs": 240,
   "families": {
@@ -24,7 +24,7 @@
   },
   "token_stats": {
     "max": 438,
-    "avg": 225.15,
+    "avg": 225.25,
     "p95": 326,
     "bins": {
       "<=128": 0,
@@ -40,9 +40,9 @@
     "zero_leakage_passed": true
   },
   "file_hashes": {
-    "rc3_bridge_benchmark.jsonl": "e6a7f30ec42ded7b8843dce951910e77a5b120587598c73948de3e9425332922",
-    "semantic_audit.json": "b4a611f8a9c8f8e6c2879a455432965f0f59cbefdc633040ff07af5dc8f24980",
-    "token_audit.json": "837e5237476e43a16d03d17c008ed710f63b644f42442bfdf9b1c19b3697c5ce",
-    "overlap_audit.json": "2360546c6d2ce58132867ffdd1ab2f4bd1b07de221e8ac9591e2508fdc8309ea"
+    "rc3_bridge_benchmark.jsonl": "95f551e136a80d426ca4eec093be84880c21e6b9fb1161d16bb4ba193b0cf558",
+    "semantic_audit.json": "c2e91e3b90192da54eb01705bed8e93cfa239987e2fa5af99f9289a204034718",
+    "token_audit.json": "26414475026781cefc4e38090ade0cd62c5c22e1f8392fe53dca6ecd9367cf66",
+    "overlap_audit.json": "34dcb6a02e5298a44dc8c2a2215f69d40d174957c4f79ad781b14a6e12ba29e5"
   }
 }

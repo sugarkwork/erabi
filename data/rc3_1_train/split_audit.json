@@ -1,0 +1,28 @@
+{
+  "domain_overlaps": {
+    "calibration__dev": [],
+    "calibration__train": [],
+    "dev__train": []
+  },
+  "exact_overlaps": {
+    "calibration__dev": 0,
+    "calibration__train": 0,
+    "dev__train": 0
+  },
+  "group_overlaps": {
+    "calibration__dev": 0,
+    "calibration__train": 0,
+    "dev__train": 0
+  },
+  "is_clean": true,
+  "normalized_overlaps": {
+    "calibration__dev": 0,
+    "calibration__train": 0,
+    "dev__train": 0
+  },
+  "template_overlaps": {
+    "calibration__dev": [],
+    "calibration__train": [],
+    "dev__train": []
+  }
+}

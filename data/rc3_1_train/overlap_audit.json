@@ -1,0 +1,24 @@
+{
+  "blind_v5_exact_matches": [],
+  "blind_v5_paths": [
+    "data\\sealed_acceptance_rc3_blind_v5\\sealed_test_rc3_blind_v5.jsonl"
+  ],
+  "exact_context_question_matches": [],
+  "exact_full_matches": [],
+  "fuzzy_near_copy_candidates": [],
+  "fuzzy_ngram": {
+    "character_size": 5,
+    "max_candidates_per_record": 40,
+    "max_postings": 128,
+    "token_size": 3,
+    "types": [
+      "character",
+      "token"
+    ]
+  },
+  "fuzzy_similarity_threshold": 0.97,
+  "historical_files": 226,
+  "historical_records": 79687,
+  "is_clean": true,
+  "normalized_near_copy_candidates": []
+}

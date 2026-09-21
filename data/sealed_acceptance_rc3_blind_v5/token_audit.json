@@ -1,0 +1,11 @@
+{
+  "timestamp_utc": "2026-09-21T03:26:15.118813+00:00",
+  "total_cases_audited": 480,
+  "hard_limit": 512,
+  "max_tokens": 359,
+  "min_tokens": 143,
+  "avg_tokens": 241.6,
+  "violations_count": 0,
+  "is_contract_compliant": true,
+  "violations": []
+}

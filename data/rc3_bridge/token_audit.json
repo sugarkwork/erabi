@@ -1,8 +1,8 @@
 {
-  "timestamp_utc": "2026-09-20T22:08:42.315568+00:00",
+  "timestamp_utc": "2026-09-21T00:30:13.876339+00:00",
   "total_cases_audited": 480,
   "max_token_length": 438,
-  "avg_token_length": 225.15,
+  "avg_token_length": 225.25,
   "p95_token_length": 326,
   "length_bins": {
     "<=128": 0,

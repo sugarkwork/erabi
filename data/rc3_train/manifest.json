@@ -1,0 +1,43 @@
+{
+  "timestamp_utc": "2026-09-21T00:32:17.598727+00:00",
+  "total_records": 10810,
+  "total_groups": 5405,
+  "streams": {
+    "stream_a_core": 5610,
+    "stream_b_generalization": 5200
+  },
+  "splits": {
+    "train": {
+      "records": 8650,
+      "groups": 4325,
+      "ratio": 0.8002,
+      "sha256": "1db4c32d62b4c7a3ee52bfe534a18d725f6b5578ffd35f0b36283d51743c7e2b"
+    },
+    "dev": {
+      "records": 1080,
+      "groups": 540,
+      "ratio": 0.0999,
+      "sha256": "86a09530291780a4a9bc30e691e100201d47e7fdd91e0d2b6b407360beb825c7"
+    },
+    "calibration": {
+      "records": 1080,
+      "groups": 540,
+      "ratio": 0.0999,
+      "sha256": "c3d81e3f915ca7fac5d33ad8857f6e166b35f71759ce101256beead43a1860db"
+    }
+  },
+  "token_summary": {
+    "max": 442,
+    "avg": 225.15,
+    "min": 66
+  },
+  "zero_leakage": {
+    "rc3_bridge": 0,
+    "rc2_blind_v3": 0,
+    "eval_v2": 0,
+    "eval_exception": 0,
+    "fresh_operator": 0,
+    "fresh_robustness": 0,
+    "fresh_general": 0
+  }
+}

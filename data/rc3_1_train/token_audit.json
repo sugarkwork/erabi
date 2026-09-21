@@ -1,0 +1,14 @@
+{
+  "avg_tokens": 121.43,
+  "formatter": "GLiClass bi-encoder prepare_inputs: prompt + ' ' + context; labels independently tokenized",
+  "hard_limit": 512,
+  "is_compliant": true,
+  "max_label_tokens": 21,
+  "max_text_plus_label_tokens": 153,
+  "max_tokens": 133,
+  "min_tokens": 111,
+  "safety_limit": 450,
+  "total_records": 2400,
+  "violations": [],
+  "violations_count": 0
+}
