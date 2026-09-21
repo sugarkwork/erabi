@@ -1517,8 +1517,22 @@ Epoch 1（論理演算子 90.00%、優先例外 83.33%）と Epoch 2（Core保�
   - SHA256: train `88311d253c4c99f6580c13e82bd635efaf7d10dba60959e108f093d8a8afaec7`、dev `64ee32fa92b038ab35a73b227e5385201bf9dab805adafd04e344983e3e4db63`、calibration `d0ab635b5179d5dc451f15be1ca998947eba3c40c73681a5305bff64e13480c5`、Logic Bridge `e2b575a34c8fb5432aa392306d8cec8bd899385a409e0b2bd4cb4f34ddc229a9`
 - RC3.1 Run 1 driverを実装し、旧RC3 trainをgroup単位で4,325組から1,383組へ完全重複排除、新logic 960組と合わせて2,343組 / 4,686件とした。旧dev/calibrationおよびBlind v5は参照しない。
 - CPU検証: `pytest tests -q` = 91 passed。`--dry-run` でbase hash、データ件数、gate、出力先保護を確認した。
-- GPU baseline / Run 1は未実行。確認時のRTX A4000がアイドル状態でも89°C、P0、VRAM 6,828 MiB使用中だったため、既存GPUプロセスを停止せず安全上保留した。
-
+- GPU baselineを `runs/rc3_1_baseline/baseline_results_001.json` に保存した。
+  - Logic Bridge 52.50% (252/480)、Paired Both 7.92%、NLL 5.9499
+  - Existing RC3 Bridge 88.75% (426/480)、Paired Both 80.42%、Permutation 97.29%
+  - Retention mean 98.70%
+- 最初のRun 1起動は学習開始直後にGPU温度90°Cへ到達したためチェックポイント保存前に停止し、`runs/rc3_1_run1_aborted_thermal_20260922/` へ退避した。ユーザー確認によりRTX A4000の90°C thermal throttlingを許容して再実行し、この未完了起動はfull-training回数に数えていない。
+- **RC3.1 Run 1**（baseから、peak LR 1e-6、2 epochs）を完走した。
+  - Epoch 1: Logic 49.38%、Paired Both 7.08%、RC3 Bridge 88.96%、Retention 98.50%、loss 0.6503
+  - Epoch 2: Logic 52.08%、Paired Both 7.50%、RC3 Bridge 88.54%、Retention 98.80%、loss 0.3099
+  - `runs/rc3_1_run1/selection.json`: `selected_epoch=null`
+  - 独立logic train/devを追加診断し、Epoch 2はtrain 58.02%、dev 54.58%で未適合だった。Blind v5および汚染済み旧dev/calibrationは使用していない。
+- Run 1の未適合を根拠に、**RC3.1 Run 2** は唯一のprimary variableとしてpeak LRのみ `1e-6 -> 2.5e-6` に変更し、同じ凍結base・data・seed・batch・warmup・weight decay・2 epochsで実行した。
+  - Epoch 1: Logic 61.46%、Paired Both 27.08%、RC3 Bridge 88.13%、Retention 98.50%、loss 0.5025
+  - Epoch 2: Logic **74.79%** (359/480)、Paired Both **55.00%**、NLL 0.6626、RC3 Bridge **88.13%** (423/480)、Retention **98.40%**、loss 0.2567
+  - Epoch 2 operator: XOR 60.00%、NAND 70.00%、NOR 80.00%、negation 65.56%、nested 83.22%。Logic gate（Overall 90%、各必須軸、Paired Both 85%）は未達。
+  - Existing RC3 Bridgeも `logical_operators=86.67%`、`general_choice=83.33%`、`priority_exception=80.00%` でfamily gate未達。`runs/rc3_1_run2/selection.json`: `selected_epoch=null`。
+- **停止条件成立**: 2 full-trainingでRC3.1 Development Gate未達。weightsはfreezeせず、Milestone 37 Calibration、Milestone 38 ONNX FP16、Milestone 39 Blind v6は未実行。次は438Mの容量/学習設計限界を整理し、指示書どおりLevel 5/6（8B級を含む）を再検討する。
 
 
 
