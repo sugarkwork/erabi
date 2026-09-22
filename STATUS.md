@@ -1599,6 +1599,11 @@ Epoch 1（論理演算子 90.00%、優先例外 83.33%）と Epoch 2（Core保�
 - `load_engine`とCLI/APIの`--model-format`を追加。`auto`はCPU+ORTでFP32、CUDA+CUDA EPでFP16を選び、ORT非対応時はPyTorchへ戻す。明示ONNX指定時は不適合環境でエラー。Hubからは選択形式とconfig/tokenizerのみを取得し、`--model-cache-dir`/`ERABI_MODEL_CACHE_DIR`を引き継ぐ。カスタムHubモデルの`auto`は既存PyTorch挙動を維持する。既定モデルは検証済みリビジョン`042998970aa20cc3371e0f7f0e320013a152c068`に固定し、Windowsでカード更新のたびに大容量キャッシュが重複するのを抑える。
 - ローカルFP32 CPU、FP16 CUDA、ローカル`auto` CPUのCLI判定は`technical`。空の専用HubキャッシュからのGPU `auto`→FP16、CPU `auto`→FP32判定も`technical`。各回に選んだONNXのみ取得され、safetensorsは取得されなかった。公開ファイルとローカル実験ファイルのSHA256は両形式で一致。ローカルHTTP APIの`/health`は`model_format=onnx-fp32`、`/predict`は`technical`。`pytest tests -q`は108件PASS。PyPI公開は確認待ち。
 
+## 49. PyPI 0.1.2 公開（2026-09-22）
+
+- ユーザーの許可後、[PyPI `erabi` 0.1.2](https://pypi.org/project/erabi/0.1.2/) にwheelとsdistを公開。公開前に`pytest tests -q` 108件PASS、`twine check`両形式PASS、sdistに秘密情報・モデル重み・作業用runの混入なしを確認した。
+- PyPI JSONとpipの配布インデックスの両方で0.1.2を確認。PyPIから新規取得したwheelのSHA256は公開前のwheelと一致。wheelを別配置にインストールし、既存の専用モデルキャッシュでCPU `auto`→`onnx-fp32`、GPU `auto`→`onnx-fp16`、どちらも`best_candidate_id=technical`・`decision.status=review`を確認した。新規モデルダウンロードを伴う検証は前節で実施済み。
+- READMEとHugging FaceモデルカードをPyPI 0.1.2の導入案内へ更新。ONNX Runtimeは依然として任意依存で、未導入時はPyTorchへ戻る。パッケージ公開はPractical V1の独立gold評価・校正・正式品質保証を意味しない。
 
 
 

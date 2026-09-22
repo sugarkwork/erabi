@@ -29,7 +29,7 @@ Linux/macOSでは`export ERABI_MODEL_CACHE_DIR=/data/models/erabi-cache`と設�
 
 ### モデル形式の自動選択とおすすめ
 
-形式選択はERABI 0.1.2以降の機能です（0.1.1以前はPyTorch版のみ）。PyPIで0.1.2が未公開の間は、`python -m pip install --upgrade "git+https://github.com/sugarkwork/erabi.git"`でGitHub版を導入できます。`--model-format`を省略すると`auto`です。`--device`を省略した場合はCUDAが利用可能なら`cuda:0`、そうでなければ`cpu`を選びます。ONNX Runtimeが使える場合、CPUではFP32 ONNX、CUDA Execution Providerが使えるGPUではFP16 ONNXを**必要な形式だけ**Hugging Faceから取得します。ONNX Runtimeがない場合や、CUDA Execution ProviderがないGPUでは従来のPyTorch safetensorsに戻します。別のHugging FaceモデルIDは互換性維持のため`auto`でPyTorchを使い、明示指定すれば同じONNX配置のモデルも利用できます。
+形式選択はERABI 0.1.2以降の機能です（0.1.1以前はPyTorch版のみ）。既存環境は`python -m pip install --upgrade erabi`で更新できます。`--model-format`を省略すると`auto`です。`--device`を省略した場合はCUDAが利用可能なら`cuda:0`、そうでなければ`cpu`を選びます。ONNX Runtimeが使える場合、CPUではFP32 ONNX、CUDA Execution Providerが使えるGPUではFP16 ONNXを**必要な形式だけ**Hugging Faceから取得します。ONNX Runtimeがない場合や、CUDA Execution ProviderがないGPUでは従来のPyTorch safetensorsに戻します。別のHugging FaceモデルIDは互換性維持のため`auto`でPyTorchを使い、明示指定すれば同じONNX配置のモデルも利用できます。
 
 | 利用形態 | おすすめ | 理由 |
 |---|---|---|
