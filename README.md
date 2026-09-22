@@ -1,6 +1,8 @@
 # ERABI（えらび）
 
-ERABIは、`context`（状況）、`question`（判断基準）、2～16個の`choices`（候補）から、全候補の確率分布を返すローカル判断エンジンです。Jevの公式版や再現版ではありません。回答は常に確認対象（`review`）であり、最大確率は正解の保証ではありません。
+ERABIは、Jevっぽい「状況を読んで候補を選ぶ」動きを、GLiClassを使って再現してみた実験プロジェクトです。Jevの公式版や内部実装の再現版ではありません。
+
+`context`（状況）、`question`（判断基準）、2～16個の`choices`（候補）から、全候補の確率分布を返します。回答は常に確認対象（`review`）であり、最大確率は正解の保証ではありません。
 
 ## インストールと最初の推論
 
@@ -49,10 +51,11 @@ python sample.py --device cuda:0
 
 GPU用PyTorchを明示的に導入する場合は、[PyTorch公式のインストール案内](https://pytorch.org/get-started/locally/)で環境に合うコマンドを先に実行してください。`onnxruntime`と`onnxruntime-gpu`は**同じ仮想環境に両方入れない**でください（[ONNX Runtime公式案内](https://onnxruntime.ai/docs/get-started/with-python.html)）。GPU版でもCUDA Execution Providerが使えなければ、自動選択はPyTorchに戻ります。`python -c "import onnxruntime as ort; print(ort.get_available_providers())"`で確認できます。
 
-[sample.py](sample.py)の中身は次のとおりです。
+[sample.py](sample.py)はモデルの初期化と1問の推論を試すコードです。追加学習したGLiClassモデルをHugging Faceから取得し、CPU/GPU向けのONNX RuntimeまたはPyTorchで実行します。中身は次のとおりです。
 
 ```python
 import argparse
+from time import perf_counter
 
 from erabi.model_loader import load_engine
 from erabi.schema import ChoiceRequest
@@ -62,20 +65,30 @@ parser.add_argument("--device", default="cpu")
 parser.add_argument("--model-format", default="auto")
 args = parser.parse_args()
 
+print("ERABI: recreating Jev-like choice decisions with GLiClass (experimental, not official Jev).", flush=True)
+print("Runtime: ONNX Runtime or PyTorch; model downloaded from Hugging Face.", flush=True)
+print(f"[1/2] Loading model (device={args.device}, format={args.model_format})...", flush=True)
+started = perf_counter()
 engine = load_engine(device=args.device, model_format=args.model_format)
-result = engine.predict(ChoiceRequest.from_dict({
+print(f"[1/2] Model ready in {perf_counter() - started:.2f}s (format={engine.model_format})", flush=True)
+
+request = ChoiceRequest.from_dict({
     "context": "ノートを7冊、消しゴムを2個買った。",
     "question": "全部で何個？",
     "choices": [
         {"id": "nine", "text": "9個"},
         {"id": "ten", "text": "10個"},
     ],
-}))
+})
+print("[2/2] Running inference...", flush=True)
+started = perf_counter()
+result = engine.predict(request)
+print(f"[2/2] Inference done in {perf_counter() - started:.2f}s", flush=True)
 print("best:", result.best_candidate_id)
 print("probabilities:", {choice.id: choice.probability for choice in result.choices})
 ```
 
-初回は選択されたモデルを自動ダウンロードします。`sample.py`は既定でCPUを使い、ONNX Runtime CPU版があればFP32 ONNX、なければPyTorchを選びます。表示される確率は正解の保証ではありません。
+初回は選択されたモデルを自動ダウンロードします。「初期化」にはモデルの取得・読み込みが含まれ、「推論」は1問を処理する時間です。`sample.py`は既定でCPUを使い、ONNX Runtime CPU版があればFP32 ONNX、なければPyTorchを選びます。表示される確率は正解の保証ではありません。
 
 ### モデルの保存先
 
