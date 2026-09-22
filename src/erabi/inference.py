@@ -22,7 +22,7 @@ from erabi.schema import (
 
 logger = logging.getLogger(__name__)
 
-DEFAULT_MODEL_ID = "knowledgator/gliclass-multilang-mini"
+DEFAULT_MODEL_ID = "sugarknight/erabi-practical-v1-experimental"
 
 
 class GLiClassEngine:

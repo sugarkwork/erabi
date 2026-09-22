@@ -1,0 +1,48 @@
+---
+language:
+- ja
+- en
+- zh
+license: apache-2.0
+library_name: transformers
+pipeline_tag: text-classification
+base_model: knowledgator/gliclass-instruct-large-v1.0
+tags:
+- gliclass
+- choice-classification
+- experimental
+---
+
+# ERABI Practical V1 (experimental)
+
+This is an **experimental**, uncalibrated choice-ranking model. It is not an official Jev model, a validated general-purpose reasoner, or an automatic decision-maker. The model ranks 2–16 user-supplied candidate texts for a natural-language context and question and returns all candidate probabilities through the [ERABI code](https://github.com/sugarkwork/erabi). Decisions should be reviewed by a person.
+
+## Provenance
+
+- Base: [knowledgator/gliclass-instruct-large-v1.0](https://huggingface.co/knowledgator/gliclass-instruct-large-v1.0), Apache-2.0, 438,672,897 parameters.
+- Additional fine-tuning: one epoch on 2,414 Practical V1 training records, peak learning rate 2.5e-6, 151 optimizer steps, microbatch 2, gradient accumulation 8, fp16 AMP.
+- Data: original synthetic Japanese, English, and Simplified Chinese examples in six task families: everyday arithmetic, tool choice, dialogue action, JSON conversation-log routing, reading inference, and original exam-style questions. Generated and answer-blind rejudged with DeepSeek V4.1 Flash via OrcaRouter. No actual entrance-exam questions or private chat logs were used.
+- Data and training code: [GitHub repository](https://github.com/sugarkwork/erabi/tree/main/data/practical_v1) and [training script](https://github.com/sugarkwork/erabi/blob/main/scripts/train_practical_v1.py). Labels remain **unreviewed synthetic teacher agreement**, not human gold.
+
+## Exploratory evaluation
+
+| Set | Frozen RC3 before this fine-tune | This checkpoint |
+|---|---:|---:|
+| Practical V1 dev, 399 cases | 59.90% | 77.19% |
+| Practical V1 held-out synthetic eval, 386 cases | 61.66% | 76.17% |
+| Existing RC3 Bridge, 480 cases | 88.75% | 88.54% |
+
+The Practical V1 eval set was used once after selecting by dev and existing-bridge results. Reading inference **regressed** from 54/71 to 50/71 despite aggregate gains. Candidate-order consistency on the existing bridge was 97.50%. These figures are not a benchmark of real-world correctness or Jev parity, because Practical V1 questions and labels come from the same teacher family. There is no independent human-verified final test, temperature calibration, or formal release approval for this checkpoint.
+
+## Use
+
+```bash
+python -m pip install "git+https://github.com/sugarkwork/erabi.git"
+erabi predict --request request.json
+```
+
+The first invocation downloads the model; later invocations use the Hugging Face cache. Input and output JSON contracts are documented in the [ERABI README](https://github.com/sugarkwork/erabi#入出力とデータセット形式). The input limit is 512 tokens; overlong inputs are rejected rather than silently truncated. The candidate probabilities are not calibrated confidence guarantees.
+
+## License and limitations
+
+These fine-tuned weights derive from the Apache-2.0-licensed GLiClass base model and are distributed under Apache-2.0; see the [Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0) and the [base model card](https://huggingface.co/knowledgator/gliclass-instruct-large-v1.0). ERABI source code is separately MIT-licensed. Do not rely on this experimental model for high-stakes or unattended decisions.

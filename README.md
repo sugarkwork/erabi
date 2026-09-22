@@ -11,9 +11,9 @@ python -m pip install "git+https://github.com/sugarkwork/erabi.git"
 erabi predict --request '{"schema_version":"1","context":"7冊のノートと2個の消しゴムを買った。","question":"全部で何個？","choices":[{"id":"nine","text":"9個"},{"id":"ten","text":"10個"}]}'
 ```
 
-PowerShellではJSONの引用規則が異なるため、リポジトリを取得して `erabi predict --request examples/request.json` とするのが簡単です。初回はモデルのダウンロードが必要で、以降はHugging Faceのローカルキャッシュを再利用します。ネットワークが使えない場合は、事前取得したモデルのローカルディレクトリを`--model-id`で指定してください。
+PowerShellではJSONの引用規則が異なるため、リポジトリを取得して `erabi predict --request examples/request.json` とするのが簡単です。初回は約1.75GBのモデルダウンロードが必要で、以降はHugging Faceのローカルキャッシュを再利用します。ネットワークが使えない場合は、事前取得したモデルのローカルディレクトリを`--model-id`で指定してください。
 
-現在の無指定デフォルトは公開済みの[GLiClass miniベースモデル](https://huggingface.co/knowledgator/gliclass-multilang-mini)です。**ERABIで追加学習したweightsではありません。** ERABIのモデルをHugging Faceへ公開した後、その正確なモデルIDとリンクに切り替えます。公開までは、手元のチェックポイントを指定できます。
+無指定の既定値は公開済みの[ERABI Practical V1実験モデル](https://huggingface.co/sugarknight/erabi-practical-v1-experimental)です。正式合格モデルではなく、未レビュー合成データで追加学習した未校正weightsです。別のモデルを使う場合はローカルパスまたはHugging FaceのモデルIDを指定できます。
 
 ```bash
 erabi predict --request examples/request.json --model-id path/to/checkpoint

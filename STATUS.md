@@ -1555,6 +1555,13 @@ Epoch 1（論理演算子 90.00%、優先例外 83.33%）と Epoch 2（Core保�
 - 選定後の暫定evalは **61.66% (238/386) → 76.17% (294/386)**、NLL 1.8971→0.6574。日常算数23/68→48/68、ツール選択50/70→62/70、JSONログ51/69→65/69で改善した一方、読解54/71→50/71に低下した。これは同一モデルの生成・再判定に基づく未レビュー合成ラベルへの適合であり、独立した人手goldの改善・Jev同等性は示さない。
 - 実行: `.venv\Scripts\python.exe scripts\train_practical_v1.py --dry-run`、同 `--device cuda:0`、`python -m erabi evaluate --input data\practical_v1\eval_teacher_agreed.jsonl --output-dir runs\practical_v1_finetune_20260922\eval_teacher_agreed --model-id runs\practical_v1_finetune_20260922\checkpoint --device cuda:0`。`pytest tests -q` は95件PASS。新weightsの校正・正式リリース・Blind v6は未実施。次は代表例の人手ラベル監査と、独立した実践的評価セットを優先する。
 
+---
+
+## 43. Practical V1 実験モデルのHugging Face公開（2026-09-22）
+
+- `sugarknight/erabi-practical-v1-experimental` を公開。約1.75GBのPyTorch safetensorsとtokenizer/config、および未レビュー合成データ評価・読解退行・未校正を明記したモデルカードを掲載した。**正式合格モデルへの昇格ではない。**
+- 公開weightsを新規Hugging Faceキャッシュへダウンロードし、ローカルcheckpointとのSHA256一致（`1902d31124ed9eae00b1938990cca736a31be1eb94bfa4125fc4b6853c1ac052`）を確認。公開モデルIDを既定値とした`erabi predict`のCPU推論も成功した。
+- GitHub READMEとパッケージのモデルURLを更新。wheel作成と`pytest tests -q` 95件PASS。PyPI公開はしておらず、GitHubからのpipインストールを案内する。Windowsでsymlink無効の場合はHubキャッシュのディスク使用量が増える可能性がある。
 
 
 
