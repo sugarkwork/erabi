@@ -1580,7 +1580,12 @@ Epoch 1（論理演算子 90.00%、優先例外 83.33%）と Epoch 2（Core保�
 - 分離したvenvでPyPIから`erabi==0.1.0`のwheelを直接取得して入れ直し、既定の公開モデルでCPU判定に成功。PowerShell 7のインラインJSON入力でも`best_candidate_id=nine`を返した。READMEとHugging Faceモデルカードの導入コマンドを`pip install erabi`に更新した。パッケージ公開はモデルの品質保証ではない。
 - モデルカード更新で生じた専用Hubキャッシュの旧リビジョン1件（約1.8GB）をdry-run確認後にpruneし、現行リビジョンのキャッシュは残した。削除分は必要なら再ダウンロードできる。
 
+## 46. モデルキャッシュ保存先と実行形式の明確化（2026-09-22）
 
+- `predict`、`evaluate`、ローカルHTTPサーバーに`--model-cache-dir`を追加。Python APIの`GLiClassEngine(cache_dir=...)`にも対応し、未指定時は`ERABI_MODEL_CACHE_DIR`を参照する。明示引数が環境変数に優先し、トークナイザーとモデル双方のHugging Face `from_pretrained`へ渡す。
+- READMEに保存先指定、CPU/CUDAの選択、PyTorch版Practical V1と別系統のONNX実験コードの違いを明記。現在のpip既定モデルはONNXではない。
+- オフライン単体テストを5件追加し、全100件PASS。既存Hubキャッシュを指定したCPU実推論で`best_candidate_id=technical`、`decision.status=review`を確認。新規モデルの重複ダウンロードなし。
+- PyPIに`erabi==0.1.1`のwheelとsdistを公開し、両成果物の`twine check`がPASS。PyPIから分離venvへ0.1.1を再取得し、既存キャッシュを指定したCPU推論で同じ`best_candidate_id=technical`と`review`を確認。
 
 
 

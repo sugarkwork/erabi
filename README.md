@@ -13,6 +13,32 @@ erabi predict --request '{"schema_version":"1","context":"7冊のノートと2�
 
 上のワンラインはPowerShell 7でも動作確認済みです。入力をファイルに保存して `erabi predict --request request.json` としても使えます。初回は約1.75GBのモデルダウンロードが必要で、以降はHugging Faceのローカルキャッシュを再利用します。ネットワークが使えない場合は、事前取得したモデルのローカルディレクトリを`--model-id`で指定してください。
 
+### モデルの保存先
+
+ダウンロード先を指定するには、`--model-cache-dir`を使います。`predict`、`evaluate`、`python -m erabi.serve`で利用でき、トークナイザーと重みの両方に適用されます。保存先に十分な空き容量を確保してください。
+
+```powershell
+erabi predict --request examples/request.json --model-cache-dir "F:\models\erabi-cache"
+$env:ERABI_MODEL_CACHE_DIR = "F:\models\erabi-cache"
+erabi predict --request examples/request.json
+```
+
+Linux/macOSでは`export ERABI_MODEL_CACHE_DIR=/data/models/erabi-cache`と設定します。優先順位は`--model-cache-dir`、`ERABI_MODEL_CACHE_DIR`、Hugging Face標準の`HF_HUB_CACHE`/`HF_HOME`、既定キャッシュの順です。環境変数を変更しても既存のダウンロードは移動されず、新しい場所に再取得されます。`--model-id`にローカルモデルディレクトリを指定した場合はその場所から読み込み、キャッシュ先の設定はモデル自体の移動には使われません。
+
+### CPU・GPU・ONNX
+
+現在pipで導入する既定のPractical V1モデルは、ONNXではなくPyTorchの`safetensors`重みです。CPUとGPUで同じ重み・同じコマンドを使い、`--device`で実行先を選びます。省略時はCUDAが利用可能なら`cuda:0`、そうでなければ`cpu`です。
+
+```powershell
+erabi doctor
+erabi predict --request examples/request.json --device cpu
+erabi predict --request examples/request.json --device cuda:0
+```
+
+GPUを使うには、対応するNVIDIAドライバーとCUDA対応PyTorchを先に導入し、`python -c "import torch; print(torch.cuda.is_available())"`が`True`になることを確認してください。PyTorchの導入コマンドは[公式インストール案内](https://pytorch.org/get-started/locally/)で環境に合わせて選び、その後`python -m pip install erabi`を実行します。CPUのみなら通常の`pip install erabi`で動作します。
+
+リポジトリには過去のRC向けONNX推論・変換コードもありますが、公開済みPractical V1のpip既定モデルをONNXで実行する導線はまだありません。`--device`はPyTorchのCPU/CUDA切替であり、ONNX形式への切替ではありません。ONNX版を配布するなら、Practical V1からの別途エクスポート、CPU用形式とGPU用形式の選定、出力一致と速度の検証が必要です。[ONNX RuntimeのCPU/GPUパッケージ](https://onnxruntime.ai/docs/install/)も現在の必須依存には含めていません。
+
 無指定の既定値は公開済みの[ERABI Practical V1実験モデル](https://huggingface.co/sugarknight/erabi-practical-v1-experimental)です。正式合格モデルではなく、未レビュー合成データで追加学習した未校正weightsです。別のモデルを使う場合はローカルパスまたはHugging FaceのモデルIDを指定できます。
 
 ```bash

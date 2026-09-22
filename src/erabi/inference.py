@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import logging
 import math
+import os
 import time
 from typing import Any, Dict, List, Optional
 
@@ -34,10 +35,12 @@ class GLiClassEngine:
         device: Optional[str] = None,
         revision: Optional[str] = None,
         max_tokens: int = MAX_TOKENS,
+        cache_dir: Optional[str] = None,
     ):
         self.model_id = model_id
         self.max_tokens = max_tokens
         self.revision = revision
+        self.cache_dir = cache_dir if cache_dir is not None else os.environ.get("ERABI_MODEL_CACHE_DIR")
 
         if device is None:
             self.device = "cuda:0" if torch.cuda.is_available() else "cpu"
@@ -56,6 +59,8 @@ class GLiClassEngine:
         kwargs = {}
         if self.revision:
             kwargs["revision"] = self.revision
+        if self.cache_dir:
+            kwargs["cache_dir"] = self.cache_dir
 
         self.tokenizer = AutoTokenizer.from_pretrained(self.model_id, **kwargs)
         self.model = GLiClassModel.from_pretrained(self.model_id, **kwargs)

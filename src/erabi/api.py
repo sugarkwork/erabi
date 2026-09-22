@@ -40,6 +40,7 @@ def create_app(
     device: Optional[str] = None,
     require_calibration: bool = False,
     engine_factory: Optional[Callable[[], Any]] = None,
+    model_cache_dir: Optional[str] = None,
 ) -> FastAPI:
     """Create and configure the FastAPI application."""
 
@@ -78,7 +79,7 @@ def create_app(
         if engine_factory:
             app.state.engine = engine_factory()
         else:
-            app.state.engine = GLiClassEngine(model_id=model_id, device=device)
+            app.state.engine = GLiClassEngine(model_id=model_id, device=device, cache_dir=model_cache_dir)
 
         yield
 

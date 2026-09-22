@@ -19,6 +19,7 @@ ALLOWED_HOSTS = {"127.0.0.1", "localhost"}
 def main():
     parser = argparse.ArgumentParser(prog="python -m erabi.serve", description="ERABI local HTTP API server")
     parser.add_argument("--model-id", type=str, required=True, help="Path to model checkpoint (explicitly required)")
+    parser.add_argument("--model-cache-dir", type=str, default=None, help="Directory for downloaded model files (also settable via ERABI_MODEL_CACHE_DIR)")
     parser.add_argument("--calibration", type=str, default=None, help="Path to calibration.json")
     parser.add_argument("--host", type=str, default="127.0.0.1", help="Bind host (loopback only: 127.0.0.1)")
     parser.add_argument("--port", type=int, default=8765, help="Bind port (default: 8765)")
@@ -35,6 +36,7 @@ def main():
         model_id=args.model_id,
         calibration_path=args.calibration,
         device=args.device,
+        model_cache_dir=args.model_cache_dir,
         require_calibration=args.require_calibration,
     )
 
