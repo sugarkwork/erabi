@@ -1563,6 +1563,13 @@ Epoch 1（論理演算子 90.00%、優先例外 83.33%）と Epoch 2（Core保�
 - 公開weightsを新規Hugging Faceキャッシュへダウンロードし、ローカルcheckpointとのSHA256一致（`1902d31124ed9eae00b1938990cca736a31be1eb94bfa4125fc4b6853c1ac052`）を確認。公開モデルIDを既定値とした`erabi predict`のCPU推論も成功した。
 - GitHub READMEとパッケージのモデルURLを更新。wheel作成と`pytest tests -q` 95件PASS。PyPI公開はしておらず、GitHubからのpipインストールを案内する。Windowsでsymlink無効の場合はHubキャッシュのディスク使用量が増える可能性がある。
 
+---
+
+## 44. 新規仮想環境でのGitHub pip導入・初回判定（2026-09-22）
+
+- 既存環境と分離したPython 3.12.10のvenvを `runs/pip_install_smoke_20260922/venv` に新設し、`pip install "git+https://github.com/sugarkwork/erabi.git"` を依存込みで実行。取得したGit commitは `806696e`、導入したERABIは0.1.0、PyTorchは2.14.0+cpu、Transformersは5.17.0。import先が新venvの`site-packages`であることを確認した。
+- 専用の空のHubキャッシュを使い、モデルIDを省略した `erabi predict --request examples/request.json --device cpu` を実行。`sugarknight/erabi-practical-v1-experimental` を初回取得し、`best_candidate_id=technical`、`P(technical)=0.9994630404`、`decision.status=review`、`calibration.status=none` を返した。新しい依存解決結果と公開モデルによる実運用導線はPASS。
+- 再実行用にvenv（約1.05GB）とモデルキャッシュ（約1.76GB）を残し、検証用pipダウンロードキャッシュ225.2MBのみ削除した。Windowsのsymlink非対応警告は出たが推論は成功。モデル品質の独立検証ではなくインストール・取得・推論のスモークである。
 
 
 
