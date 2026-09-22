@@ -1,0 +1,351 @@
+{
+  "all_blind_judge": {
+    "agreed_unambiguous": 3218,
+    "judged": 3446,
+    "note": "Same-provider answer-blind check, not human gold",
+    "packaging_accepted": 3218
+  },
+  "api_requests": 1149,
+  "arithmetic_spec_overlaps": {
+    "dev__eval_candidate": 0,
+    "train__dev": 1,
+    "train__eval_candidate": 0
+  },
+  "blind_judge": {
+    "agreed_unambiguous": 397,
+    "disagreed_or_ambiguous": [
+      "pv1_eval_candidate_tool_routing_zh-Hans_0010",
+      "pv1_eval_candidate_dialogue_action_ja_0000",
+      "pv1_eval_candidate_dialogue_action_ja_0002",
+      "pv1_eval_candidate_dialogue_action_ja_0005",
+      "pv1_eval_candidate_dialogue_action_ja_0006",
+      "pv1_eval_candidate_dialogue_action_ja_0007",
+      "pv1_eval_candidate_dialogue_action_ja_0010",
+      "pv1_eval_candidate_dialogue_action_en_0002",
+      "pv1_eval_candidate_dialogue_action_zh-Hans_0000",
+      "pv1_eval_candidate_dialogue_action_zh-Hans_0007",
+      "pv1_eval_candidate_json_log_routing_en_0006",
+      "pv1_eval_candidate_original_exam_style_ja_0009",
+      "pv1_eval_candidate_original_exam_style_en_0002",
+      "pv1_eval_candidate_original_exam_style_en_0009",
+      "pv1_eval_candidate_original_exam_style_zh-Hans_0002",
+      "pv1_eval_candidate_dialogue_action_ja_0022",
+      "pv1_eval_candidate_dialogue_action_en_0012",
+      "pv1_eval_candidate_dialogue_action_en_0016",
+      "pv1_eval_candidate_dialogue_action_en_0022",
+      "pv1_eval_candidate_dialogue_action_zh-Hans_0012",
+      "pv1_eval_candidate_dialogue_action_zh-Hans_0017",
+      "pv1_eval_candidate_dialogue_action_zh-Hans_0022",
+      "pv1_eval_candidate_json_log_routing_zh-Hans_0013",
+      "pv1_eval_candidate_reading_inference_ja_0021",
+      "pv1_eval_candidate_original_exam_style_ja_0017",
+      "pv1_eval_candidate_original_exam_style_en_0020",
+      "pv1_eval_candidate_original_exam_style_zh-Hans_0012",
+      "pv1_eval_candidate_original_exam_style_zh-Hans_0013",
+      "pv1_eval_candidate_original_exam_style_zh-Hans_0016",
+      "pv1_eval_candidate_original_exam_style_zh-Hans_0020",
+      "pv1_eval_candidate_original_exam_style_en_0016",
+      "pv1_eval_candidate_original_exam_style_en_0017"
+    ],
+    "judged": 429,
+    "note": "Same-provider answer-blind check, not independent human gold validation"
+  },
+  "by_family": {
+    "dialogue_action": 563,
+    "everyday_arithmetic": 606,
+    "json_log_routing": 570,
+    "original_exam_style": 567,
+    "reading_inference": 564,
+    "tool_routing": 576
+  },
+  "by_language": {
+    "en": 1144,
+    "ja": 1158,
+    "zh-Hans": 1144
+  },
+  "by_split": {
+    "dev": 426,
+    "eval_candidate": 429,
+    "train": 2591
+  },
+  "cell_counts": {
+    "dev|dialogue_action|en": 24,
+    "dev|dialogue_action|ja": 24,
+    "dev|dialogue_action|zh-Hans": 24,
+    "dev|everyday_arithmetic|en": 24,
+    "dev|everyday_arithmetic|ja": 24,
+    "dev|everyday_arithmetic|zh-Hans": 24,
+    "dev|json_log_routing|en": 18,
+    "dev|json_log_routing|ja": 24,
+    "dev|json_log_routing|zh-Hans": 24,
+    "dev|original_exam_style|en": 24,
+    "dev|original_exam_style|ja": 24,
+    "dev|original_exam_style|zh-Hans": 24,
+    "dev|reading_inference|en": 24,
+    "dev|reading_inference|ja": 24,
+    "dev|reading_inference|zh-Hans": 24,
+    "dev|tool_routing|en": 24,
+    "dev|tool_routing|ja": 24,
+    "dev|tool_routing|zh-Hans": 24,
+    "eval_candidate|dialogue_action|en": 24,
+    "eval_candidate|dialogue_action|ja": 24,
+    "eval_candidate|dialogue_action|zh-Hans": 24,
+    "eval_candidate|everyday_arithmetic|en": 24,
+    "eval_candidate|everyday_arithmetic|ja": 21,
+    "eval_candidate|everyday_arithmetic|zh-Hans": 24,
+    "eval_candidate|json_log_routing|en": 24,
+    "eval_candidate|json_log_routing|ja": 24,
+    "eval_candidate|json_log_routing|zh-Hans": 24,
+    "eval_candidate|original_exam_style|en": 24,
+    "eval_candidate|original_exam_style|ja": 24,
+    "eval_candidate|original_exam_style|zh-Hans": 24,
+    "eval_candidate|reading_inference|en": 24,
+    "eval_candidate|reading_inference|ja": 24,
+    "eval_candidate|reading_inference|zh-Hans": 24,
+    "eval_candidate|tool_routing|en": 24,
+    "eval_candidate|tool_routing|ja": 24,
+    "eval_candidate|tool_routing|zh-Hans": 24,
+    "train|dialogue_action|en": 143,
+    "train|dialogue_action|ja": 138,
+    "train|dialogue_action|zh-Hans": 138,
+    "train|everyday_arithmetic|en": 144,
+    "train|everyday_arithmetic|ja": 177,
+    "train|everyday_arithmetic|zh-Hans": 144,
+    "train|json_log_routing|en": 144,
+    "train|json_log_routing|ja": 144,
+    "train|json_log_routing|zh-Hans": 144,
+    "train|original_exam_style|en": 143,
+    "train|original_exam_style|ja": 138,
+    "train|original_exam_style|zh-Hans": 142,
+    "train|reading_inference|en": 144,
+    "train|reading_inference|ja": 132,
+    "train|reading_inference|zh-Hans": 144,
+    "train|tool_routing|en": 144,
+    "train|tool_routing|ja": 144,
+    "train|tool_routing|zh-Hans": 144
+  },
+  "errors": [],
+  "estimated_peak_usd": 1.0611954000000003,
+  "language_mismatch": [
+    "pv1_train_reading_inference_ja_0025",
+    "pv1_train_reading_inference_ja_0026",
+    "pv1_train_reading_inference_ja_0027",
+    "pv1_train_reading_inference_ja_0028",
+    "pv1_train_reading_inference_ja_0029"
+  ],
+  "max_tokens": 248,
+  "over_512": 0,
+  "p95_tokens": 160,
+  "packaged_by_cell": {
+    "dev|dialogue_action|en": 22,
+    "dev|dialogue_action|ja": 23,
+    "dev|dialogue_action|zh-Hans": 21,
+    "dev|everyday_arithmetic|en": 23,
+    "dev|everyday_arithmetic|ja": 21,
+    "dev|everyday_arithmetic|zh-Hans": 23,
+    "dev|json_log_routing|en": 18,
+    "dev|json_log_routing|ja": 24,
+    "dev|json_log_routing|zh-Hans": 24,
+    "dev|original_exam_style|en": 23,
+    "dev|original_exam_style|ja": 18,
+    "dev|original_exam_style|zh-Hans": 21,
+    "dev|reading_inference|en": 22,
+    "dev|reading_inference|ja": 23,
+    "dev|reading_inference|zh-Hans": 24,
+    "dev|tool_routing|en": 24,
+    "dev|tool_routing|ja": 23,
+    "dev|tool_routing|zh-Hans": 22,
+    "eval_candidate|dialogue_action|en": 20,
+    "eval_candidate|dialogue_action|ja": 18,
+    "eval_candidate|dialogue_action|zh-Hans": 20,
+    "eval_candidate|everyday_arithmetic|en": 24,
+    "eval_candidate|everyday_arithmetic|ja": 21,
+    "eval_candidate|everyday_arithmetic|zh-Hans": 23,
+    "eval_candidate|json_log_routing|en": 23,
+    "eval_candidate|json_log_routing|ja": 24,
+    "eval_candidate|json_log_routing|zh-Hans": 22,
+    "eval_candidate|original_exam_style|en": 19,
+    "eval_candidate|original_exam_style|ja": 21,
+    "eval_candidate|original_exam_style|zh-Hans": 20,
+    "eval_candidate|reading_inference|en": 24,
+    "eval_candidate|reading_inference|ja": 24,
+    "eval_candidate|reading_inference|zh-Hans": 24,
+    "eval_candidate|tool_routing|en": 24,
+    "eval_candidate|tool_routing|ja": 24,
+    "eval_candidate|tool_routing|zh-Hans": 22,
+    "train|dialogue_action|en": 121,
+    "train|dialogue_action|ja": 117,
+    "train|dialogue_action|zh-Hans": 105,
+    "train|everyday_arithmetic|en": 141,
+    "train|everyday_arithmetic|ja": 173,
+    "train|everyday_arithmetic|zh-Hans": 138,
+    "train|json_log_routing|en": 141,
+    "train|json_log_routing|ja": 140,
+    "train|json_log_routing|zh-Hans": 141,
+    "train|original_exam_style|en": 125,
+    "train|original_exam_style|ja": 120,
+    "train|original_exam_style|zh-Hans": 123,
+    "train|reading_inference|en": 141,
+    "train|reading_inference|ja": 126,
+    "train|reading_inference|zh-Hans": 134,
+    "train|tool_routing|en": 141,
+    "train|tool_routing|ja": 143,
+    "train|tool_routing|zh-Hans": 144
+  },
+  "packaged_by_split": {
+    "dev": 399,
+    "eval_candidate": 397,
+    "train": 2414
+  },
+  "packaged_generic_target_ids": {
+    "c1": 407,
+    "c2": 396,
+    "c3": 415,
+    "c4": 401
+  },
+  "packaging_excluded_train_math_overlap": [
+    "pv1_dev_everyday_arithmetic_ja_0009",
+    "pv1_dev_everyday_arithmetic_en_0009",
+    "pv1_dev_everyday_arithmetic_zh-Hans_0009",
+    "pv1_train_reading_inference_ja_0025",
+    "pv1_train_reading_inference_ja_0026",
+    "pv1_train_reading_inference_ja_0027",
+    "pv1_train_reading_inference_ja_0028",
+    "pv1_train_reading_inference_ja_0029"
+  ],
+  "records": 3446,
+  "sha256": {
+    "all.jsonl": "de190863dfe2e48a16650f6922b8394232705962dc070fa2bac1f394dc9c03cd",
+    "all_judgments.jsonl": "a8071245bd10fc478ead3438d0465978512f37f36a3bcf0f06c129cf3a1a1c65",
+    "dev.jsonl": "e4c129eb2a5bdcbfc8ecfa79b95034888ead8b280cae8c42beef02cf1754f382",
+    "eval_candidate.jsonl": "eb0accc21ab48f806ceaf00ca963e2eae9303743dfaf6f744977d85f98ea4418",
+    "eval_judgments.jsonl": "54f2466802c215dad1c941bfe111e31d7176dca2a7cc34e6880d84f85f54a5cf",
+    "eval_teacher_agreed.jsonl": "229b9df263233b9ad7cb44bc96765f530f4b9ad564822cb3f59b41847a22e357",
+    "train.jsonl": "baecbb87f4afb2501f7ffb8ebb2275885658d40c82e57b3b85ab8b212254188b"
+  },
+  "target_balance": {
+    "dialogue_action|dev": {
+      "answer_directly": 15,
+      "ask_clarification": 15,
+      "call_tool": 15,
+      "refuse_unsafe": 12,
+      "request_permission": 15
+    },
+    "dialogue_action|eval_candidate": {
+      "answer_directly": 15,
+      "ask_clarification": 15,
+      "call_tool": 15,
+      "refuse_unsafe": 12,
+      "request_permission": 15
+    },
+    "dialogue_action|train": {
+      "answer_directly": 84,
+      "ask_clarification": 85,
+      "call_tool": 84,
+      "refuse_unsafe": 82,
+      "request_permission": 84
+    },
+    "everyday_arithmetic|dev": {
+      "c1": 15,
+      "c2": 23,
+      "c3": 24,
+      "c4": 10
+    },
+    "everyday_arithmetic|eval_candidate": {
+      "c1": 15,
+      "c2": 21,
+      "c3": 22,
+      "c4": 11
+    },
+    "everyday_arithmetic|train": {
+      "c1": 106,
+      "c2": 142,
+      "c3": 112,
+      "c4": 105
+    },
+    "json_log_routing|dev": {
+      "calculator": 11,
+      "calendar": 11,
+      "file_search": 11,
+      "no_tool": 11,
+      "weather": 11,
+      "web_search": 11
+    },
+    "json_log_routing|eval_candidate": {
+      "calculator": 12,
+      "calendar": 12,
+      "file_search": 12,
+      "no_tool": 12,
+      "weather": 12,
+      "web_search": 12
+    },
+    "json_log_routing|train": {
+      "calculator": 72,
+      "calendar": 72,
+      "file_search": 72,
+      "no_tool": 72,
+      "weather": 72,
+      "web_search": 72
+    },
+    "original_exam_style|dev": {
+      "c1": 25,
+      "c2": 28,
+      "c3": 17,
+      "c4": 2
+    },
+    "original_exam_style|eval_candidate": {
+      "c1": 22,
+      "c2": 28,
+      "c3": 17,
+      "c4": 5
+    },
+    "original_exam_style|train": {
+      "c1": 151,
+      "c2": 168,
+      "c3": 79,
+      "c4": 25
+    },
+    "reading_inference|dev": {
+      "c1": 24,
+      "c2": 31,
+      "c3": 14,
+      "c4": 3
+    },
+    "reading_inference|eval_candidate": {
+      "c1": 34,
+      "c2": 26,
+      "c3": 10,
+      "c4": 2
+    },
+    "reading_inference|train": {
+      "c1": 120,
+      "c2": 183,
+      "c3": 100,
+      "c4": 17
+    },
+    "tool_routing|dev": {
+      "calculator": 12,
+      "calendar": 12,
+      "file_search": 12,
+      "no_tool": 12,
+      "weather": 12,
+      "web_search": 12
+    },
+    "tool_routing|eval_candidate": {
+      "calculator": 12,
+      "calendar": 12,
+      "file_search": 12,
+      "no_tool": 12,
+      "weather": 12,
+      "web_search": 12
+    },
+    "tool_routing|train": {
+      "calculator": 72,
+      "calendar": 72,
+      "file_search": 72,
+      "no_tool": 72,
+      "weather": 72,
+      "web_search": 72
+    }
+  }
+}

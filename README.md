@@ -1,141 +1,76 @@
 # ERABI（えらび）
 
-自然文・判断基準・可変の選択肢から確率分布を返す、ローカル判断エンジンです。
+ERABIは、`context`（状況）、`question`（判断基準）、2～16個の`choices`（候補）から、全候補の確率分布を返すローカル判断エンジンです。Jevの公式版や再現版ではありません。回答は常に確認対象（`review`）であり、最大確率は正解の保証ではありません。
 
-## 実装状況 (2026-09-18)
+## インストールと最初の推論
 
-- **M0（環境基盤）** & **M1（既存モデル推論・評価）** が実装・実測完了。
-- 採用モデル: `knowledgator/gliclass-multilang-mini` (Apache-2.0, ~0.3B)
-- 単一 Softmax 正規化による全候補の完全な確率分布取得、厳密な入力契約・バリデーション、評価指標（Accuracy, NLL, Brier, Reliability bins）の計算に対応。
+Python 3.11以上が必要です。現時点ではPyPIには公開していないため、GitHubからpipでインストールします。PyTorchのGPU版を使う場合は、先に利用環境に合うPyTorchをインストールしてください。
 
-## セットアップ
-
-```pwsh
-# 1. 仮想環境の作成 (Python 3.12推奨)
-py -3.12 -m venv .venv
-
-# 2. PyTorch (CUDA 12.4版) のインストール
-.venv\Scripts\pip install torch --index-url https://download.pytorch.org/whl/cu124
-
-# 3. 依存ライブラリおよびERABIのインストール
-.venv\Scripts\pip install -e .[dev]
+```bash
+python -m pip install "git+https://github.com/sugarkwork/erabi.git"
+erabi predict --request '{"schema_version":"1","context":"7冊のノートと2個の消しゴムを買った。","question":"全部で何個？","choices":[{"id":"nine","text":"9個"},{"id":"ten","text":"10個"}]}'
 ```
 
-## 使い方 (CLI)
+PowerShellではJSONの引用規則が異なるため、リポジトリを取得して `erabi predict --request examples/request.json` とするのが簡単です。初回はモデルのダウンロードが必要で、以降はHugging Faceのローカルキャッシュを再利用します。ネットワークが使えない場合は、事前取得したモデルのローカルディレクトリを`--model-id`で指定してください。
 
-### 1. 環境診断 (`doctor`)
-システムスペック、PyTorch/CUDA、GPU、VRAM、ディスク使用量を取得・表示します。
+現在の無指定デフォルトは公開済みの[GLiClass miniベースモデル](https://huggingface.co/knowledgator/gliclass-multilang-mini)です。**ERABIで追加学習したweightsではありません。** ERABIのモデルをHugging Faceへ公開した後、その正確なモデルIDとリンクに切り替えます。公開までは、手元のチェックポイントを指定できます。
 
-```pwsh
-.venv\Scripts\python -m erabi doctor [--save runs/environment.json]
+```bash
+erabi predict --request examples/request.json --model-id path/to/checkpoint
+# または、利用するモデルIDを既定値として設定
+export ERABI_MODEL_ID=owner/model-name
+erabi predict --request examples/request.json
 ```
 
-### 2. 単一推論 (`predict`)
-JSONファイルまたはJSON文字列を入力とし、全候補の確率分布を計算して返します。
+`erabi doctor` はCPU/CUDAと空き容量を表示します。`erabi evaluate --input examples/smoke_cases.jsonl --output-dir runs/smoke` は評価ファイルを処理します。ローカルHTTP APIはオプション依存を入れて `python -m erabi.serve --model-id path/to/checkpoint` で起動します（localhost限定）。
 
-```pwsh
-.venv\Scripts\python -m erabi predict --request examples/request.json
-```
+## 入出力とデータセット形式
 
-出力例:
+推論入力はUTF-8 JSONです。候補の`id`と順序を保ち、全候補のlogitsに対して1回だけSoftmaxを適用します。入力全体が512トークンを超える場合は無言で切り詰めずにエラーにします。
+
 ```json
 {
   "schema_version": "1",
-  "model_id": "knowledgator/gliclass-multilang-mini",
+  "context": "文房具店でノートを7冊、消しゴムを2個買った。",
+  "question": "全部で何個買った？",
   "choices": [
-    {"id": "technical", "probability": 0.933457},
-    {"id": "billing", "probability": 0.006144},
-    {"id": "sales", "probability": 0.002561},
-    {"id": "insufficient", "probability": 0.057838}
-  ],
-  "best_candidate_id": "technical",
-  "decision": {"status": "review", "reason": "policy_not_configured"},
-  "calibration": {"status": "none", "artifact_id": null},
-  "usage": {
-    "input_tokens": 47,
-    "truncated": false,
-    "latency_ms": 310.87
-  }
+    {"id": "a", "text": "9個"},
+    {"id": "b", "text": "10個"}
+  ]
 }
 ```
 
-### 3. ベンチマーク評価 (`evaluate`)
-JSONL形式の評価データを順次推論し、Accuracy、NLL、Brierスコア、確信度別ビンを集計して `runs/<run_id>/` に成果物を保存します。
+出力の`choices`は各候補の`id`と`probability`を入力順で返し、`best_candidate_id`は最大logitの候補を示します。`decision.status`は既定で`review`、未校正の`calibration.status`は`none`です。例は[examples/request.json](examples/request.json)を参照してください。
 
-```pwsh
-.venv\Scripts\python -m erabi evaluate --input examples/smoke_cases.jsonl --output-dir runs/smoke_eval_m1
+学習・評価データは1行1問のJSONLです。上の入力に加えて、最低限`id`、`group_id`、`target`を付けます。`group_id`は同じ原題の言い換えや候補順序違いをまとめ、train/dev/calibration/final_test間で重複させません。
+
+```json
+{"schema_version":"1","id":"sample-001","group_id":"story-001","context":"ノート7冊と消しゴム2個を買った。","question":"全部で何個？","choices":[{"id":"a","text":"9個"},{"id":"b","text":"10個"}],"target":{"kind":"hard","choice_id":"a"},"language":"ja","family":"everyday_arithmetic","review_status":"unreviewed"}
 ```
 
-生成される成果物:
-- `config.json`: 実行設定（モデルID、リビジョン、デバイス等）
-- `environment.json`: 実行環境情報
-- `metrics.json`: Accuracy, NLL, Brier, Reliability bins, 推論レイテンシ
-- `predictions.jsonl`: 各問ごとの推論結果、確率分布、正否、トークン数
-- `notes.md`: サマリーメモ
+`target.choice_id`は選択肢のIDを参照し、選択肢を並べ替えても正しいIDを保ちます。`language`、`family`、`review_status`などは出所・品質の追跡用メタデータです。合成教師ラベルを人手確認済みgoldと呼ばないことが重要です。[Practical V1のデータ説明](data/practical_v1/README.md)に生成・監査の詳細があります。
 
-### 4. ローカルHTTP APIサーバー (`serve`)
-`127.0.0.1:8765` で動作する、全件review固定・1並行排他制御のローカル推論サーバーを起動します。
+## 学習と評価で得られた知見
 
-```pwsh
-# サーバー起動 (オフライン可)
-$env:HF_HUB_OFFLINE = "1"
-.venv\Scripts\python -m erabi.serve --model-id runs/m2_1/trained_instruct_base/checkpoint --port 8765
+2026-09-22時点の追加学習実験では、凍結RC3（約438Mパラメータ）からPractical V1のtrain 2,414問のみで1 epoch、151 optimizer steps、peak LR 2.5e-6、microbatch 2・勾配蓄積8、fp16 AMPを実施しました。dev 399問と旧RC3 Bridge 480問で選定し、eval 386問は選定後に一度だけ評価しました。release weightsは上書きしていません。
+
+| セット | 学習前 | 学習後 |
+|---|---:|---:|
+| Practical V1 dev | 59.90% (239/399) | 77.19% (308/399) |
+| Practical V1 eval | 61.66% (238/386) | 76.17% (294/386) |
+| 旧RC3 Bridge | 88.75% (426/480) | 88.54% (425/480) |
+
+新データでは日常算数23/68→48/68、ツール選択50/70→62/70、JSONログ判断51/69→65/69と改善しましたが、読解は54/71→50/71に低下しました。候補順序の入替一致率は旧Bridgeで97.29%→97.50%でした。**同一教師モデルが作成・再判定した未レビュー合成データ上の結果**であり、独立した人手goldでの汎化性能、実在入試問題の成績、Jevとの同等性は示しません。現時点では校正・正式リリースも未実施です。
+
+Practical V1は日本語・英語・簡体字中国語の6分野（日常算数、ツール選択、会話の次行動、JSON会話ログ、読解、創作入試風）で構成されます。実在の入試問題や私的会話ログは利用していません。生成・再判定に使ったDeepSeek経由の料金推計は$1.0612で、追加予算枠は使いませんでした。より信頼できる次の評価には、人手ラベル監査と独立した実問題の調達が必要です。
+
+再現用コードは[scripts/train_practical_v1.py](scripts/train_practical_v1.py)、監査結果は[data/practical_v1/audit.json](data/practical_v1/audit.json)にあります。この学習スクリプトの再実行には別途RC3チェックポイントが`release/rc3/model`に必要です。GPU学習と大容量weightsはpipパッケージに含まれません。
+
+## 開発とライセンス
+
+```bash
+python -m pip install -e ".[dev]"
+python -m pytest tests -q
 ```
 
-PowerShell からの推論リクエスト例:
-```pwsh
-# 健全性確認
-Invoke-RestMethod -Uri "http://127.0.0.1:8765/health" -Method Get
-
-# 推論リクエスト
-$body = @{
-    context = "プランAは100円で5日、プランBは300円で1日です。"
-    question = "最も安いプランを選んでください。"
-    choices = @(
-        @{ id = "a"; text = "プランA" },
-        @{ id = "b"; text = "プランB" }
-    )
-} | ConvertTo-Json
-
-Invoke-RestMethod -Uri "http://127.0.0.1:8765/predict" -Method Post -ContentType "application/json" -Body $body
-```
-
-### 5. 確率校正 (`calibrate`)
-独立した校正データ（`calibration.jsonl`）から生logitsを抽出し、NLLを最小化する単一温度 $T > 0$ を最適化して `calibration.json` を生成します。
-
-```pwsh
-.venv\Scripts\python -m erabi.calibrate --data-dir data/m3_1 --model-id runs/m2_1/trained_instruct_base/checkpoint --output-dir runs/m3_1
-```
-
-### 6. テストの実行 (CPU・オフライン)
-契約検証、Softmax数値安定性、温度校正、HTTP API契約、排他制御など全31件の単体テストを実行します。
-
-```pwsh
-.venv\Scripts\pytest tests/ -v
-```
-
-## ファイル構成
-
-| ファイル | 役割 |
-|---|---|
-| `docs/ERABI_DESIGN.md` | 技術背景・仕様・学習・評価・テスト・運用をまとめた正本 |
-| `AGENTS.md` | 作業上の制約と過剰設計防止の共通指示 |
-| `STATUS.md` | 現在の作業状況・実測値・次の一手 |
-| `src/erabi/schema.py` | 入出力スキーマと契約バリデーション |
-| `src/erabi/inference.py` | GLiClassアダプターと全候補logits/Softmax推論 |
-| `src/erabi/evaluate.py` | Accuracy, NLL, Brier, 確信度ビン, 選択的リスク集計 |
-| `src/erabi/calibrate.py` | 単一温度最適化とモデルハッシュ付き校正アーティファクト生成 |
-| `src/erabi/api.py` | FastAPI アプリケーションファクトリ（lifespan, 1並行排他, review固定） |
-| `src/erabi/serve.py` | ローカルHTTP APIサーバーCLI (127.0.0.1:8765) |
-| `src/erabi/__main__.py` | CLIエントリーポイント (`doctor`, `predict`, `evaluate`) |
-| `tests/` | 高速なCPU単体テスト群 (31件) |
-| `examples/` | APIリクエスト例・レスポンス例・配線確認データ |
-| `runs/` | 評価実行結果・監査レポート・校正成果物・レビューバンドルの保存先 |
-
-## ライセンス
-
-ERABI original source code is licensed under the [MIT License](LICENSE).
-
-Third-party libraries, pretrained models, model weights, and upstream
-components remain subject to their respective licenses.
-See [THIRD_PARTY_LICENSES.md](THIRD_PARTY_LICENSES.md) for details.
+コードは[MIT License](LICENSE)です。ベースモデルと学習済みweightsには別のライセンスが適用されます。[THIRD_PARTY_LICENSES.md](THIRD_PARTY_LICENSES.md)を参照してください。

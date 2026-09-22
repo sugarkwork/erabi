@@ -1534,7 +1534,26 @@ Epoch 1（論理演算子 90.00%、優先例外 83.33%）と Epoch 2（Core保�
   - Existing RC3 Bridgeも `logical_operators=86.67%`、`general_choice=83.33%`、`priority_exception=80.00%` でfamily gate未達。`runs/rc3_1_run2/selection.json`: `selected_epoch=null`。
 - **停止条件成立**: 2 full-trainingでRC3.1 Development Gate未達。weightsはfreezeせず、Milestone 37 Calibration、Milestone 38 ONNX FP16、Milestone 39 Blind v6は未実行。次は438Mの容量/学習設計限界を整理し、指示書どおりLevel 5/6（8B級を含む）を再検討する。
 
+---
 
+## 41. Practical V1 合成データ候補（2026-09-22）
+
+- ユーザー指定のOrcaRouter経由 `deepseek/deepseek-v4.1-flash` を使用。DeepSeek公式API名 `deepseek-flash` を含む応答モデル名の内訳は `data/practical_v1/usage_ledger.json` に保存。APIキーはGit無視の `.env.orcarouter.local` のみ。
+- 日本語・英語・簡体字中国語×6分野（日常算数、ツール選択、会話の次行動、JSON会話ログ、読解、創作入試風）で原案3,446件。実在の入試問題や私的ログは送信・転載していない。
+- 回答を見せない同一モデルの再判定で3,218件が一致。言語不一致5件、train/devの算数仕様重複8件などを除外し、収録版はtrain 2,414、dev 399、eval_candidate 397（計3,210件）。さらに評価候補の2回の判定が一致した `eval_teacher_agreed.jsonl` は386件。**いずれも人手確認済みgoldではない。**
+- 構造エラー0、512-token超0（最大248）、候補ID再配置後の正解本文不一致0、収録版の完全重複0。過去の比較可能な72,770件とのcontext+question完全一致0。類義のnear-copy完全排除は未証明。
+- APIトークン使用量からの保守的ピーク料金推計は **$1.0612**（初期上限$5内、追加$5枠未使用）。実請求残高は未照会。途中の503とbilling更新500は再開で復旧。
+- 凍結RC3の診断的評価（未校正T=1、上記の暫定386件）はAccuracy **61.66% (238/386)**、NLL 1.8971。日常算数23/68、会話行動24/54が弱い。合成ラベルのため正式な汎化性能・Jev達成率には使わない。
+- `pytest tests -q` は95件PASS。モデル追加学習・新規weights選定・校正・Blind v6は実施していない。次は人手で代表例を検証してラベルの残存誤りを調べ、必要なら実問題を適法に調達して独立評価を構築する。
+
+---
+
+## 42. Practical V1 train/dev 分割での試験学習（2026-09-22）
+
+- 凍結RC3を基点に、監査済みtrain 2,414件だけで1 epoch / 151 optimizer stepsを実行した。dev 399件と旧RC3 Bridge 480件は学習に使わず選定用とし、eval 386件は選定後に一度だけ評価した。出力は `runs/practical_v1_finetune_20260922/` に分離し、RC3 release weightsは変更していない。
+- 選定基準は事前に「dev精度向上、旧RC3 Bridge精度低下2pt以内」と固定。devは **59.90% (239/399) → 77.19% (308/399)**、旧Bridgeは **88.75% (426/480) → 88.54% (425/480)** で、探索的基準を満たした。旧Bridgeの対照ペア両問正答は80.42%→79.58%、候補順序一致率は97.29%→97.50%。
+- 選定後の暫定evalは **61.66% (238/386) → 76.17% (294/386)**、NLL 1.8971→0.6574。日常算数23/68→48/68、ツール選択50/70→62/70、JSONログ51/69→65/69で改善した一方、読解54/71→50/71に低下した。これは同一モデルの生成・再判定に基づく未レビュー合成ラベルへの適合であり、独立した人手goldの改善・Jev同等性は示さない。
+- 実行: `.venv\Scripts\python.exe scripts\train_practical_v1.py --dry-run`、同 `--device cuda:0`、`python -m erabi evaluate --input data\practical_v1\eval_teacher_agreed.jsonl --output-dir runs\practical_v1_finetune_20260922\eval_teacher_agreed --model-id runs\practical_v1_finetune_20260922\checkpoint --device cuda:0`。`pytest tests -q` は95件PASS。新weightsの校正・正式リリース・Blind v6は未実施。次は代表例の人手ラベル監査と、独立した実践的評価セットを優先する。
 
 
 

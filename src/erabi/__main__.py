@@ -13,6 +13,8 @@ import sys
 import time
 from typing import Any, Dict, List, Optional
 
+from erabi.inference import DEFAULT_MODEL_ID
+
 
 def get_environment_info() -> Dict[str, Any]:
     """Collect OS, Python, PyTorch, CUDA, GPU, and disk information."""
@@ -409,7 +411,7 @@ def main():
     # predict
     parser_predict = subparsers.add_parser("predict", help="Run inference on a single request.")
     parser_predict.add_argument("--request", type=str, required=True, help="JSON string or path to JSON file.")
-    parser_predict.add_argument("--model-id", type=str, default="knowledgator/gliclass-multilang-mini", help="Hugging Face model ID.")
+    parser_predict.add_argument("--model-id", type=str, default=os.environ.get("ERABI_MODEL_ID", DEFAULT_MODEL_ID), help="Local model directory or Hugging Face model ID (also settable via ERABI_MODEL_ID).")
     parser_predict.add_argument("--revision", type=str, default=None, help="Model revision or commit hash.")
     parser_predict.add_argument("--device", type=str, default=None, help="Device to use (e.g. cuda:0 or cpu).")
     parser_predict.add_argument("--temperature", type=float, default=1.0, help="Temperature for softmax.")
@@ -418,7 +420,7 @@ def main():
     parser_eval = subparsers.add_parser("evaluate", help="Run evaluation on a JSONL benchmark.")
     parser_eval.add_argument("--input", type=str, required=True, help="Path to JSONL input file.")
     parser_eval.add_argument("--output-dir", type=str, default=None, help="Directory to save evaluation artifacts.")
-    parser_eval.add_argument("--model-id", type=str, default="knowledgator/gliclass-multilang-mini", help="Hugging Face model ID.")
+    parser_eval.add_argument("--model-id", type=str, default=os.environ.get("ERABI_MODEL_ID", DEFAULT_MODEL_ID), help="Local model directory or Hugging Face model ID (also settable via ERABI_MODEL_ID).")
     parser_eval.add_argument("--revision", type=str, default=None, help="Model revision or commit hash.")
     parser_eval.add_argument("--device", type=str, default=None, help="Device to use (e.g. cuda:0 or cpu).")
     parser_eval.add_argument("--temperature", type=float, default=1.0, help="Temperature for softmax.")
