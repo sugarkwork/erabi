@@ -1,4 +1,4 @@
-"""ONNX Runtime inference engine for ERABI Release Candidate 1.
+"""ONNX Runtime inference engine for ERABI.
 
 Supports:
 - Execution on CUDA (CUDAExecutionProvider) and CPU (CPUExecutionProvider).
@@ -55,6 +55,7 @@ class ERABIONNXEngine:
         onnx_model_file: str = "model.onnx",
         device: Optional[str] = None,
         max_tokens: int = MAX_TOKENS,
+        model_id: Optional[str] = None,
     ):
         import onnxruntime as ort
         from transformers import AutoTokenizer
@@ -70,6 +71,7 @@ class ERABIONNXEngine:
             raise FileNotFoundError(f"ONNX model not found: {self.onnx_path}")
 
         self.max_tokens = max_tokens
+        self.model_id = model_id or f"onnx::{self.onnx_path.name}"
 
         # Device / provider setup
         if device is None:
@@ -79,9 +81,10 @@ class ERABIONNXEngine:
 
         available_providers = ort.get_available_providers()
         if self.device == "cuda" and "CUDAExecutionProvider" in available_providers:
+            device_id = int(str(device).split(":", 1)[1]) if device and ":" in str(device) else 0
             providers = [
                 ("CUDAExecutionProvider", {
-                    "device_id": 0,
+                    "device_id": device_id,
                     "arena_extend_strategy": "kNextPowerOfTwo",
                     "gpu_mem_limit": 4 * 1024 * 1024 * 1024,  # 4 GB max
                     "cudnn_conv_algo_search": "EXHAUSTIVE",
@@ -193,7 +196,7 @@ class ERABIONNXEngine:
 
         return ChoiceResponse(
             schema_version="1",
-            model_id=f"onnx::{self.onnx_path.name}",
+            model_id=self.model_id,
             choices=choice_outputs,
             best_candidate_id=best_candidate_id,
             decision=DecisionOutput(status="review", reason="policy_not_configured"),

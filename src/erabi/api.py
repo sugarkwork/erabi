@@ -19,7 +19,7 @@ import logging
 from contextlib import asynccontextmanager
 from typing import Any, Callable, Dict, Optional
 
-from erabi.inference import GLiClassEngine
+from erabi.model_loader import load_engine
 from erabi.schema import (
     ChoiceRequest,
     ChoiceResponse,
@@ -41,6 +41,7 @@ def create_app(
     require_calibration: bool = False,
     engine_factory: Optional[Callable[[], Any]] = None,
     model_cache_dir: Optional[str] = None,
+    model_format: str = "auto",
 ) -> FastAPI:
     """Create and configure the FastAPI application."""
 
@@ -79,7 +80,7 @@ def create_app(
         if engine_factory:
             app.state.engine = engine_factory()
         else:
-            app.state.engine = GLiClassEngine(model_id=model_id, device=device, cache_dir=model_cache_dir)
+            app.state.engine = load_engine(model_id=model_id, model_format=model_format, device=device, cache_dir=model_cache_dir)
 
         yield
 
@@ -109,6 +110,7 @@ def create_app(
         return {
             "status": "ok",
             "model_id": app.state.engine.model_id,
+            "model_format": getattr(app.state.engine, "model_format", "pytorch"),
             "calibration": {
                 "status": app.state.calibration_output.status,
                 "artifact_id": app.state.calibration_output.artifact_id,

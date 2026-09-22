@@ -11,7 +11,7 @@ python -m pip install erabi
 erabi predict --request '{"schema_version":"1","context":"7冊のノートと2個の消しゴムを買った。","question":"全部で何個？","choices":[{"id":"nine","text":"9個"},{"id":"ten","text":"10個"}]}'
 ```
 
-上のワンラインはPowerShell 7でも動作確認済みです。入力をファイルに保存して `erabi predict --request request.json` としても使えます。初回は約1.75GBのモデルダウンロードが必要で、以降はHugging Faceのローカルキャッシュを再利用します。ネットワークが使えない場合は、事前取得したモデルのローカルディレクトリを`--model-id`で指定してください。
+上のワンラインはPowerShell 7でも動作確認済みです。入力をファイルに保存して `erabi predict --request request.json` としても使えます。初回は選択された形式のモデル（約0.88～1.76GB）を取得し、以降はHugging Faceのローカルキャッシュを再利用します。ネットワークが使えない場合は、事前取得したモデルのローカルディレクトリを`--model-id`で指定してください。
 
 ### モデルの保存先
 
@@ -25,19 +25,32 @@ erabi predict --request examples/request.json
 
 Linux/macOSでは`export ERABI_MODEL_CACHE_DIR=/data/models/erabi-cache`と設定します。優先順位は`--model-cache-dir`、`ERABI_MODEL_CACHE_DIR`、Hugging Face標準の`HF_HUB_CACHE`/`HF_HOME`、既定キャッシュの順です。環境変数を変更しても既存のダウンロードは移動されず、新しい場所に再取得されます。`--model-id`にローカルモデルディレクトリを指定した場合はその場所から読み込み、キャッシュ先の設定はモデル自体の移動には使われません。
 
-### CPU・GPU・ONNX
+既定モデルは、ONNX両形式を含む検証済みHugging Faceリビジョン`042998970aa20cc3371e0f7f0e320013a152c068`に固定しています。Windowsでシンボリックリンクを使えない環境ではモデルカード更新だけでも別リビジョンのキャッシュが重複し得るためです。新しいリビジョンを意図的に使う場合は`--revision main`またはコミットIDを指定してください。
 
-現在pipで導入する既定のPractical V1モデルは、ONNXではなくPyTorchの`safetensors`重みです。CPUとGPUで同じ重み・同じコマンドを使い、`--device`で実行先を選びます。省略時はCUDAが利用可能なら`cuda:0`、そうでなければ`cpu`です。
+### モデル形式の自動選択とおすすめ
+
+形式選択はERABI 0.1.2以降の機能です（0.1.1以前はPyTorch版のみ）。`--model-format`を省略すると`auto`です。`--device`を省略した場合はCUDAが利用可能なら`cuda:0`、そうでなければ`cpu`を選びます。ONNX Runtimeが使える場合、CPUではFP32 ONNX、CUDA Execution Providerが使えるGPUではFP16 ONNXを**必要な形式だけ**Hugging Faceから取得します。ONNX Runtimeがない場合や、CUDA Execution ProviderがないGPUでは従来のPyTorch safetensorsに戻します。別のHugging FaceモデルIDは互換性維持のため`auto`でPyTorchを使い、明示指定すれば同じONNX配置のモデルも利用できます。
+
+| 利用形態 | おすすめ | 理由 |
+|---|---|---|
+| NVIDIA GPU + 対応するONNX Runtime GPU版 | `auto` → `onnx-fp16` | このホストでp50が35.90→19.00ms、元weightsと最上位90/90一致 |
+| CPU + ONNX Runtime CPU版 | `auto` → `onnx-fp32` | このホストでp50が366.73→201.67ms、元weightsと最上位90/90一致 |
+| ONNX Runtimeなし・互換性優先 | `pytorch` | `pip install erabi`のみで動作し、元のsafetensorsを使用 |
+
+これらはPractical V1の未レビュー合成90件での比較であり、人手goldでの品質保証ではありません。INT8版は今回の量子化設定で予測が大きく変わったため、自動選択・公開対象から除外しました。
+
+PyTorchのGPU版を使う場合は[公式案内](https://pytorch.org/get-started/locally/)で環境に合う版を先に導入します。ONNX RuntimeはCPUなら`python -m pip install onnxruntime`、NVIDIA GPUなら環境に合う`onnxruntime-gpu`を導入してください。**両パッケージを同じ仮想環境に同時インストールしない**でください（[ONNX Runtime公式案内](https://onnxruntime.ai/docs/get-started/with-python.html)）。GPU版はPyTorch、CUDA、cuDNNと互換な版を[公式CUDA表](https://onnxruntime.ai/docs/execution-providers/CUDA-ExecutionProvider.html)で確認してください。
 
 ```powershell
 erabi doctor
 erabi predict --request examples/request.json --device cpu
 erabi predict --request examples/request.json --device cuda:0
+erabi predict --request examples/request.json --model-format pytorch
+erabi predict --request examples/request.json --model-format onnx-fp32 --device cpu
+erabi predict --request examples/request.json --model-format onnx-fp16 --device cuda:0
 ```
 
-GPUを使うには、対応するNVIDIAドライバーとCUDA対応PyTorchを先に導入し、`python -c "import torch; print(torch.cuda.is_available())"`が`True`になることを確認してください。PyTorchの導入コマンドは[公式インストール案内](https://pytorch.org/get-started/locally/)で環境に合わせて選び、その後`python -m pip install erabi`を実行します。CPUのみなら通常の`pip install erabi`で動作します。
-
-リポジトリには過去のRC向けONNX推論・変換コードもありますが、公開済みPractical V1のpip既定モデルをONNXで実行する導線はまだありません。`--device`はPyTorchのCPU/CUDA切替であり、ONNX形式への切替ではありません。ONNX版を配布するなら、Practical V1からの別途エクスポート、CPU用形式とGPU用形式の選定、出力一致と速度の検証が必要です。[ONNX RuntimeのCPU/GPUパッケージ](https://onnxruntime.ai/docs/install/)も現在の必須依存には含めていません。
+`ERABI_MODEL_FORMAT=onnx-fp32`のように環境変数でも指定できます。優先順位は`--model-format`、`ERABI_MODEL_FORMAT`、`auto`です。明示指定したONNX形式がそのデバイス・実行環境に対応しない場合は、別形式へ黙って切り替えずエラーにします。Python APIでは`from erabi.model_loader import load_engine`を使い、`load_engine(model_format="auto", device="cpu")`のように指定します。`predict`、`evaluate`、ローカルHTTP APIの`--model-format`で同じ選択ができます。
 
 無指定の既定値は公開済みの[ERABI Practical V1実験モデル](https://huggingface.co/sugarknight/erabi-practical-v1-experimental)です。正式合格モデルではなく、未レビュー合成データで追加学習した未校正weightsです。別のモデルを使う場合はローカルパスまたはHugging FaceのモデルIDを指定できます。
 
@@ -91,6 +104,38 @@ erabi predict --request examples/request.json
 Practical V1は日本語・英語・簡体字中国語の6分野（日常算数、ツール選択、会話の次行動、JSON会話ログ、読解、創作入試風）で構成されます。実在の入試問題や私的会話ログは利用していません。生成・再判定に使ったDeepSeek経由の料金推計は$1.0612で、追加予算枠は使いませんでした。より信頼できる次の評価には、人手ラベル監査と独立した実問題の調達が必要です。
 
 再現用コードは[scripts/train_practical_v1.py](scripts/train_practical_v1.py)、監査結果は[data/practical_v1/audit.json](data/practical_v1/audit.json)にあります。この学習スクリプトの再実行には別途RC3チェックポイントが`release/rc3/model`に必要です。GPU学習と大容量weightsはpipパッケージに含まれません。
+
+## Practical V1 推論最適化の実測
+
+2026-09-22、Windows、RTX A4000 16GB、PyTorch 2.6.0+cu124、ONNX Runtime 1.21.0で、同じPractical V1 checkpointを比較しました。CPUはPyTorch safetensors、ONNX FP32、動的INT8、静的QDQ W8A8、GPUはPyTorch safetensors、ONNX FP16、静的QDQ W8A8を試しています。90件は`eval_teacher_agreed.jsonl`から分野・言語別に抽出した未レビュー合成ラベルです。全モデルで温度1.0、全90件の予測確認後に8回ウォームアップし、40回の単件レイテンシを測定しました。CPU再測定とGPU測定時、Robloxは終了し、GPUの他負荷はほぼありませんでした。
+
+| 実行先・形式 | 重み/ONNX容量 | p50 / p95 | 元weightsとの最上位一致 | 合成教師ラベル一致 |
+|---|---:|---:|---:|---:|
+| CPU PyTorch safetensors | 1.75 GB | 366.73 / 521.44 ms | 基準 | 69/90 |
+| CPU ONNX FP32 | 1.76 GB | **201.67 / 378.73 ms** | **90/90** | 69/90 |
+| CPU ONNX 動的INT8 | 1.04 GB | 120.42 / 236.11 ms | 49/90 | 42/90 |
+| CPU ONNX 静的QDQ W8A8 | 0.84 GB | 908.17 / 1,142.89 ms | 33/90 | 36/90 |
+| GPU PyTorch safetensors | 1.75 GB | 35.90 / 44.12 ms | 基準 | 69/90 |
+| GPU ONNX FP16 | 0.88 GB | **19.00 / 22.80 ms** | **90/90** | 69/90 |
+| GPU ONNX 静的QDQ W8A8 | 0.84 GB | 84.75 / 89.44 ms | 29/90 | 27/90 |
+
+このホストではCPUはONNX FP32、GPUはONNX FP16が速度と出力一致の両面で有望でした。FP32の最大確率差は元weights比で最大0.00000493、FP16は最大0.00374でした。今回の動的/静的INT8設定は軽くなっても予測が大きく変化し、静的版はCPU/GPUとも遅くなりました。**今回の静的W8A8はONNX RuntimeのMinMax校正によるQDQであり、SmoothQuantではありません。** RTX A4000上でのSmoothQuant高速化を証明する結果ではなく、今回のINT8版を配布・既定化しません。CUDA Execution Providerが有効でも全ノードのGPU実行は保証されないため、静的INT8の遅さの原因をCPUフォールバックと断定しません。FP32/FP16版は実験モデルとして配布しますが、独立goldでの確認や校正は未実施です。
+
+再現にはリポジトリをチェックアウトし、開発用仮想環境へ`pip install -e ".[dev]"`、環境に合う`onnxruntime`または`onnxruntime-gpu`と`onnx`を導入します。以下は公開モデルをHugging Face CLIで別ディレクトリへ取得する例です（約1.75GB、十分な空き容量が必要）。実験結果は`runs/`配下（Git管理外）へ書き、モデルと評価結果の既存ファイルは上書きしないでください。
+
+```powershell
+$out = "runs/practical_v1_optimization_20260922"
+$checkpoint = "$out/checkpoint"
+hf download sugarknight/erabi-practical-v1-experimental model.safetensors config.json tokenizer.json tokenizer_config.json --local-dir $checkpoint
+python -c "from pathlib import Path; from scripts.export_rc3_onnx import export_fp32_model, export_fp16_model; p=Path('$checkpoint'); o=Path('$out'); export_fp32_model(p,o/'fp32'); export_fp16_model(p,o/'fp16')"
+python scripts/benchmark_practical_v1_runtimes.py quantize --mode dynamic --fp32-dir "$out/fp32" --output-dir "$out/int8_dynamic_cpu"
+python scripts/benchmark_practical_v1_runtimes.py quantize --mode static --fp32-dir "$out/fp32" --output-dir "$out/int8_static_w8a8" --train-file data/practical_v1/train.jsonl --calibration-count 128
+python scripts/benchmark_practical_v1_runtimes.py benchmark --backend pytorch --device cuda --model-dir $checkpoint --output "$out/results/pytorch_cuda.json"
+python scripts/benchmark_practical_v1_runtimes.py benchmark --backend onnx --device cuda --model-dir "$out/fp16" --output "$out/results/onnx_fp16_cuda.json"
+python scripts/benchmark_practical_v1_runtimes.py compare --baseline "$out/results/pytorch_cuda.json" --candidate "$out/results/onnx_fp16_cuda.json"
+```
+
+CPU比較は同じ`benchmark`コマンドで`--device cpu`を指定し、`--backend pytorch --model-dir $checkpoint`、または`--backend onnx --model-dir "$out/fp32"` / `"$out/int8_dynamic_cpu"` / `"$out/int8_static_w8a8"`をそれぞれ実行します。GPU静的INT8も`--backend onnx --device cuda --model-dir "$out/int8_static_w8a8"`で測れます。既定の90件・8回ウォームアップ・40回計測を変更する場合は`--cases`、`--warmup`、`--iterations`を指定します。静的量子化の128件は**trainのみ**から取り、評価90件を校正には使いません。初回のモデル読込・エクスポート・量子化の時間は上記の単件レイテンシに含めず、端末・CPUスレッド数・温度・入力長で値は変わります。
 
 ## 開発とライセンス
 

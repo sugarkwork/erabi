@@ -41,7 +41,9 @@ python -m pip install erabi
 erabi predict --request request.json
 ```
 
-The first invocation downloads the model; later invocations use the Hugging Face cache. Input and output JSON contracts are documented in the [ERABI README](https://github.com/sugarkwork/erabi#入出力とデータセット形式). The input limit is 512 tokens; overlong inputs are rejected rather than silently truncated. The candidate probabilities are not calibrated confidence guarantees.
+The repository contains three inference formats from the same checkpoint: `model.safetensors` (PyTorch), `onnx/fp32/model.onnx` (CPU), and `onnx/fp16/model.onnx` (NVIDIA GPU). ERABI 0.1.2 or newer is required for `--model-format`; 0.1.1 uses PyTorch safetensors. `--model-format auto` downloads only the selected variant: FP32 ONNX for CPU with ONNX Runtime, FP16 ONNX for CUDA with CUDA Execution Provider, and otherwise PyTorch safetensors. Install the compatible `onnxruntime` (CPU) or `onnxruntime-gpu` (GPU) separately; do not install both in one environment. You can also select `--model-format pytorch`, `onnx-fp32`, or `onnx-fp16` explicitly.
+
+The ONNX variants preserved the top-ranked choice on 90/90 unreviewed synthetic comparison cases; this is not independent human-gold validation. Experimental INT8 variants changed predictions substantially and are not distributed. The first invocation downloads the selected model; later invocations use the Hugging Face cache. Input and output JSON contracts and runtime recommendations are documented in the [ERABI README](https://github.com/sugarkwork/erabi#モデル形式の自動選択とおすすめ). The input limit is 512 tokens; overlong inputs are rejected rather than silently truncated. The candidate probabilities are not calibrated confidence guarantees.
 
 ## License and limitations
 

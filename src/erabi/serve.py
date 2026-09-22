@@ -9,16 +9,19 @@ Enforces:
 from __future__ import annotations
 
 import argparse
+import os
 import sys
 import uvicorn
 from erabi.api import create_app
+from erabi.model_loader import MODEL_FORMATS
 
 ALLOWED_HOSTS = {"127.0.0.1", "localhost"}
 
 
 def main():
     parser = argparse.ArgumentParser(prog="python -m erabi.serve", description="ERABI local HTTP API server")
-    parser.add_argument("--model-id", type=str, required=True, help="Path to model checkpoint (explicitly required)")
+    parser.add_argument("--model-id", type=str, required=True, help="Local model directory or Hugging Face model ID (explicitly required)")
+    parser.add_argument("--model-format", choices=MODEL_FORMATS, default=os.environ.get("ERABI_MODEL_FORMAT", "auto"), help="auto, pytorch, onnx-fp32, or onnx-fp16")
     parser.add_argument("--model-cache-dir", type=str, default=None, help="Directory for downloaded model files (also settable via ERABI_MODEL_CACHE_DIR)")
     parser.add_argument("--calibration", type=str, default=None, help="Path to calibration.json")
     parser.add_argument("--host", type=str, default="127.0.0.1", help="Bind host (loopback only: 127.0.0.1)")
@@ -34,6 +37,7 @@ def main():
 
     app = create_app(
         model_id=args.model_id,
+        model_format=args.model_format,
         calibration_path=args.calibration,
         device=args.device,
         model_cache_dir=args.model_cache_dir,

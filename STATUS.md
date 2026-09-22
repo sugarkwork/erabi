@@ -1587,10 +1587,17 @@ Epoch 1（論理演算子 90.00%、優先例外 83.33%）と Epoch 2（Core保�
 - オフライン単体テストを5件追加し、全100件PASS。既存Hubキャッシュを指定したCPU実推論で`best_candidate_id=technical`、`decision.status=review`を確認。新規モデルの重複ダウンロードなし。
 - PyPIに`erabi==0.1.1`のwheelとsdistを公開し、両成果物の`twine check`がPASS。PyPIから分離venvへ0.1.1を再取得し、既存キャッシュを指定したCPU推論で同じ`best_candidate_id=technical`と`review`を確認。
 
+## 47. Practical V1 CPU/GPU推論最適化の探索（2026-09-22）
 
+- Practical V1 checkpointから実験用ONNX FP32（1.76GB）とFP16（0.88GB）をエクスポートし、FP32からORT動的INT8（1.04GB）・静的QDQ W8A8（0.84GB）を作成。静的版のMinMax校正はtrainのみから128件を使用。SmoothQuantは実施していない。成果物はGit無視の`runs/practical_v1_optimization_20260922/`に分離し、公開モデル・pip既定・RC3 releaseには未反映。
+- 未レビュー合成evalから分野×言語で選んだ90件、T=1.0、8回ウォームアップ、40単件推論で比較。CPU p50: PyTorch safetensors 366.73ms、ONNX FP32 **201.67ms**（最上位90/90一致）、動的INT8 120.42ms（49/90一致）、静的QDQ W8A8 908.17ms（33/90一致）。GPU p50: PyTorch safetensors 35.90ms、ONNX FP16 **19.00ms**（90/90一致）、静的QDQ W8A8 84.75ms（29/90一致）。同一評価セットの合成教師ラベル一致は元weights/FP32/FP16が69/90、動的INT8 42/90、静的INT8 CPU 36/90・GPU 27/90。
+- 結論: このホストではCPU用ONNX FP32とGPU用ONNX FP16が有望。一般的なINT8量子化は予測が大きく変わるため不採用。GPU静的版の全ノードGPU実行は未確認で、遅さの原因は未確定。FP16版の独立gold評価・校正・配布導線は未実施。再現コマンドと環境・限界は`README.md`に記載。`pytest tests -q`は102件PASS。次は人手ラベル監査後に独立評価し、必要ならONNX版の配布・実行導線を別途設計する。
 
+## 48. Practical V1形式選択・自動取得（2026-09-22）
 
-
+- ユーザーの追加公開許可に基づき、既存Hugging Face実験モデルへCPU用`onnx/fp32/model.onnx`とGPU用`onnx/fp16/model.onnx`を追加。Int8版は前節の精度低下により公開しない。モデルカードにも形式・限界を明記。
+- `load_engine`とCLI/APIの`--model-format`を追加。`auto`はCPU+ORTでFP32、CUDA+CUDA EPでFP16を選び、ORT非対応時はPyTorchへ戻す。明示ONNX指定時は不適合環境でエラー。Hubからは選択形式とconfig/tokenizerのみを取得し、`--model-cache-dir`/`ERABI_MODEL_CACHE_DIR`を引き継ぐ。カスタムHubモデルの`auto`は既存PyTorch挙動を維持する。既定モデルは検証済みリビジョン`042998970aa20cc3371e0f7f0e320013a152c068`に固定し、Windowsでカード更新のたびに大容量キャッシュが重複するのを抑える。
+- ローカルFP32 CPU、FP16 CUDA、ローカル`auto` CPUのCLI判定は`technical`。空の専用HubキャッシュからのGPU `auto`→FP16、CPU `auto`→FP32判定も`technical`。各回に選んだONNXのみ取得され、safetensorsは取得されなかった。公開ファイルとローカル実験ファイルのSHA256は両形式で一致。ローカルHTTP APIの`/health`は`model_format=onnx-fp32`、`/predict`は`technical`。`pytest tests -q`は108件PASS。PyPI公開は確認待ち。
 
 
 

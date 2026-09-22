@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "erabi"
-version = "0.1.1"
+version = "0.1.2"
 description = "ERABI - Local probability distribution engine for choices"
 authors = [
     { name = "ERABI Project" }
@@ -17,6 +17,7 @@ dependencies = [
     "torch",
     "transformers>=4.40.0",
     "gliclass>=0.1.20",
+    "huggingface_hub>=0.26.0",
     "pydantic>=2.0.0",
 ]
 

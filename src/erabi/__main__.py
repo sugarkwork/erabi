@@ -14,6 +14,7 @@ import time
 from typing import Any, Dict, List, Optional
 
 from erabi.inference import DEFAULT_MODEL_ID
+from erabi.model_loader import MODEL_FORMATS
 
 
 def get_environment_info() -> Dict[str, Any]:
@@ -95,7 +96,7 @@ def run_doctor(args: argparse.Namespace):
 
 def run_predict(args: argparse.Namespace):
     """Execute the 'predict' command for a single request."""
-    from erabi.inference import GLiClassEngine
+    from erabi.model_loader import load_engine
     from erabi.schema import ChoiceRequest
 
     # Parse request JSON from argument or file
@@ -111,12 +112,14 @@ def run_predict(args: argparse.Namespace):
 
     request = ChoiceRequest.from_dict(raw_data, raw_bytes_len=byte_len)
 
-    engine = GLiClassEngine(
+    engine = load_engine(
         model_id=args.model_id,
+        model_format=args.model_format,
         device=args.device,
         revision=args.revision,
         cache_dir=args.model_cache_dir,
     )
+    print(f"Model format: {engine.model_format}", file=sys.stderr)
 
     t0 = time.perf_counter()
     response = engine.predict(request, temperature=args.temperature)
@@ -233,7 +236,7 @@ def load_and_verify_calibration(calib_path: str, model_id: str):
 def run_evaluate(args: argparse.Namespace):
     """Execute the 'evaluate' command on a JSONL benchmark dataset."""
     from erabi.evaluate import compute_metrics
-    from erabi.inference import GLiClassEngine
+    from erabi.model_loader import load_engine
     from erabi.schema import ChoiceRequest, CalibrationOutput
 
     input_file = args.input
@@ -263,12 +266,14 @@ def run_evaluate(args: argparse.Namespace):
     print(f"Output Directory: {output_dir}")
     print(f"Loading model: {args.model_id}...")
 
-    engine = GLiClassEngine(
+    engine = load_engine(
         model_id=args.model_id,
+        model_format=args.model_format,
         device=args.device,
         revision=args.revision,
         cache_dir=args.model_cache_dir,
     )
+    print(f"Model format: {engine.model_format}")
 
     records = []
     with open(input_file, "r", encoding="utf-8") as f:
@@ -340,6 +345,7 @@ def run_evaluate(args: argparse.Namespace):
     # 2. config.json
     config_data = {
         "model_id": args.model_id,
+        "model_format": engine.model_format,
         "revision": args.revision,
         "device": engine.device,
         "temperature": eval_temp,
@@ -414,6 +420,7 @@ def main():
     parser_predict = subparsers.add_parser("predict", help="Run inference on a single request.")
     parser_predict.add_argument("--request", type=str, required=True, help="JSON string or path to JSON file.")
     parser_predict.add_argument("--model-id", type=str, default=os.environ.get("ERABI_MODEL_ID", DEFAULT_MODEL_ID), help="Local model directory or Hugging Face model ID (also settable via ERABI_MODEL_ID).")
+    parser_predict.add_argument("--model-format", choices=MODEL_FORMATS, default=os.environ.get("ERABI_MODEL_FORMAT", "auto"), help="auto, pytorch, onnx-fp32, or onnx-fp16 (also settable via ERABI_MODEL_FORMAT).")
     parser_predict.add_argument("--model-cache-dir", type=str, default=None, help="Directory for downloaded model files (also settable via ERABI_MODEL_CACHE_DIR).")
     parser_predict.add_argument("--revision", type=str, default=None, help="Model revision or commit hash.")
     parser_predict.add_argument("--device", type=str, default=None, help="Device to use (e.g. cuda:0 or cpu).")
@@ -424,6 +431,7 @@ def main():
     parser_eval.add_argument("--input", type=str, required=True, help="Path to JSONL input file.")
     parser_eval.add_argument("--output-dir", type=str, default=None, help="Directory to save evaluation artifacts.")
     parser_eval.add_argument("--model-id", type=str, default=os.environ.get("ERABI_MODEL_ID", DEFAULT_MODEL_ID), help="Local model directory or Hugging Face model ID (also settable via ERABI_MODEL_ID).")
+    parser_eval.add_argument("--model-format", choices=MODEL_FORMATS, default=os.environ.get("ERABI_MODEL_FORMAT", "auto"), help="auto, pytorch, onnx-fp32, or onnx-fp16 (also settable via ERABI_MODEL_FORMAT).")
     parser_eval.add_argument("--model-cache-dir", type=str, default=None, help="Directory for downloaded model files (also settable via ERABI_MODEL_CACHE_DIR).")
     parser_eval.add_argument("--revision", type=str, default=None, help="Model revision or commit hash.")
     parser_eval.add_argument("--device", type=str, default=None, help="Device to use (e.g. cuda:0 or cpu).")
