@@ -13,6 +13,70 @@ erabi predict --request '{"schema_version":"1","context":"7冊のノートと2�
 
 上のワンラインはPowerShell 7でも動作確認済みです。入力をファイルに保存して `erabi predict --request request.json` としても使えます。初回は選択された形式のモデル（約0.88～1.76GB）を取得し、以降はHugging Faceのローカルキャッシュを再利用します。ネットワークが使えない場合は、事前取得したモデルのローカルディレクトリを`--model-id`で指定してください。
 
+### Pythonから使う：仮想環境から `sample.py` まで
+
+Python 3.11以上で、任意の作業フォルダから実行できます。この後に示すコードを`sample.py`としてそのフォルダへ保存してください（リポジトリを取得済みなら[sample.py](sample.py)をそのまま使えます）。以下はWindows PowerShellでPython 3.12を使う例です。`py -3.12`がない場合は、インストール済みの対応バージョンを指定してください。
+
+```powershell
+py -3.12 -m venv .venv
+.\.venv\Scripts\Activate.ps1
+python -m pip install --upgrade pip
+```
+
+Linux/macOSでは、代わりに`python3.12 -m venv .venv`、`source .venv/bin/activate`で仮想環境を有効化します。以降のコマンドは有効化した仮想環境内で実行します。PowerShellで有効化が制限される場合は、`python`の代わりに`.\.venv\Scripts\python.exe`を直接使えます。
+
+使いたい実行方法に応じて、次の**いずれか1つ**を選びます。どの方法でも`erabi`は同じpipパッケージです。ONNX版でも`erabi`の依存としてPyTorchはインストールされます。
+
+```powershell
+# CPU + ONNX FP32（推奨）: CPU専用PyTorchを先に入れ、ONNX Runtime CPU版を追加
+python -m pip install torch --index-url https://download.pytorch.org/whl/cpu
+python -m pip install erabi onnxruntime
+python sample.py
+```
+
+```powershell
+# CPU + PyTorch safetensors（ONNX Runtimeを使わない）
+python -m pip install torch --index-url https://download.pytorch.org/whl/cpu
+python -m pip install erabi
+python sample.py --model-format pytorch
+```
+
+```powershell
+# NVIDIA GPU + ONNX FP16（対応するCUDA/cuDNN環境が必要）
+python -m pip install erabi onnxruntime-gpu
+python sample.py --device cuda:0
+```
+
+GPU用PyTorchを明示的に導入する場合は、[PyTorch公式のインストール案内](https://pytorch.org/get-started/locally/)で環境に合うコマンドを先に実行してください。`onnxruntime`と`onnxruntime-gpu`は**同じ仮想環境に両方入れない**でください（[ONNX Runtime公式案内](https://onnxruntime.ai/docs/get-started/with-python.html)）。GPU版でもCUDA Execution Providerが使えなければ、自動選択はPyTorchに戻ります。`python -c "import onnxruntime as ort; print(ort.get_available_providers())"`で確認できます。
+
+[sample.py](sample.py)の中身は次のとおりです。
+
+```python
+import argparse
+
+from erabi.model_loader import load_engine
+from erabi.schema import ChoiceRequest
+
+parser = argparse.ArgumentParser()
+parser.add_argument("--device", default="cpu")
+parser.add_argument("--model-format", default="auto")
+args = parser.parse_args()
+
+engine = load_engine(device=args.device, model_format=args.model_format)
+result = engine.predict(ChoiceRequest.from_dict({
+    "context": "ノートを7冊、消しゴムを2個買った。",
+    "question": "全部で何個？",
+    "choices": [
+        {"id": "nine", "text": "9個"},
+        {"id": "ten", "text": "10個"},
+    ],
+}))
+print("best:", result.best_candidate_id)
+print("probabilities:", {choice.id: choice.probability for choice in result.choices})
+```
+
+初回は選択されたモデルを自動ダウンロードします。`sample.py`は既定でCPUを使い、ONNX Runtime CPU版があればFP32 ONNX、なければPyTorchを選びます。表示される確率は正解の保証ではありません。
+
 ### モデルの保存先
 
 ダウンロード先を指定するには、`--model-cache-dir`を使います。`predict`、`evaluate`、`python -m erabi.serve`で利用でき、トークナイザーと重みの両方に適用されます。保存先に十分な空き容量を確保してください。
