@@ -1,6 +1,6 @@
 # ERABI workspace rule
 
-このworkspaceでは、ルートのAGENTS.mdを共通指示として読み、KICKOFF.mdとSTATUS.mdで現在の作業範囲を確認してください。
+このworkspaceでは、ルートのAGENTS.mdを共通指示として読み、README.mdとSTATUS.mdで現在の利用方法・実測・未完了項目を確認してください。
 
 @../../AGENTS.md
 
