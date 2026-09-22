@@ -37,7 +37,7 @@ The Practical V1 eval set was used once after selecting by dev and existing-brid
 ## Use
 
 ```bash
-python -m pip install "git+https://github.com/sugarkwork/erabi.git"
+python -m pip install erabi
 erabi predict --request request.json
 ```
 

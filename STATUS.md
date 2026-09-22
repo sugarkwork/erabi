@@ -1571,7 +1571,14 @@ Epoch 1（論理演算子 90.00%、優先例外 83.33%）と Epoch 2（Core保�
 - 専用の空のHubキャッシュを使い、モデルIDを省略した `erabi predict --request examples/request.json --device cpu` を実行。`sugarknight/erabi-practical-v1-experimental` を初回取得し、`best_candidate_id=technical`、`P(technical)=0.9994630404`、`decision.status=review`、`calibration.status=none` を返した。新しい依存解決結果と公開モデルによる実運用導線はPASS。
 - 再実行用にvenv（約1.05GB）とモデルキャッシュ（約1.76GB）を残し、検証用pipダウンロードキャッシュ225.2MBのみ削除した。Windowsのsymlink非対応警告は出たが推論は成功。モデル品質の独立検証ではなくインストール・取得・推論のスモークである。
 
+---
 
+## 45. PyPI 0.1.0 公開（2026-09-22）
+
+- [PyPI `erabi` 0.1.0](https://pypi.org/project/erabi/0.1.0/) にwheelとsdistを公開。公開前に`twine check`両形式PASS、sdist 68ファイルに`.env`・weights・作業用データ混入0、`pytest tests -q` 95件PASSを確認した。
+- WindowsのTwine進捗表示がcp932文字コードエラーを起こし、wheel登録後に一度終了した。PyPI上でwheelのみ登録済みと確かめてから、進捗表示を無効にしてsdistだけを追加し、両形式の掲載を再確認した。
+- 分離したvenvでPyPIから`erabi==0.1.0`のwheelを直接取得して入れ直し、既定の公開モデルでCPU判定に成功。PowerShell 7のインラインJSON入力でも`best_candidate_id=nine`を返した。READMEとHugging Faceモデルカードの導入コマンドを`pip install erabi`に更新した。パッケージ公開はモデルの品質保証ではない。
+- モデルカード更新で生じた専用Hubキャッシュの旧リビジョン1件（約1.8GB）をdry-run確認後にpruneし、現行リビジョンのキャッシュは残した。削除分は必要なら再ダウンロードできる。
 
 
 

@@ -4,14 +4,14 @@ ERABIは、`context`（状況）、`question`（判断基準）、2～16個の`c
 
 ## インストールと最初の推論
 
-Python 3.11以上が必要です。現時点ではPyPIには公開していないため、GitHubからpipでインストールします。PyTorchのGPU版を使う場合は、先に利用環境に合うPyTorchをインストールしてください。
+Python 3.11以上が必要です。PyTorchのGPU版を使う場合は、先に利用環境に合うPyTorchをインストールしてください。
 
 ```bash
-python -m pip install "git+https://github.com/sugarkwork/erabi.git"
+python -m pip install erabi
 erabi predict --request '{"schema_version":"1","context":"7冊のノートと2個の消しゴムを買った。","question":"全部で何個？","choices":[{"id":"nine","text":"9個"},{"id":"ten","text":"10個"}]}'
 ```
 
-PowerShellではJSONの引用規則が異なるため、リポジトリを取得して `erabi predict --request examples/request.json` とするのが簡単です。初回は約1.75GBのモデルダウンロードが必要で、以降はHugging Faceのローカルキャッシュを再利用します。ネットワークが使えない場合は、事前取得したモデルのローカルディレクトリを`--model-id`で指定してください。
+上のワンラインはPowerShell 7でも動作確認済みです。入力をファイルに保存して `erabi predict --request request.json` としても使えます。初回は約1.75GBのモデルダウンロードが必要で、以降はHugging Faceのローカルキャッシュを再利用します。ネットワークが使えない場合は、事前取得したモデルのローカルディレクトリを`--model-id`で指定してください。
 
 無指定の既定値は公開済みの[ERABI Practical V1実験モデル](https://huggingface.co/sugarknight/erabi-practical-v1-experimental)です。正式合格モデルではなく、未レビュー合成データで追加学習した未校正weightsです。別のモデルを使う場合はローカルパスまたはHugging FaceのモデルIDを指定できます。
 
