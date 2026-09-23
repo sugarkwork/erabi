@@ -1605,8 +1605,36 @@ Epoch 1（論理演算子 90.00%、優先例外 83.33%）と Epoch 2（Core保�
 - PyPI JSONとpipの配布インデックスの両方で0.1.2を確認。PyPIから新規取得したwheelのSHA256は公開前のwheelと一致。wheelを別配置にインストールし、既存の専用モデルキャッシュでCPU `auto`→`onnx-fp32`、GPU `auto`→`onnx-fp16`、どちらも`best_candidate_id=technical`・`decision.status=review`を確認した。新規モデルダウンロードを伴う検証は前節で実施済み。
 - READMEとHugging FaceモデルカードをPyPI 0.1.2の導入案内へ更新。ONNX Runtimeは依然として任意依存で、未導入時はPyTorchへ戻る。パッケージ公開はPractical V1の独立gold評価・校正・正式品質保証を意味しない。
 
+## 50. 2kコンテキスト探索診断（2026-09-22）
 
+- 配布契約の512上限を変更せず、Practical V1実験weightsの推論パイプラインを実験時のみ2048へ設定。GLiClass既定の1024切り詰めを回避し、整形前後トークン数の一致を確認。508/1012/2038トークンの日本語反復文・4候補・batch 1でPyTorch GPU、ONNX FP16 GPUとも正常に推論できた。現行エンコーダ設定は512のため、長文品質の保証ではない。
+- 最初の10回単件測定でPyTorch GPU p50は84.6/217.5/701.5ms、ONNX FP16 GPU p50は46.1/136.0/579.5ms。PyTorch peak割当は1,836/2,152/3,326MiB。後続の20回測定では2038トークンのPyTorch p50が2,075.5msに伸び、終了後GPU 89°C。ONNX FP16の別の20回測定は508/2038トークンで45.6/451.9ms。変動要因は未確定で、2kの速度保証は不可。ONNXのGPUメモリは未測定。
+- 1 optimizer stepの学習試走（batch 1、fp16 AMP、AdamW）は508トークンで約0.80秒・peak割当8,387MiB、2038トークンで約9.63秒・19,020MiB。両方でstepはskipされなかった。2kの割当は専用VRAM 16GBを超えており、Windows共有メモリ等の可能性を含む。フル学習、収束、長文汎化は未実施。
+- Codex起草NPC診断例130件（train 78/dev 26/eval 26、実整形長245～1887、512超10件）を作成。以前のユーザー方針により**学習・正式評価には不使用**。動作診断で現行未学習weightsはdev 19/26、eval 18/26、長文は各1/2、PyTorch↔ONNX最上位52/52一致。合成未レビューかつscene template共通のため品質成績ではない。結果は`runs/npc_tool_routing_v1_2k_*_eval_20260922.json`に保存。
+- 実行: `scripts/probe_2k_context.py`、`scripts/probe_2k_train_step.py`、`scripts/eval_npc_tool_routing_v1.py`。`pytest tests -q`は108件PASS。リポジトリ全体の`pytest -q`は既存の`scripts/test_onnx_export.py`の形状差と`scripts/test_onnx_generalization.py`の欠損ファイルで収集時エラー（通常テスト対象は`tests/`）。正式2kリリース、モデル再学習、校正、独立gold評価は未実施。
 
+## 51. DeepSeek NPCマルチターン候補データ（2026-09-22）
 
+- 既存のユーザー指定に従い、OrcaRouter経由の`deepseek/deepseek-v4.1-flash`のみでオリジナルの架空NPC会話を生成。別ディレクトリ`data/npc_deepseek_v1/`に198件（train 140/dev 28/eval 30、99対照ペア）を保存。ユーザー会話ログや先のCodex起草例はAPIに送っていない。1つのdevペアは生成ID不一致で除外し、教師ターゲットを改変して採用しなかった。
+- 全件スキーマ・正解ID・分割・重複・SHA256照合を監査。実GLiClass整形後に512超20件、最長1301、2048超0。10種類の行動を2/4/6/8/10候補から選ぶ。教師ラベルはDeepSeekが条件に従って提案した未レビュー合成ラベルであり、人手goldではない。分割間で行動対照パターンが再登場するので、真の未知用途汎化を測る最終テストではない。
+- 新規API支出の保守的推計$0.084888、以前のPractical V1 $1.061195と累計$1.146084。事前承認の初期上限$5以内。使用量・応答モデル・拒否理由を`usage_ledger.json`等へ記録し、秘密鍵は出力に含めない。
+- Practical V1現行weightsを**追加学習せず**2048上限の実験モードでdev/evalを推論。PyTorch dev 26/28・eval 27/30、長文1/2・2/4。ONNX FP16も同数で最上位58/58一致。誤り5件はすべて会話のみのターゲットをツールへ誤ルーティングした。これは合成教師への一致であり実プレイヤー精度ではない。`runs/npc_deepseek_v1_2k_{pytorch,onnx}_eval_20260922.json`に出力。`pytest tests -q`は108件PASS。次は人手ラベル監査と、最新意図が旧文脈を上書きする長文例の充実、および2kの実用的な学習方法の検討。
 
+## 52. 1kコンテキスト追加診断（2026-09-22）
 
+- 512/1024/2048の同条件比較から、実入力1012トークンのGPU推論p50はPyTorch 217.5ms、ONNX FP16 136.0ms（508トークンでは84.6/46.1ms）。モデルロードを除くウォーム後の10回計測。GPU温度・他負荷による変動に注意。
+- `scripts/probe_2k_train_step.py --length 1024 --batch-size 2`で1 optimizer step（fp16 AMP、AdamW、step skipなし）は1.09秒、peak割当12,191MiB・予約14,580MiB。508トークン・batch 2は0.76秒、8,386/8,652MiB。batch 1の1012トークンは0.83秒・8,393MiB割当。RTX A4000 16GBでは単発が成立するが、連続学習・他GPU負荷共存は未検証。
+- DeepSeek NPC候補198件の整形長は190件が1024以内、8件が超過。dev/evalは55/58件が適合し、`--max-tokens 1024 --skip-over-limit`で事前に切り詰めず除外してONNX FP16推論するとdev 26/27、eval 26/28。超過3件のIDを`runs/npc_deepseek_v1_1k_onnx_eval_20260922.json`に記録。これは2k評価と母数が異なり、別モデルの品質改善を示さない。
+- GLiClassの既定前処理が1024で先に切り詰めるため、ERABIの上限だけを1024に変更すると超過入力の無言切り詰めを許す。正式な1k契約にはモデル入力整形前の厳密な長さ検証と前処理変更が必要。公開版の512契約は変更していない。
+
+## 53. Exam-QA DeepSeek選別・非公開学習実験（2026-09-23）
+
+- ローカルExam-QA 374件を`deepseek/deepseek-v4.1-flash`で処理。固定seedの層化ランダム10件でv1→v2→v3とpilotし、API送信前1024 tokens監査、判断不能時の早期skip、記号から本文への選択肢対応、自由記述の同型誤答生成、図・複数正解・部分点・不完全空欄問題の除外を実装。秘密鍵はGit無視ファイルだけで扱った。
+- v3全件処理は採用217、skip 157。うち58件は1024 tokens超としてAPI送信前に除外。採用は公式選択肢169、DeepSeek生成誤答48、日本語104・英語113、50 groups。OrcaRouter累計推計$1.5851154（既存$1.1460837を含む、承認済み$10上限内）。
+- group分離でtrain 175、valid 37。pilot 3 groupsはtrain固定、validは公式選択肢だけ、valid groupに属する生成候補5件は両splitから除外。train/valid SHA256は`d88c6154...c879` / `31b07dcb...c68f`。データ、応答journal、APIログは非公開・Git無視を維持。
+- Practical V1 checkpointからExam 175 + Practical replay 175、`max_length=1024`、lr 1.5e-6、microbatch 2、勾配蓄積8、fp16 AMPで2 epoch。baselineはExam 8/37、Practical dev 308/399、Bridge 425/480。epoch 1は9/37、312/399、425/480でbest。epoch 2はExam同率だが保持性能が少し下がったため不採用。
+- best weights SHA256 `1ae38ef6c1103f8c021b0d3a974f3b1aedc42d89832d11761e74b95664216251`。追加回帰ではNPC 1kが旧weightsと同一（dev 26/27、eval 26/28）、Practical teacher-agreed evalは294/386→292/386（-0.52pt）。Exam改善は1問のみで、正式な入試性能保証ではない。
+- ONNX FP32/FP16をbest weightsから再生成。非公開Exam valid 37件、最大853 tokensでPyTorchとのTop-1一致は両形式37/37。最大logit差はFP32 `1.5020e-05`、FP16 `0.01336`。モデル側は1024で学習・検証したが、公開ERABI runtimeの既定契約512は変更しない。
+- Hugging Face実験モデル`sugarknight/erabi-practical-v1-experimental`のsafetensors、ONNX FP32、ONNX FP16を同一checkpointへ更新（weights commit `c6c7acf0280b8af5cce6c2a18e9a215f7d2eae57`、カード追補commit `16b6985f0775ce8975ad99cc6408ef8505b934ab`）。ERABI 0.1.3はweights commitを既定リビジョンとして固定。
+- PyPI `erabi==0.1.3`を公開。wheel/sdistの`twine check`合格、秘密・Exam-QAデータ・モデル本体の混入なしを一覧確認。公開前の全pytestは123件PASS。
+- 再現コード: `scripts/build_exam_qa_erabi_v1.py`、`scripts/train_exam_qa_erabi_v1.py`、`scripts/export_exam_qa_erabi_v1_onnx.py`。出典ごとの再配布条件と人手監査が終わるまでExam-QA加工データは公開しない。

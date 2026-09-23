@@ -64,6 +64,12 @@ models/
 .env.*
 !.env.example
 
+# Local exam source material and generated ERABI pilot data
+exam-qa/
+data/exam_qa_erabi_v1/
+data/npc_deepseek_v1/
+data/npc_tool_routing_v1/
+
 # IDE & OS files
 .vscode/
 .idea/

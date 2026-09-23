@@ -24,7 +24,7 @@ from erabi.schema import (
 logger = logging.getLogger(__name__)
 
 DEFAULT_MODEL_ID = "sugarknight/erabi-practical-v1-experimental"
-DEFAULT_MODEL_REVISION = "042998970aa20cc3371e0f7f0e320013a152c068"
+DEFAULT_MODEL_REVISION = "c6c7acf0280b8af5cce6c2a18e9a215f7d2eae57"
 
 
 class GLiClassEngine:
