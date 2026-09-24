@@ -68,6 +68,7 @@ models/
 exam-qa/
 data/exam_qa_erabi_v1/
 data/exam_qa_erabi_v1_reshuffle_*/
+data/exam_qa_weakness_v1*/
 data/npc_deepseek_v1/
 data/npc_tool_routing_v1/
 

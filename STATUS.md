@@ -1,6 +1,6 @@
 # ERABI 作業状況
 
-更新日：2026-09-21
+更新日：2026-09-24
 
 ## 現在地
 
@@ -1646,3 +1646,12 @@ Epoch 1（論理演算子 90.00%、優先例外 83.33%）と Epoch 2（Core保�
 - devは13/43（30.23%）→15/43（34.88%）、Practical devは308/399→306/399、Bridgeは425/480→424/480。epoch 2はdev 14/43へ下がったため不採用。
 - 選択後のsealed final testは16/51（31.37%）→16/51（31.37%）でTop-1改善なし。NLLは1.5258→1.4928、Brierは0.7827→0.7689とわずかに改善。Practical teacher-agreed evalは294/386→300/386。
 - 本番候補条件（final testで5pt以上改善、dev改善、Practical/Bridge保持）を満たさず、`production_candidate=false`。Hugging Face、PyPI、既存公開weightsは更新しない。再現コードは`scripts/reshuffle_exam_qa_erabi_v1.py`と`scripts/train_exam_qa_reshuffle_v1.py`。
+
+## 55. 苦手傾向向けDeepSeek合成問題候補（2026-09-24）
+
+- 公開Practical V1の元Exam-QA validと再シャッフル候補のsealed finalを、問題本文を保存しない集計スクリプトで再分析。弱点は多段階計算、化学・科学の証拠判断、日本語の根拠読解、英語Reading/Writing、5〜9択、257〜768 tokens付近の情報統合。分析結果はGit無視の`runs/exam_qa_weakness_analysis_20260924/`に保存。
+- 実問題や評価本文を外部へ送らず、上記の集計傾向だけをOrcaRouter経由`deepseek/deepseek-v4.1-flash`へ渡して、架空・自己完結・日英のオリジナル問題を生成。カテゴリは`quantitative_multistep`、`chemistry_evidence`、`science_data_reasoning`、`reading_evidence`、`history_source_inference`、選択肢数は4/6/8、長さはshort/medium/long。生成時の正解位置強制は論理不整合を生んだため、DeepSeekに自然な正解を解かせた後、ローカルで選択肢と教師IDを同時に並べ替える方式へ修正した。
+- 600仕様を1回ずつ処理し、局所スキーマ・言語・重複・禁止参照検証で442件を受理。正解ラベルと解説を隠した別リクエストで全442件を独立採点し、同じDeepSeekの判定と一致した336件から実GLiClassトークン長を検査。最終的に310件（日本語159、英語151、4択132、6択102、8択76、short 132、medium 102、long 76、57〜1020 tokens）を非公開訓練候補として保存した。
+- 最終カテゴリ内訳は化学63、架空史料51、多段階計算27、読解112、科学データ57。多段階計算は独立採点不一致が多く、追加人手監査が特に必要。候補310件はID・入力指紋とも全件一意で、既存`data/**/*.jsonl` 151ファイル・80,987行との完全一致重複0件。正解位置は生成仕様で均等化したが、品質除外後は完全均等ではない。
+- 新規API費用は生成$0.5763285、回答ブラインド採点$0.0794778、結果不明要求の安全側予約$0.0203757。以前の累計を含む保守的累計は$2.2612974で、承認済み最大$10以内。APIキーはGit無視のローカルファイルだけで扱った。
+- データ本体、応答journal、採点結果は`data/exam_qa_weakness_v1/`に置き、公開・Git追跡しない。これは同一モデルによる生成・再判定であり、人手goldではない。モデル学習・Hugging Face/PyPI更新は未実施。再現コードは`scripts/analyze_exam_qa_weaknesses.py`と`scripts/build_exam_qa_weakness_v1.py`。
