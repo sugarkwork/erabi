@@ -67,6 +67,7 @@ models/
 # Local exam source material and generated ERABI pilot data
 exam-qa/
 data/exam_qa_erabi_v1/
+data/exam_qa_erabi_v1_reshuffle_*/
 data/npc_deepseek_v1/
 data/npc_tool_routing_v1/
 

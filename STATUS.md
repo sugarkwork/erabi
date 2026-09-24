@@ -1638,3 +1638,11 @@ Epoch 1（論理演算子 90.00%、優先例外 83.33%）と Epoch 2（Core保�
 - Hugging Face実験モデル`sugarknight/erabi-practical-v1-experimental`のsafetensors、ONNX FP32、ONNX FP16を同一checkpointへ更新（weights commit `c6c7acf0280b8af5cce6c2a18e9a215f7d2eae57`、カード追補commit `16b6985f0775ce8975ad99cc6408ef8505b934ab`）。ERABI 0.1.3はweights commitを既定リビジョンとして固定。
 - PyPI `erabi==0.1.3`を公開。wheel/sdistの`twine check`合格、秘密・Exam-QAデータ・モデル本体の混入なしを一覧確認。公開前の全pytestは123件PASS。
 - 再現コード: `scripts/build_exam_qa_erabi_v1.py`、`scripts/train_exam_qa_erabi_v1.py`、`scripts/export_exam_qa_erabi_v1_onnx.py`。出典ごとの再配布条件と人手監査が終わるまでExam-QA加工データは公開しない。
+
+## 54. Exam-QA再シャッフル・sealed test実験（2026-09-24）
+
+- 既存217件を複製し、seed `20260924`で原題group単位のtrain/dev/final_testへ再分割。行単位リークを避け、DeepSeek生成誤答はtrain限定、prompt pilot 3 groupsもtrain固定。train 117件／30 groups、dev 43件／11 groups、final test 51件／9 groups、保留group内の生成候補6件は除外。データは引き続き非公開・Git無視。
+- Practical V1 checkpointからExam train 117 + Practical replay 117、`max_length=1024`、lr 1.5e-6、microbatch 2、勾配蓄積8で2 epoch。epoch選択中はfinal testを読み込まず、devと既存保持だけでepoch 1を選択した。
+- devは13/43（30.23%）→15/43（34.88%）、Practical devは308/399→306/399、Bridgeは425/480→424/480。epoch 2はdev 14/43へ下がったため不採用。
+- 選択後のsealed final testは16/51（31.37%）→16/51（31.37%）でTop-1改善なし。NLLは1.5258→1.4928、Brierは0.7827→0.7689とわずかに改善。Practical teacher-agreed evalは294/386→300/386。
+- 本番候補条件（final testで5pt以上改善、dev改善、Practical/Bridge保持）を満たさず、`production_candidate=false`。Hugging Face、PyPI、既存公開weightsは更新しない。再現コードは`scripts/reshuffle_exam_qa_erabi_v1.py`と`scripts/train_exam_qa_reshuffle_v1.py`。
