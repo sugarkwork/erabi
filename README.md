@@ -95,8 +95,8 @@ print("probabilities:", {choice.id: choice.probability for choice in result.choi
 ダウンロード先を指定するには、`--model-cache-dir`を使います。`predict`、`evaluate`、`python -m erabi.serve`で利用でき、トークナイザーと重みの両方に適用されます。保存先に十分な空き容量を確保してください。
 
 ```powershell
-erabi predict --request examples/request.json --model-cache-dir "F:\models\erabi-cache"
-$env:ERABI_MODEL_CACHE_DIR = "F:\models\erabi-cache"
+erabi predict --request examples/request.json --model-cache-dir ".\model-cache"
+$env:ERABI_MODEL_CACHE_DIR = ".\model-cache"
 erabi predict --request examples/request.json
 ```
 
@@ -110,8 +110,8 @@ ERABI 0.1.3の既定モデルは、Exam-QA追加実験後の3形式を含む検�
 
 | 利用形態 | おすすめ | 理由 |
 |---|---|---|
-| NVIDIA GPU + 対応するONNX Runtime GPU版 | `auto` → `onnx-fp16` | このホストでp50が35.90→19.00ms、元weightsと最上位90/90一致 |
-| CPU + ONNX Runtime CPU版 | `auto` → `onnx-fp32` | このホストでp50が366.73→201.67ms、元weightsと最上位90/90一致 |
+| NVIDIA GPU + 対応するONNX Runtime GPU版 | `auto` → `onnx-fp16` | 下記ベンチマークでp50が35.90→19.00ms、元weightsと最上位90/90一致 |
+| CPU + ONNX Runtime CPU版 | `auto` → `onnx-fp32` | 下記ベンチマークでp50が366.73→201.67ms、元weightsと最上位90/90一致 |
 | ONNX Runtimeなし・互換性優先 | `pytorch` | `pip install erabi`のみで動作し、元のsafetensorsを使用 |
 
 これらはPractical V1の未レビュー合成90件での比較であり、人手goldでの品質保証ではありません。INT8版は今回の量子化設定で予測が大きく変わったため、自動選択・公開対象から除外しました。
@@ -168,7 +168,7 @@ erabi predict --request examples/request.json
 
 ## 学習と評価で得られた知見
 
-2026-09-22時点の追加学習実験では、凍結RC3（約438Mパラメータ）からPractical V1のtrain 2,414問のみで1 epoch、151 optimizer steps、peak LR 2.5e-6、microbatch 2・勾配蓄積8、fp16 AMPを実施しました。dev 399問と旧RC3 Bridge 480問で選定し、eval 386問は選定後に一度だけ評価しました。release weightsは上書きしていません。
+2026-09-22時点の追加学習実験では、凍結RC3（約438Mパラメータ）からPractical V1のtrain 2,414問のみで1 epoch、151 optimizer steps、peak LR 2.5e-6、microbatch 2・勾配蓄積8、fp16 AMPを実施しました。dev 399問と旧RC3 Bridge 480問で選定し、eval 386問は選定後に一度だけ評価しました。
 
 | セット | 学習前 | 学習後 |
 |---|---:|---:|
@@ -178,15 +178,15 @@ erabi predict --request examples/request.json
 
 新データでは日常算数23/68→48/68、ツール選択50/70→62/70、JSONログ判断51/69→65/69と改善しましたが、読解は54/71→50/71に低下しました。候補順序の入替一致率は旧Bridgeで97.29%→97.50%でした。**同一教師モデルが作成・再判定した未レビュー合成データ上の結果**であり、独立した人手goldでの汎化性能、実在入試問題の成績、Jevとの同等性は示しません。現時点では校正・正式リリースも未実施です。
 
-Practical V1は日本語・英語・簡体字中国語の6分野（日常算数、ツール選択、会話の次行動、JSON会話ログ、読解、創作入試風）で構成されます。実在の入試問題や私的会話ログは利用していません。生成・再判定に使ったDeepSeek経由の料金推計は$1.0612で、追加予算枠は使いませんでした。より信頼できる次の評価には、人手ラベル監査と独立した実問題の調達が必要です。
+Practical V1は日本語・英語・簡体字中国語の6分野（日常算数、ツール選択、会話の次行動、JSON会話ログ、読解、創作入試風）で構成されます。実在の入試問題や私的会話ログは利用していません。より信頼できる評価には、人手ラベル監査と独立した実問題が必要です。
 
 再現用コードは[scripts/train_practical_v1.py](scripts/train_practical_v1.py)、監査結果は[data/practical_v1/audit.json](data/practical_v1/audit.json)にあります。この学習スクリプトの再実行には別途RC3チェックポイントが`release/rc3/model`に必要です。GPU学習と大容量weightsはpipパッケージに含まれません。
 
 ### Exam-QAを使った追加実験（2026-09-23）
 
-ローカルに取得したExam-QA 374件を、そのまま学習へ流さず、指定された`deepseek/deepseek-v4.1-flash`でERABI形式へ選別・変換しました。固定seedで形式を分散させた10件を先に3回処理し、最終v3では「判断不能なら早期skip」、1024 tokens超のAPI送信前除外、図・複数正解・不完全な複数空欄・部分点式証明の除外を明示しています。記号選択肢は元の選択肢本文へ対応付け、自由記述だけは公式解答を正解候補としてDeepSeekに同型の誤答候補を作らせ、ローカル検証を通したものだけ採用しました。
+非公開のExam-QA 374件を、そのまま学習へ流さず、`deepseek/deepseek-v4.1-flash`でERABI形式へ選別・変換しました。固定seedで形式を分散させた10件を先に3回処理し、最終v3では「判断不能なら早期skip」、1024 tokens超のAPI送信前除外、図・複数正解・不完全な複数空欄・部分点式証明の除外を明示しています。記号選択肢は元の選択肢本文へ対応付け、自由記述だけは公式解答を正解候補としてDeepSeekに同型の誤答候補を作らせ、ローカル検証を通したものだけ採用しました。
 
-全374件中217件を採用、157件を除外しました。分割は原題グループ単位で、train 175件、valid 37件です。validは元資料に正式な選択肢がある問題だけに限定し、DeepSeek生成の誤答候補はtrainにだけ入れています。5件はvalid側グループに属する生成候補だったため両方から除外しました。日本語104件・英語113件、入力長は最大860 tokensです。今回までのOrcaRouter累計費用推計は$1.5851で、設定された$10上限内でした。
+全374件中217件を採用、157件を除外しました。分割は原題グループ単位で、train 175件、valid 37件です。validは元資料に正式な選択肢がある問題だけに限定し、DeepSeek生成の誤答候補はtrainにだけ入れています。5件はvalid側グループに属する生成候補だったため両方から除外しました。日本語104件・英語113件、入力長は最大860 tokensです。
 
 Practical V1 checkpointにExam-QA 175件とPractical replay 175件を混ぜ、`max_length=1024`、2 epoch、学習率1.5e-6で追加学習しました。選定されたepoch 1の結果は次の通りです。
 
@@ -203,7 +203,7 @@ Practical V1 checkpointにExam-QA 175件とPractical replay 175件を混ぜ、`m
 
 ## Practical V1 推論最適化の実測
 
-2026-09-22、Windows、RTX A4000 16GB、PyTorch 2.6.0+cu124、ONNX Runtime 1.21.0で、同じPractical V1 checkpointを比較しました。CPUはPyTorch safetensors、ONNX FP32、動的INT8、静的QDQ W8A8、GPUはPyTorch safetensors、ONNX FP16、静的QDQ W8A8を試しています。90件は`eval_teacher_agreed.jsonl`から分野・言語別に抽出した未レビュー合成ラベルです。全モデルで温度1.0、全90件の予測確認後に8回ウォームアップし、40回の単件レイテンシを測定しました。CPU再測定とGPU測定時、Robloxは終了し、GPUの他負荷はほぼありませんでした。
+2026-09-22、Windows、RTX A4000 16GB、PyTorch 2.6.0+cu124、ONNX Runtime 1.21.0で、同じPractical V1 checkpointを比較しました。CPUはPyTorch safetensors、ONNX FP32、動的INT8、静的QDQ W8A8、GPUはPyTorch safetensors、ONNX FP16、静的QDQ W8A8を試しています。90件は`eval_teacher_agreed.jsonl`から分野・言語別に抽出した未レビュー合成ラベルです。全モデルで温度1.0、全90件の予測確認後に8回ウォームアップし、40回の単件レイテンシを測定しました。
 
 | 実行先・形式 | 重み/ONNX容量 | p50 / p95 | 元weightsとの最上位一致 | 合成教師ラベル一致 |
 |---|---:|---:|---:|---:|
@@ -215,12 +215,12 @@ Practical V1 checkpointにExam-QA 175件とPractical replay 175件を混ぜ、`m
 | GPU ONNX FP16 | 0.88 GB | **19.00 / 22.80 ms** | **90/90** | 69/90 |
 | GPU ONNX 静的QDQ W8A8 | 0.84 GB | 84.75 / 89.44 ms | 29/90 | 27/90 |
 
-このホストではCPUはONNX FP32、GPUはONNX FP16が速度と出力一致の両面で有望でした。FP32の最大確率差は元weights比で最大0.00000493、FP16は最大0.00374でした。今回の動的/静的INT8設定は軽くなっても予測が大きく変化し、静的版はCPU/GPUとも遅くなりました。**今回の静的W8A8はONNX RuntimeのMinMax校正によるQDQであり、SmoothQuantではありません。** RTX A4000上でのSmoothQuant高速化を証明する結果ではなく、今回のINT8版を配布・既定化しません。CUDA Execution Providerが有効でも全ノードのGPU実行は保証されないため、静的INT8の遅さの原因をCPUフォールバックと断定しません。FP32/FP16版は実験モデルとして配布しますが、独立goldでの確認や校正は未実施です。
+この測定ではCPUはONNX FP32、GPUはONNX FP16が速度と出力一致の両面で有望でした。FP32の最大確率差は元weights比で最大0.00000493、FP16は最大0.00374でした。動的/静的INT8は軽量化できても予測が大きく変化し、静的版はCPU/GPUとも遅くなりました。静的W8A8はONNX RuntimeのMinMax校正によるQDQであり、SmoothQuantではありません。INT8版は配布・自動選択の対象外です。FP32/FP16版も、独立goldでの確認や校正は未実施です。
 
 再現にはリポジトリをチェックアウトし、開発用仮想環境へ`pip install -e ".[dev]"`、環境に合う`onnxruntime`または`onnxruntime-gpu`と`onnx`を導入します。以下は公開モデルをHugging Face CLIで別ディレクトリへ取得する例です（約1.75GB、十分な空き容量が必要）。実験結果は`runs/`配下（Git管理外）へ書き、モデルと評価結果の既存ファイルは上書きしないでください。
 
 ```powershell
-$out = "runs/practical_v1_optimization_20260922"
+$out = "runs/practical_v1_optimization"
 $checkpoint = "$out/checkpoint"
 hf download sugarknight/erabi-practical-v1-experimental model.safetensors config.json tokenizer.json tokenizer_config.json --local-dir $checkpoint
 python -c "from pathlib import Path; from scripts.export_rc3_onnx import export_fp32_model, export_fp16_model; p=Path('$checkpoint'); o=Path('$out'); export_fp32_model(p,o/'fp32'); export_fp16_model(p,o/'fp16')"
@@ -231,11 +231,11 @@ python scripts/benchmark_practical_v1_runtimes.py benchmark --backend onnx --dev
 python scripts/benchmark_practical_v1_runtimes.py compare --baseline "$out/results/pytorch_cuda.json" --candidate "$out/results/onnx_fp16_cuda.json"
 ```
 
-CPU比較は同じ`benchmark`コマンドで`--device cpu`を指定し、`--backend pytorch --model-dir $checkpoint`、または`--backend onnx --model-dir "$out/fp32"` / `"$out/int8_dynamic_cpu"` / `"$out/int8_static_w8a8"`をそれぞれ実行します。GPU静的INT8も`--backend onnx --device cuda --model-dir "$out/int8_static_w8a8"`で測れます。既定の90件・8回ウォームアップ・40回計測を変更する場合は`--cases`、`--warmup`、`--iterations`を指定します。静的量子化の128件は**trainのみ**から取り、評価90件を校正には使いません。初回のモデル読込・エクスポート・量子化の時間は上記の単件レイテンシに含めず、端末・CPUスレッド数・温度・入力長で値は変わります。
+CPU比較は同じ`benchmark`コマンドで`--device cpu`を指定し、`--backend pytorch --model-dir $checkpoint`、または`--backend onnx --model-dir "$out/fp32"` / `"$out/int8_dynamic_cpu"` / `"$out/int8_static_w8a8"`をそれぞれ実行します。GPU静的INT8も`--backend onnx --device cuda --model-dir "$out/int8_static_w8a8"`で測れます。既定の90件・8回ウォームアップ・40回計測を変更する場合は`--cases`、`--warmup`、`--iterations`を指定します。静的量子化の128件は**trainのみ**から取り、評価90件を校正には使いません。モデル読込・エクスポート・量子化の時間は単件レイテンシに含みません。測定値はハードウェア、実行環境、入力長によって変わります。
 
 ## 2k入力の探索実験（2026-09-22）
 
-現行の配布版は引き続き512トークン上限です。約2kを試すにはERABIの上限だけでなく、GLiClass前処理の既定1024トークン切り詰めも実験時に変更する必要があります。[診断スクリプト](scripts/probe_2k_context.py)は整形後の入力長を切り詰め前後で照合します。RTX A4000 16GB、Practical V1実験weights、4候補、batch 1、反復した日本語文での予備測定です。通常の短い問題で測った上表の19msとは入力長が違います。
+現行の配布版は引き続き512トークン上限です。約2kを試すにはERABIの上限だけでなく、GLiClass前処理の既定1024トークン切り詰めも実験時に変更する必要があります。[診断スクリプト](scripts/probe_2k_context.py)は整形後の入力長を切り詰め前後で照合します。以下はRTX A4000 16GB、Practical V1実験weights、4候補、batch 1での予備測定です。
 
 | 実入力長 | PyTorch GPU p50（10回の初回測定） | ONNX FP16 GPU p50（10回の初回測定） | PyTorch推論peak割当 |
 | ---: | ---: | ---: | ---: |
@@ -243,11 +243,11 @@ CPU比較は同じ`benchmark`コマンドで`--device cpu`を指定し、`--back
 | 1,012 | 217.5ms | 136.0ms | 2,152MiB |
 | 2,038 | 701.5ms | 579.5ms | 3,326MiB |
 
-長い連続測定では2,038トークンのPyTorch p50が2,075.5msまで伸びた。測定後のGPU温度は89°Cで、速度の変動要因は切り分けられていない。ONNX FP16の別の20回測定では508/2,038トークンのp50が45.6/451.9msだった。単一の高速値を2kの性能保証としない。ONNXのVRAMはPyTorchのアロケータでは測れないため、この表では報告しない。学習の単一optimizer step（batch 1、fp16 AMP）は508トークンで約0.80秒・peak割当8,387MiB、2,038トークンで約9.63秒・19,020MiBだった。後者は専用VRAM 16GBを超える割当で、Windowsの共有メモリ利用等の可能性があり、実用的な学習速度を示すものではない。どちらもoptimizer stepは実行されたが、1 stepのみで学習収束や長文精度は検証していない。[学習診断コード](scripts/probe_2k_train_step.py)。
+レイテンシは入力長とともに大きく増え、長時間・高負荷時にはさらに変動します。学習の単一optimizer step（batch 1、fp16 AMP）は508トークンで約0.80秒・peak割当8,387MiB、2,038トークンで約9.63秒・19,020MiBでした。2k学習は16GB GPUで実用的とはいえず、収束や長文精度も未検証です。[学習診断コード](scripts/probe_2k_train_step.py)。
 
 NPCツール選択のCodex起草130件は**2k動作診断専用で、学習・正式評価データには使用しない**。データ本体と説明はローカルに留め、Gitでは公開していない。未学習モデルでの暫定診断はdev 19/26、eval 18/26、512超の長文では各1/2で、PyTorchとONNX FP16の最上位選択は52/52件一致した。テンプレートを分割間で共有し、ラベルも未レビューなので、これを実運用精度やJevとの比較には用いない。[評価スクリプト](scripts/eval_npc_tool_routing_v1.py)。
 
-学習・評価の**候補**として別途、指定されたDeepSeek V4.1 Flash経由でゲームNPCのマルチターン会話198件を生成した。データ本体はローカルに留め、Gitでは公開していない。train 140／dev 28／eval 30で、20件が512超、最長1301トークン。Web、画像・動画生成、コマンド、スクリーンショット、画像解析、ゲーム状態・クエスト・経路探索、ツールなしの会話を可変候補から選ぶ。新規API費用の保守的推計は$0.084888、以前の生成分と合わせて$1.146084（請求額の照合ではない）。旧モデルweightsのまま2048上限で暫定的に推論するとdev 26/28、eval 27/30、長文はそれぞれ1/2と2/4、PyTorch↔ONNX FP16の選択は58/58一致。誤り5件はいずれも「会話だけ」が教師ターゲットで、旧文脈のツール意図を引きずった。**まだこのデータで追加学習しておらず、教師ラベルは人手確認前。**同じ行動対照パターンが分割間で再登場するため、独立gold精度やJev同等性を示さない。
+学習・評価の候補として、DeepSeek V4.1 FlashでゲームNPCのマルチターン会話198件も生成しました。データ本体は非公開です。train 140／dev 28／eval 30で、20件が512超、最長1301トークン。Web、画像・動画生成、コマンド、スクリーンショット、画像解析、ゲーム状態・クエスト・経路探索、ツールなしの会話を可変候補から選びます。旧モデルweightsの2048上限診断ではdev 26/28、eval 27/30、PyTorch↔ONNX FP16の選択は58/58一致しました。教師ラベルは人手確認前で、このデータによる追加学習も未実施です。同じ行動対照パターンが分割間で再登場するため、独立gold精度やJev同等性は示しません。
 
 ### 1k上限の追加診断
 
