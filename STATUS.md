@@ -1655,3 +1655,12 @@ Epoch 1（論理演算子 90.00%、優先例外 83.33%）と Epoch 2（Core保�
 - 最終カテゴリ内訳は化学63、架空史料51、多段階計算27、読解112、科学データ57。多段階計算は独立採点不一致が多く、追加人手監査が特に必要。候補310件はID・入力指紋とも全件一意で、既存`data/**/*.jsonl` 151ファイル・80,987行との完全一致重複0件。正解位置は生成仕様で均等化したが、品質除外後は完全均等ではない。
 - 新規API費用は生成$0.5763285、回答ブラインド採点$0.0794778、結果不明要求の安全側予約$0.0203757。以前の累計を含む保守的累計は$2.2612974で、承認済み最大$10以内。APIキーはGit無視のローカルファイルだけで扱った。
 - データ本体、応答journal、採点結果は`data/exam_qa_weakness_v1/`に置き、公開・Git追跡しない。これは同一モデルによる生成・再判定であり、人手goldではない。モデル学習・Hugging Face/PyPI更新は未実施。再現コードは`scripts/analyze_exam_qa_weaknesses.py`と`scripts/build_exam_qa_weakness_v1.py`。
+
+## 56. 苦手傾向候補の追加学習実験（2026-09-24）
+
+- 非公開候補310件をdomain×languageで層化し、group重複なしのtrain 218 / dev 46 / final_test 46へseed `20260924`で分割。日英、5カテゴリ、4/6/8択、short/medium/longを各splitへ保持した。finalはepoch選択条件が成立するまで基準・候補の双方で開かない。
+- 現在公開中weightsと同じExam追加学習済みcheckpoint（SHA256 `1ae38ef6...216251`）を起点に、弱点train 218 + Practical replay 218を混合。`max_tokens=1024`、lr `1e-6`、micro-batch 1、勾配蓄積16、fp16 AMPで2 epoch実行。長文のVRAMピークに備えてbatch 1とし、単一GPUだけを使用した。
+- 基準は弱点dev **25/46 (54.35%)**、NLL 1.0707、Brier 0.5411、Practical dev **312/399 (78.20%)**、Bridge **425/480 (88.54%)**、既存Exam dev **14/43 (32.56%)**。epoch 1は弱点dev 25/46据え置き、NLL 1.0413、Brier 0.5296、Practical 314/399、Bridge 425/480、既存Exam 14/43。epoch 2も25/46据え置き、NLL 1.0191、Brier 0.5199、Practical 313/399、Bridge 426/480、既存Exam 14/43。
+- Top-1は改善しなかったため両epochとも選定不合格。checkpointは保存せず、weakness final 46件、Practical eval、既存Exam finalは未評価のまま維持。`production_candidate=false`で、Hugging Face/PyPI/公開weightsは更新しない。NLL/Brierは少し改善したが、同じDeepSeek生成様式の小規模devに対する結果であり、一般性能向上とは判定しない。
+- 実行ログでは各epochでAMP scaleが1回半減した。GradScalerの動作上、そのwindowのoptimizer更新はskipされたと推定されるため、後続実行用コードはoptimizer window数と実更新数、AMP skip数を分けて記録するよう修正した。再現コードは`scripts/split_exam_qa_weakness_v1.py`と`scripts/train_exam_qa_weakness_v1.py`、実測は`runs/exam_qa_weakness_v1_finetune_20260924/summary.json`。
+- `pytest tests -q`は133件PASS。分割データと実測runは非公開・Git無視を維持し、再現コードと結果要約だけを追跡する。
