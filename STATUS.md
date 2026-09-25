@@ -1538,7 +1538,7 @@ Epoch 1（論理演算子 90.00%、優先例外 83.33%）と Epoch 2（Core保�
 
 ## 41. Practical V1 合成データ候補（2026-09-22）
 
-- ユーザー指定のOrcaRouter経由 `deepseek/deepseek-v4.1-flash` を使用。DeepSeek公式API名 `deepseek-flash` を含む応答モデル名の内訳は `data/practical_v1/usage_ledger.json` に保存。APIキーはGit無視の `.env.orcarouter.local` のみ。
+- データ生成にはユーザー指定のDeepSeek V4.1 Flashを使用。応答モデル名と使用量の内訳は非公開の監査台帳に保存し、API認証情報はGit管理外とした。
 - 日本語・英語・簡体字中国語×6分野（日常算数、ツール選択、会話の次行動、JSON会話ログ、読解、創作入試風）で原案3,446件。実在の入試問題や私的ログは送信・転載していない。
 - 回答を見せない同一モデルの再判定で3,218件が一致。言語不一致5件、train/devの算数仕様重複8件などを除外し、収録版はtrain 2,414、dev 399、eval_candidate 397（計3,210件）。さらに評価候補の2回の判定が一致した `eval_teacher_agreed.jsonl` は386件。**いずれも人手確認済みgoldではない。**
 - 構造エラー0、512-token超0（最大248）、候補ID再配置後の正解本文不一致0、収録版の完全重複0。過去の比較可能な72,770件とのcontext+question完全一致0。類義のnear-copy完全排除は未証明。
@@ -1615,7 +1615,7 @@ Epoch 1（論理演算子 90.00%、優先例外 83.33%）と Epoch 2（Core保�
 
 ## 51. DeepSeek NPCマルチターン候補データ（2026-09-22）
 
-- 既存のユーザー指定に従い、OrcaRouter経由の`deepseek/deepseek-v4.1-flash`のみでオリジナルの架空NPC会話を生成。別ディレクトリ`data/npc_deepseek_v1/`に198件（train 140/dev 28/eval 30、99対照ペア）を保存。ユーザー会話ログや先のCodex起草例はAPIに送っていない。1つのdevペアは生成ID不一致で除外し、教師ターゲットを改変して採用しなかった。
+- ユーザー指定のDeepSeek V4.1 Flashのみでオリジナルの架空NPC会話を生成。別ディレクトリ`data/npc_deepseek_v1/`に198件（train 140/dev 28/eval 30、99対照ペア）を保存。ユーザー会話ログや先のCodex起草例はAPIに送っていない。1つのdevペアは生成ID不一致で除外し、教師ターゲットを改変して採用しなかった。
 - 全件スキーマ・正解ID・分割・重複・SHA256照合を監査。実GLiClass整形後に512超20件、最長1301、2048超0。10種類の行動を2/4/6/8/10候補から選ぶ。教師ラベルはDeepSeekが条件に従って提案した未レビュー合成ラベルであり、人手goldではない。分割間で行動対照パターンが再登場するので、真の未知用途汎化を測る最終テストではない。
 - 新規API支出の保守的推計$0.084888、以前のPractical V1 $1.061195と累計$1.146084。事前承認の初期上限$5以内。使用量・応答モデル・拒否理由を`usage_ledger.json`等へ記録し、秘密鍵は出力に含めない。
 - Practical V1現行weightsを**追加学習せず**2048上限の実験モードでdev/evalを推論。PyTorch dev 26/28・eval 27/30、長文1/2・2/4。ONNX FP16も同数で最上位58/58一致。誤り5件はすべて会話のみのターゲットをツールへ誤ルーティングした。これは合成教師への一致であり実プレイヤー精度ではない。`runs/npc_deepseek_v1_2k_{pytorch,onnx}_eval_20260922.json`に出力。`pytest tests -q`は108件PASS。次は人手ラベル監査と、最新意図が旧文脈を上書きする長文例の充実、および2kの実用的な学習方法の検討。
@@ -1630,7 +1630,7 @@ Epoch 1（論理演算子 90.00%、優先例外 83.33%）と Epoch 2（Core保�
 ## 53. Exam-QA DeepSeek選別・非公開学習実験（2026-09-23）
 
 - ローカルExam-QA 374件を`deepseek/deepseek-v4.1-flash`で処理。固定seedの層化ランダム10件でv1→v2→v3とpilotし、API送信前1024 tokens監査、判断不能時の早期skip、記号から本文への選択肢対応、自由記述の同型誤答生成、図・複数正解・部分点・不完全空欄問題の除外を実装。秘密鍵はGit無視ファイルだけで扱った。
-- v3全件処理は採用217、skip 157。うち58件は1024 tokens超としてAPI送信前に除外。採用は公式選択肢169、DeepSeek生成誤答48、日本語104・英語113、50 groups。OrcaRouter累計推計$1.5851154（既存$1.1460837を含む、承認済み$10上限内）。
+- v3全件処理は採用217、skip 157。うち58件は1024 tokens超としてAPI送信前に除外。採用は公式選択肢169、DeepSeek生成誤答48、日本語104・英語113、50 groups。API利用料の累計推計は$1.5851154（既存$1.1460837を含む、承認済み$10上限内）。
 - group分離でtrain 175、valid 37。pilot 3 groupsはtrain固定、validは公式選択肢だけ、valid groupに属する生成候補5件は両splitから除外。train/valid SHA256は`d88c6154...c879` / `31b07dcb...c68f`。データ、応答journal、APIログは非公開・Git無視を維持。
 - Practical V1 checkpointからExam 175 + Practical replay 175、`max_length=1024`、lr 1.5e-6、microbatch 2、勾配蓄積8、fp16 AMPで2 epoch。baselineはExam 8/37、Practical dev 308/399、Bridge 425/480。epoch 1は9/37、312/399、425/480でbest。epoch 2はExam同率だが保持性能が少し下がったため不採用。
 - best weights SHA256 `1ae38ef6c1103f8c021b0d3a974f3b1aedc42d89832d11761e74b95664216251`。追加回帰ではNPC 1kが旧weightsと同一（dev 26/27、eval 26/28）、Practical teacher-agreed evalは294/386→292/386（-0.52pt）。Exam改善は1問のみで、正式な入試性能保証ではない。
@@ -1650,7 +1650,7 @@ Epoch 1（論理演算子 90.00%、優先例外 83.33%）と Epoch 2（Core保�
 ## 55. 苦手傾向向けDeepSeek合成問題候補（2026-09-24）
 
 - 公開Practical V1の元Exam-QA validと再シャッフル候補のsealed finalを、問題本文を保存しない集計スクリプトで再分析。弱点は多段階計算、化学・科学の証拠判断、日本語の根拠読解、英語Reading/Writing、5〜9択、257〜768 tokens付近の情報統合。分析結果はGit無視の`runs/exam_qa_weakness_analysis_20260924/`に保存。
-- 実問題や評価本文を外部へ送らず、上記の集計傾向だけをOrcaRouter経由`deepseek/deepseek-v4.1-flash`へ渡して、架空・自己完結・日英のオリジナル問題を生成。カテゴリは`quantitative_multistep`、`chemistry_evidence`、`science_data_reasoning`、`reading_evidence`、`history_source_inference`、選択肢数は4/6/8、長さはshort/medium/long。生成時の正解位置強制は論理不整合を生んだため、DeepSeekに自然な正解を解かせた後、ローカルで選択肢と教師IDを同時に並べ替える方式へ修正した。
+- 実問題や評価本文を外部へ送らず、上記の集計傾向だけをDeepSeek V4.1 Flashへ渡して、架空・自己完結・日英のオリジナル問題を生成。カテゴリは`quantitative_multistep`、`chemistry_evidence`、`science_data_reasoning`、`reading_evidence`、`history_source_inference`、選択肢数は4/6/8、長さはshort/medium/long。生成時の正解位置強制は論理不整合を生んだため、DeepSeekに自然な正解を解かせた後、ローカルで選択肢と教師IDを同時に並べ替える方式へ修正した。
 - 600仕様を1回ずつ処理し、局所スキーマ・言語・重複・禁止参照検証で442件を受理。正解ラベルと解説を隠した別リクエストで全442件を独立採点し、同じDeepSeekの判定と一致した336件から実GLiClassトークン長を検査。最終的に310件（日本語159、英語151、4択132、6択102、8択76、short 132、medium 102、long 76、57〜1020 tokens）を非公開訓練候補として保存した。
 - 最終カテゴリ内訳は化学63、架空史料51、多段階計算27、読解112、科学データ57。多段階計算は独立採点不一致が多く、追加人手監査が特に必要。候補310件はID・入力指紋とも全件一意で、既存`data/**/*.jsonl` 151ファイル・80,987行との完全一致重複0件。正解位置は生成仕様で均等化したが、品質除外後は完全均等ではない。
 - 新規API費用は生成$0.5763285、回答ブラインド採点$0.0794778、結果不明要求の安全側予約$0.0203757。以前の累計を含む保守的累計は$2.2612974で、承認済み最大$10以内。APIキーはGit無視のローカルファイルだけで扱った。
