@@ -6,7 +6,7 @@ Guarantees:
   - 1-concurrency inference protection: returns HTTP 503 if busy.
   - Decision is strictly locked to status='review' on all predictions.
   - Calibration hash verification against model checkpoint on startup.
-  - Request byte limit (65,536 bytes) -> 413.
+  - Single-request byte limit (65,536 bytes) and batch limits -> 413/422.
   - Validation error -> 422.
   - Swagger/ReDoc disabled.
 """
@@ -26,6 +26,8 @@ from erabi.schema import (
     CalibrationOutput,
     DecisionOutput,
     ValidationError,
+    MAX_BATCH_REQUEST_BYTES,
+    MAX_BATCH_REQUESTS,
     MAX_REQUEST_BYTES,
 )
 from fastapi import FastAPI, HTTPException, Request, Response, status
@@ -170,6 +172,86 @@ def create_app(
             }
             return resp_dict
 
+    async def handle_batch_inference(request: Request):
+        raw_body = await request.body()
+        raw_len = len(raw_body)
+        if raw_len > MAX_BATCH_REQUEST_BYTES:
+            raise HTTPException(
+                status_code=status.HTTP_413_REQUEST_ENTITY_TOO_LARGE,
+                detail=(
+                    f"Batch request size ({raw_len} bytes) exceeds limit of "
+                    f"{MAX_BATCH_REQUEST_BYTES} bytes."
+                ),
+            )
+
+        try:
+            data = json.loads(raw_body.decode("utf-8"))
+        except Exception as e:
+            raise HTTPException(
+                status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+                detail=f"Malformed JSON: {str(e)}",
+            )
+
+        if not isinstance(data, dict) or not isinstance(data.get("requests"), list):
+            raise ValidationError(
+                "invalid_batch",
+                "Batch request body must be an object containing a 'requests' list.",
+            )
+        raw_requests = data["requests"]
+        if not 1 <= len(raw_requests) <= MAX_BATCH_REQUESTS:
+            raise ValidationError(
+                "invalid_batch_count",
+                f"Batch must contain between 1 and {MAX_BATCH_REQUESTS} requests.",
+                {"count": len(raw_requests), "min": 1, "max": MAX_BATCH_REQUESTS},
+            )
+
+        choice_requests = []
+        for index, item in enumerate(raw_requests):
+            item_len = len(
+                json.dumps(item, ensure_ascii=False, separators=(",", ":")).encode("utf-8")
+            )
+            try:
+                choice_requests.append(ChoiceRequest.from_dict(item, raw_bytes_len=item_len))
+            except ValidationError as exc:
+                details = dict(exc.details)
+                details["request_index"] = index
+                raise ValidationError(exc.code, exc.message, details) from exc
+
+        lock: asyncio.Lock = app.state.lock
+        if lock.locked():
+            raise HTTPException(
+                status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+                detail="Engine busy processing another request.",
+            )
+
+        async with lock:
+            engine = app.state.engine
+            if engine is None:
+                raise HTTPException(status_code=500, detail="Engine unavailable")
+            responses = await asyncio.to_thread(
+                engine.predict_batch,
+                choice_requests,
+                temperature=app.state.temperature,
+                calibration=app.state.calibration_output,
+                batch_size=min(
+                    len(choice_requests),
+                    getattr(engine, "recommended_batch_size", len(choice_requests)),
+                ),
+            )
+            response_dicts = []
+            for response in responses:
+                response_dict = response.to_dict()
+                response_dict["decision"] = {
+                    "status": "review",
+                    "reason": "policy_not_configured",
+                }
+                response_dicts.append(response_dict)
+            return {
+                "schema_version": "1",
+                "count": len(response_dicts),
+                "responses": response_dicts,
+            }
+
     @app.post("/predict")
     async def predict_endpoint(request: Request):
         return await handle_choice_inference(request)
@@ -177,5 +259,9 @@ def create_app(
     @app.post("/v1/choice")
     async def v1_choice_endpoint(request: Request):
         return await handle_choice_inference(request)
+
+    @app.post("/v1/choice/batch")
+    async def v1_choice_batch_endpoint(request: Request):
+        return await handle_batch_inference(request)
 
     return app

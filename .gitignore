@@ -58,11 +58,14 @@ coverage.xml
 # Training runs & checkpoint directories
 runs/
 models/
+release/
+scratch/
 
 # Environment variables & secrets
 .env
 .env.*
 !.env.example
+.venv-*-bench/
 
 # Local exam source material and generated ERABI pilot data
 exam-qa/
@@ -71,6 +74,9 @@ data/exam_qa_erabi_v1_reshuffle_*/
 data/exam_qa_weakness_v1*/
 data/npc_deepseek_v1/
 data/npc_tool_routing_v1/
+data/world_choice_v1/
+data/rc2_1_research_fresh/
+data/rc2_1_train/
 
 # IDE & OS files
 .vscode/

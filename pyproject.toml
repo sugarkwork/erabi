@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "erabi"
-version = "0.1.3"
+version = "0.1.4"
 description = "ERABI - Local probability distribution engine for choices"
 authors = [
     { name = "ERABI Project" }
@@ -34,10 +34,12 @@ calibrate = [
 ]
 data-gen = [
     "openai>=2.54.0,<3",
+    "scikit-learn>=1.3,<2",
 ]
 dev = [
     "pytest>=7.0.0",
     "httpx>=0.27.0",
+    "psutil>=5.9.0",
 ]
 
 [project.urls]

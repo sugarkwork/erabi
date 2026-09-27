@@ -1664,3 +1664,78 @@ Epoch 1（論理演算子 90.00%、優先例外 83.33%）と Epoch 2（Core保�
 - Top-1は改善しなかったため両epochとも選定不合格。checkpointは保存せず、weakness final 46件、Practical eval、既存Exam finalは未評価のまま維持。`production_candidate=false`で、Hugging Face/PyPI/公開weightsは更新しない。NLL/Brierは少し改善したが、同じDeepSeek生成様式の小規模devに対する結果であり、一般性能向上とは判定しない。
 - 実行ログでは各epochでAMP scaleが1回半減した。GradScalerの動作上、そのwindowのoptimizer更新はskipされたと推定されるため、後続実行用コードはoptimizer window数と実更新数、AMP skip数を分けて記録するよう修正した。再現コードは`scripts/split_exam_qa_weakness_v1.py`と`scripts/train_exam_qa_weakness_v1.py`、実測は`runs/exam_qa_weakness_v1_finetune_20260924/summary.json`。
 - `pytest tests -q`は133件PASS。分割データと実測runは非公開・Git無視を維持し、再現コードと結果要約だけを追跡する。
+
+## 57. World Choice V1の非公開データ生成・品質監査（2026-09-26）
+
+- 基礎属性、動物、数量判断、ツール選択、会話履歴、自律ロボット、資源・経路、RPG生存、NPC会話、複合ルールの10カテゴリをDeepSeekで生成。本生成の取得4,739件（試作込み4,886件）、形式・回答ブラインド一致で保存4,048件、内容23件・近似重複7件を除外して**4,018件の候補**を保存。5,000件採用には未達で、費用の安全側予約が上限に達したため追加APIを停止した。
+- DeepSeekの試作と抜き取り点検で、複数正解、行動効果の欠落、初期/現在数量の曖昧さ、答えを要約済みの会話、類似問題の連続を確認。生成指示をv4まで修正し、推論モード・回答ブラインド再採点を採用。v4 pilotは10カテゴリ各1件が初回生成・再採点を通過し、内容も点検した。試作は本データの全splitから除外する。
+- 日本語2,352、英語811、中国語855。2択372、4択2,386、6択900、8択360。実入力22〜908 tokens、中央値230、p95 449、512超93件、1,024超0件。長文の目標比率は実現せず、大半は短文となった。
+- 生成前のgroup分割を保ち、train 2,825 / dev 575 / calibration 214 / final_test 404。group重複0、既存比較可能82,068行・試作との入力完全一致0。新規本生成内は数字正規化した文字TF-IDF類似度0.90以上を近似除外した。過去データとの近似・意味重複や未知テンプレートへの汎化は保証していない。既存評価58ファイルのSHA256は不変。
+- 固定seedで各カテゴリ10件、計100件を抽出してCodexで内容点検し、83件を暫定保持、17件を保留。敵HP・消費電力・速度の欠落、締切境界の矛盾、複数解釈、回答ヒント等を確認。関連3バッチの残存27件（抽出との重複1件）も点検して4件追加保留。生成中の点検2件と合わせ内容除外23件。元の100件は除外後も固定し、個別理由を保存した。これはERABIの成績でも、人手goldの正解率でもない。
+- 最長の選択肢を選ぶだけでツール選択約59%、NPC会話約69%となる偏りも残る（一様ランダム期待約25%）。品質状態は`needs_independent_curation`。候補データを確定gold・本番学習用の合格データとは扱わず、条件整備・独立点検・選択肢の長さ/具体性の偏り修正が次の課題。
+- 新規取得応答の推計$6.72601815、結果不明80要求の安全側予約$0.9898368、以前の$2.28を含む保守的累計$9.99585495。最大$10を超えず、不明要求は再送しない。旧実行が上限到達で終了したため、今後用コードは処理中要求の完了を待って新規送信だけ停止するよう修正した。
+- 再現コードは`scripts/build_world_choice_v1.py`と`scripts/audit_world_choice_v1.py`。詳細、原応答、固定抽出、個別評価、分割とhashはGit無視の`data/world_choice_v1/`に保存。全pytestは137件PASS。データ公開、学習、ERABIモデル採点、既存テストへの混合、公開モデル更新は未実施。
+
+## 58. World Choice V1全件の参考スコア（2026-09-26）
+
+- ユーザー指示で、現行公開weightsと同じExam追加学習済みcheckpoint（SHA256 `1ae38ef6...216251`）を追加学習せず全4,018件で採点。**Top-1 2,041/4,018 = 50.80%**、NLL 1.3370、Brier 0.6436。一様ランダム期待24.33%、最長選択肢のみの診断38.88%。
+- カテゴリ別: 色・属性226/398（56.78%）、動物184/384（47.92%）、数量139/439（31.66%）、ツール380/420（90.48%）、会話記憶224/424（52.83%）、ロボット185/363（50.96%）、経路138/427（32.32%）、RPG109/315（34.60%）、NPC224/397（56.42%）、複合ルール232/451（51.44%）。日本語49.70%、英語57.46%、中国語47.49%。難度・カテゴリ差があるため言語能力差とは断定しない。
+- PyTorch FP32、CUDA、GLiClass 0.1.20、Transformers 5.17.0、温度1.0、max_tokens/内部max_lengthとも1,024。切り詰め・スキップ・推論エラー0。生成時ヘルパーの入力長は現行formatterより全件で1 token多く、実推論は21〜907 tokens、512超92件。初回はこの差の事前一致検査で予測0件のまま停止し、再実行では両方の長さを記録して実推論長を独立検査した。入力本文・formatter・モデル重みは変更していない。
+- 生成段階で未採点だった全splitを今回開いたため、以降は参考/診断データとして扱い、未使用の最終合否テストとは呼ばない。合成ラベルと長さの偏り等の品質制約は継続。モデル選択・学習・校正・公開更新は行っていない。
+- `scripts/eval_world_choice_v1.py`で再現可能。全予測・集計・条件は`runs/world_choice_v1_reference_20260926_run2/`、開封記録は`data/world_choice_v1/evaluation_exposure.json`。全4,018件の候補ID・target・logits・確率和・argmax・正解数を保存予測から再検査した。入力・weightsの前後hashと既存評価58ファイルは不変。全pytest137件PASS、評価プロセスとGPU割当の終了を確認。
+
+## 59. World Choice V1追加学習・既存＋新規テスト（2026-09-27）
+
+- group重複なしの既存splitを変更せず、World Choice train 2,825件にPractical train 2,414件とExam train 175件をリプレイとして混合（計5,414件）。現行公開weightsと同じcheckpoint（SHA256 `1ae38ef6...216251`）から、max_tokens 1,024、lr `1e-6`、micro-batch 1、勾配蓄積16、fp16 AMP、1 GPUで3 epoch追加学習した。実formatter入力は21〜907 tokens、1,024超・切り詰め0。
+- epoch選択はWorld Choice devと既存dev保持だけで行い、final群は選択に使わなかった。World Choice devは基準272/575（47.30%）からepoch 1: 308/575（53.57%）、epoch 2: 332/575（57.74%）、epoch 3: **351/575（61.04%）**へ改善。全epochが既存保持条件を通り、epoch 3を選択した。
+- 選択epochの既存devはPractical 312/399→334/399（78.20→83.71%）、Bridge 425/480→423/480（88.54→88.12%）、Exam 14/43→13/43（32.56→30.23%）、Weakness 25/46→29/46（54.35→63.04%）。Bridge -0.42pt、Exam -2.33ptは事前の許容範囲内。
+- dev選択後の参考テストは、World Choice final **197/404→255/404（48.76→63.12%、+14.36pt）**、Practical final **292/386→338/386（75.65→87.56%、+11.92pt）**、Bridge **425/480→423/480（-0.42pt）**、Exam final **19/51→21/51（37.25→41.18%、+3.92pt）**、Weakness final **26/46→25/46（56.52→54.35%、-2.17pt）**。World Choice finalは前日の全件測定で既に開封済み、全教師は暫定合成ラベルなので、独立goldの本番合格とは扱わない。
+- 選択weights SHA256は`20385ab5a4a40aefc754a5f5faba0463d1b68831c896fb92d95160c63f44bd4e`。実験runは`runs/world_choice_v1_finetune_20260927/`、再現コードは`scripts/train_world_choice_v1.py`。公開weights、Hugging Face、PyPI、校正、ONNXは更新していない。
+- 全工程は154.41分。学習3 epochは約75.1分。最終Bridge再測定はGPUが90〜91℃で210MHzへスロットリングし44.89分を要したため、通常速度の推論時間とは比較しない。既存評価58ファイルのSHA256不変と`pytest tests -q` 137件PASSを確認した。
+
+## 60. 主要モデル世代のWorld Choice final比較（2026-09-27）
+
+- 新しいWorld Choice final 404件を、途中の不採用epochを除く主要系譜で比較。PyTorch/CUDA、温度1.0、max_tokens 1,024、候補順固定、切り詰め0。RC1〜Practical V1は新規測定し、同一入力・条件で測定済みのExam V1とWorld Choice選択モデルを統合した。
+- Top-1はRC1 150/404（37.13%）、RC2 177/404（43.81%）、RC2.1 181/404（44.80%）、RC3 197/404（48.76%）、Practical V1 201/404（49.75%）、Exam V1 197/404（48.76%）、World Choice epoch 3 **255/404（63.12%）**。RC1比+25.99pt / 105問、直前Exam比+14.36pt / 58問。
+- NLL/BrierはRC1 5.0332/1.1024、RC2 7.0019/1.0372、RC2.1 4.4303/0.9743、RC3 2.7616/0.8198、Practical 1.4210/0.6672、Exam 1.3778/0.6618、World Choice **0.9480/0.4942**。RC2は正解数が増えてもNLLが悪化し、過信誤りが増えた。Practical/ExamはTop-1変化が小さい一方で確率品質を大きく改善した。
+- 新規測定した旧5世代の完全予測・カテゴリ/言語別集計は`runs/world_choice_v1_model_lineage_20260927/`。詳細は同ディレクトリの`REPORT.md`。ExamとWorld Choiceの全体値は`runs/world_choice_v1_finetune_20260927/summary.json`を正とする。
+- この404件は学習前に開封済みで、教師も暫定合成ラベル。世代差の参考にはなるが、未知データの本番合格や公開モデル更新の根拠には単独で使わない。公開・校正・ONNX更新は実施していない。
+
+## 61. World Choice V1実験モデル・ONNX公開（2026-09-27）
+
+- ユーザーの公開指示に基づき、選択epoch 3のPyTorch weightsからCPU用ONNX FP32とGPU用ONNX FP16を再生成。World Choice final 404件、実入力最大747 tokens、max_tokens/前処理max_length 1,024でPyTorchとのTop-1一致を全件確認した。FP32 404/404、最大logit差`5.4598e-05`、FP16 404/404、最大logit差`0.021997`。
+- SHA256はPyTorch `20385ab5a4a40aefc754a5f5faba0463d1b68831c896fb92d95160c63f44bd4e`、ONNX FP32 `f35ba7019a32b823b116fea5dff839315bb0e982850d66352d531b6b0eaed770`、ONNX FP16 `56d5a87b79f60299be5f93facac524f8ba6af7e2896399eaa0de210c64ebe801`。パリティ詳細は`runs/world_choice_v1_finetune_20260927/onnx/parity_report.json`。
+- Hugging Faceの既存実験モデル`sugarknight/erabi-practical-v1-experimental`を3形式同時に更新。Hub commitは`72ef0212cddae20486009f9e4ce2498c75bb0b0c`。Hub APIのLFS metadataで3ファイルのサイズ・SHA256がローカルと一致することを確認した。モデルカードはWorld Choice学習条件、成績、既開封test、暫定合成ラベル、Weakness退行、未校正を明記し、内部ルーター名や秘密情報を含めない。
+- PyPI `erabi==0.1.3`の既定revisionは旧Exam版commit `c6c7acf...`に固定されたまま。今回の新モデル利用には当面`--model-id sugarknight/erabi-practical-v1-experimental --revision main`またはcommit IDを明示する。PyPI、GitHub、公開runtime既定512-token契約は変更していない。
+
+## 62. World Choice V1 CPU単体速度（2026-09-27）
+
+- Ryzen 7 5800X（8C/16T、RAM約96GB）、推論threads 8、batch 1、GPU不使用。404件を8回ウォームアップ後に各1回測定。実入力31〜747 tokens、切り詰め0。新しい公開weightsとローカルONNX FP32を使用した。
+- CPU ONNX FP32は初期ロード8.73秒、平均532.54ms、p50 **496.13ms**、p95 1,252.05ms、平均換算1.88 req/s。入力長別p50は1〜128 tokens 138.35ms、129〜256 410.97ms、257〜512 716.98ms、513〜747 1,592.72ms。
+- CPU PyTorch FP32は初期ロード2.20秒、平均647.26ms、p50 608.86ms、p95 1,226.29ms、平均換算1.54 req/s。通常の短いツール選択・NPC判断ではONNX FP32が明確に速く、長文では差が縮まった。このホスト固有の単件実測であり、CPU・電源設定・同時負荷・入力長に依存する。
+- 両backendとも教師一致255/404で、今回選択checkpointの既存結果を再現。詳細は`runs/world_choice_v1_cpu_benchmark_20260927/{REPORT.md,summary.json}`、再現コードは`scripts/benchmark_world_choice_cpu.py`。
+
+## 63. World Choice V1 CPU RAM・CPU使用量（2026-09-27）
+
+- 同じホスト・404件を、backendごとに独立した新規プロセスで再測定。20ms間隔でプロセスRSSを採取し、推論区間のprocess CPU time / wall timeから平均使用論理CPU数を算出した。GPU不使用、8 threads、batch 1、8回ウォームアップ、切り詰め0。
+- ONNX FP32はウォームアップ後RSS 2.34 GiB、推論中ピーク2.59 GiB。推論404件は209.45秒、平均518.43ms、p50 474.35ms、p95 1,206.31ms、1.93 req/s。平均7.95論理CPU相当で、16論理CPUホスト全体の49.66%。
+- PyTorch FP32はウォームアップ後RSS 1.77 GiB、推論中ピーク2.23 GiB。推論404件は260.85秒、平均645.65ms、p50 610.10ms、p95 1,230.47ms、1.55 req/s。平均7.94論理CPU相当で、ホスト全体の49.60%。
+- 利用目安は1推論プロセスにつき少なくとも約3 GiBの空きRAM。OS等を含むシステムRAMは8 GB以上を現実的な出発点とする。これは余裕を含む参考値で最低動作保証ではない。独立プロセスの初期化はONNX 33.42秒、PyTorch 10.57秒だったが、同日別測定の8.73秒・2.20秒との差が大きく、ディスクキャッシュ等に依存する。
+- 両backendとも教師一致255/404を再現。詳細は`runs/world_choice_v1_cpu_resources_20260927/{REPORT.md,onnx_fp32/summary.json,pytorch_fp32/summary.json}`。計測コードへRSS・CPU time採取と単一backend実行オプションを追加した。
+
+## 64. CUDA 13.2速度・VRAM比較（2026-09-27）
+
+- 既存`.venv`を変更せず、隔離venvへ公式`torch 2.12.0+cu132`を導入。`torch.version.cuda=13.2`、RTX A4000上のCUDA演算、依存整合を確認した。統制用に同じPyTorch 2.12.0の`cu130`環境も作成した。
+- World Choice final 404件、PyTorch safetensors、batch 1、8 warmups、各単件の前後でCUDA synchronize、max_tokens 1,024、切り詰め0。cu130/cu132は各2 run、現行`torch 2.6.0+cu124`は1 run。全runで教師一致255/404。
+- 現行cu124は初期化6.72秒、p50 240.34ms、平均233.22ms、4.29 req/s。cu132初回は初期化6.40秒、p50 235.59ms、平均225.58ms、4.43 req/sで約2%速く見えたが、PyTorch世代差を含むためCUDA差とは判定しない。
+- 同じtorch 2.12.0の統制比較では、cu130は2 run平均初期化6.20秒・p50 236.66ms・合計4.19 req/s、cu132は6.38秒・236.77ms・4.18 req/s。cu132はp50 0.05%遅く、処理量0.23%低く、測定誤差範囲。速度改善なし。
+- VRAMはcu124/cu130/cu132の全runで、ウォームアップ後allocated 1,681.53MiB、推論peak allocated 1,963.40MiB、peak reserved 2,070MiBと同一。CUDA 13.2による削減なし。
+- 全runで温度中央値91℃、最大92〜93℃、SM clock中央値210MHzの強いサーマルスロットリング。通常冷却時の絶対性能値ではなく、同一高温条件下の相対比較としてのみ扱う。PyTorch wheelのCUDA更新は別RuntimeのONNX FP16速度を変えないため、現時点でcu132への移行は推奨しない。
+- CUDA 13.2隔離環境へ同じONNX Runtimeも追加した後、`pytest tests -q`は137件PASS。詳細は`runs/world_choice_v1_cuda_compare_20260927/REPORT.md`と各runの`summary.json`。再現コードは`scripts/benchmark_world_choice_cuda.py`。
+
+## 65. バッチ推論対応と実測（2026-09-28）
+
+- PyTorch/ONNX両エンジンへ`predict_batch()`を追加し、異なるcontext・question・2〜16候補をまとめて受理する。全件を切り詰めなしで事前検査し、トークン長順にまとめてpaddingを抑え、返却時は要求順・候補ID順を復元する。HTTPには最大16件・全体1MiBの`POST /v1/choice/batch`を追加した。
+- World Choice final 404件、31〜747 tokens、max 1,024で実測。PyTorch CUDAはbatch 1の6.156 req/sからbatch 16の6.838 req/sへ**1.111倍**。教師一致255/404とbatch 1比Top-1 404/404を維持し、最大logit差`4.58e-05`。
+- ONNX FP16 CUDAはbatch 1が27.331 req/sで最速。batch 16は20.844 req/s（0.763倍）でTop-1 404/404一致。batch 4/8はFP16丸め差により境界的な1件が変化した。ONNX FP32 CPU（8 threads）もbatch 1の2.000 req/sが最速で、batch 2は1.841、batch 4は1.743 req/s。全404件のTop-1は一致した。
+- したがって自動推奨batchはPyTorch CUDA=16、CPU PyTorch/ONNX=1。ONNXでも明示的な一括forwardは可能だが、この環境では高速化しなかった。測定はtokenize込みの全件wall time、各サイズ1周で、GPUは高温・他プロセス使用中。再現コードは`scripts/benchmark_world_choice_batch.py`、結果は`runs/world_choice_v1_batch_benchmark_20260928/`。

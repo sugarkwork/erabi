@@ -33,6 +33,10 @@ class FakeEngine:
             usage=UsageOutput(input_tokens=42, truncated=False),
         )
 
+    def predict_batch(self, requests, **kwargs):
+        kwargs.pop("batch_size", None)
+        return [self.predict(request, **kwargs) for request in requests]
+
 
 @pytest.fixture
 def client():
@@ -89,6 +93,56 @@ def test_api_validation_error_422(client):
     assert data["error"] == "invalid_choice_count"
 
 
+def test_api_batch_preserves_request_and_choice_order(client):
+    payload = {
+        "requests": [
+            {
+                "context": "天候は晴れです。",
+                "question": "行動を選んでください。",
+                "choices": [
+                    {"id": "talk", "text": "雑談する"},
+                    {"id": "search", "text": "Web検索する"},
+                ],
+            },
+            {
+                "context": "扉の向こうから物音がする。",
+                "question": "NPCの行動を選んでください。",
+                "choices": [
+                    {"id": "wait", "text": "待機する"},
+                    {"id": "open", "text": "扉を開ける"},
+                    {"id": "leave", "text": "その場を離れる"},
+                ],
+            },
+        ]
+    }
+    response = client.post("/v1/choice/batch", json=payload)
+    assert response.status_code == 200
+    data = response.json()
+    assert data["count"] == 2
+    assert [item["best_candidate_id"] for item in data["responses"]] == ["talk", "wait"]
+    assert [choice["id"] for choice in data["responses"][1]["choices"]] == [
+        "wait",
+        "open",
+        "leave",
+    ]
+
+
+@pytest.mark.parametrize("requests", [[], [{}] * 17])
+def test_api_batch_rejects_invalid_count(client, requests):
+    response = client.post("/v1/choice/batch", json={"requests": requests})
+    assert response.status_code == 422
+    assert response.json()["error"] == "invalid_batch_count"
+
+
+def test_api_batch_reports_invalid_item_index(client):
+    response = client.post(
+        "/v1/choice/batch",
+        json={"requests": [{"context": "x", "question": "q", "choices": []}]},
+    )
+    assert response.status_code == 422
+    assert response.json()["details"]["request_index"] == 0
+
+
 def test_api_request_too_large_413(client):
     # Create request exceeding 65,536 bytes
     large_context = "A" * 70000
@@ -109,8 +163,7 @@ def test_api_request_too_large_413(client):
 def test_api_concurrency_lock_503(client):
     app = client.app
     # Manually lock the async lock to simulate in-flight inference
-    loop = asyncio.get_event_loop()
-    loop.run_until_complete(app.state.lock.acquire())
+    asyncio.run(app.state.lock.acquire())
 
     payload = {
         "context": "文脈",

@@ -90,6 +90,39 @@ print("probabilities:", {choice.id: choice.probability for choice in result.choi
 
 初回は選択されたモデルを自動ダウンロードします。「初期化」にはモデルの取得・読み込みが含まれ、「推論」は1問を処理する時間です。`sample.py`は既定でCPUを使い、ONNX Runtime CPU版があればFP32 ONNX、なければPyTorchを選びます。表示される確率は正解の保証ではありません。
 
+### 複数の判断をまとめて処理する
+
+Python APIは、質問・文脈・候補数が異なる複数要求を`predict_batch`で受け取れます。返却順と各要求内の候補ID順は入力どおりです。内部ではトークン長の近い要求をまとめてpaddingを減らし、処理後に元の順へ戻します。各入力は切り詰め前に上限を検査します。
+
+```python
+requests = [
+    ChoiceRequest.from_dict({
+        "context": "今日の宮崎の天気を知りたい。",
+        "question": "次の行動を選んでください。",
+        "choices": [
+            {"id": "chat", "text": "雑談する"},
+            {"id": "web", "text": "Web検索する"},
+        ],
+    }),
+    ChoiceRequest.from_dict({
+        "context": "扉の向こうから物音がする。",
+        "question": "NPCの行動を選んでください。",
+        "choices": [
+            {"id": "wait", "text": "待機する"},
+            {"id": "open", "text": "扉を開ける"},
+            {"id": "leave", "text": "その場を離れる"},
+        ],
+    }),
+]
+
+results = engine.predict_batch(requests)
+print([result.best_candidate_id for result in results])
+```
+
+`batch_size`は明示指定もできます（例: `engine.predict_batch(requests, batch_size=8)`）。実測上の既定はPyTorch CUDAが16、CPU PyTorchとONNXが1です。ONNXでも複数要求を一度に渡せますが、現在のランタイムではモデル内部の一括forwardより単件を長さ順に処理する方が速かったためです。
+
+HTTP APIでは最大16要求の`POST /v1/choice/batch`を使います。本文は`{"requests":[...通常のChoiceRequest...]}`、応答は`{"schema_version":"1","count":2,"responses":[...]}`です。バッチ全体は1 MiB、各要求は64 KiBまでで、途中の1件が不正ならバッチ全体を422で拒否します。
+
 ### モデルの保存先
 
 ダウンロード先を指定するには、`--model-cache-dir`を使います。`predict`、`evaluate`、`python -m erabi.serve`で利用でき、トークナイザーと重みの両方に適用されます。保存先に十分な空き容量を確保してください。
@@ -102,7 +135,7 @@ erabi predict --request examples/request.json
 
 Linux/macOSでは`export ERABI_MODEL_CACHE_DIR=/data/models/erabi-cache`と設定します。優先順位は`--model-cache-dir`、`ERABI_MODEL_CACHE_DIR`、Hugging Face標準の`HF_HUB_CACHE`/`HF_HOME`、既定キャッシュの順です。環境変数を変更しても既存のダウンロードは移動されず、新しい場所に再取得されます。`--model-id`にローカルモデルディレクトリを指定した場合はその場所から読み込み、キャッシュ先の設定はモデル自体の移動には使われません。
 
-ERABI 0.1.3の既定モデルは、Exam-QA追加実験後の3形式を含む検証済みHugging Faceリビジョン`c6c7acf0280b8af5cce6c2a18e9a215f7d2eae57`に固定しています。Windowsでシンボリックリンクを使えない環境ではモデルカード更新だけでも別リビジョンのキャッシュが重複し得るためです。新しいリビジョンを意図的に使う場合は`--revision main`またはコミットIDを指定してください。
+ERABI 0.1.4の既定モデルは、World Choice追加学習後の3形式を含む検証済みHugging Faceリビジョン`72ef0212cddae20486009f9e4ce2498c75bb0b0c`に固定しています。0.1.3は以前のExam-QA版を既定としていました。Windowsでシンボリックリンクを使えない環境ではモデルカード更新だけでも別リビジョンのキャッシュが重複し得るため、再現可能なweights commitへ固定しています。別のリビジョンを意図的に使う場合は`--revision main`またはコミットIDを指定してください。
 
 ### モデル形式の自動選択とおすすめ
 
@@ -216,6 +249,43 @@ Practical V1 checkpointにExam-QA 175件とPractical replay 175件を混ぜ、`m
 | GPU ONNX 静的QDQ W8A8 | 0.84 GB | 84.75 / 89.44 ms | 29/90 | 27/90 |
 
 この測定ではCPUはONNX FP32、GPUはONNX FP16が速度と出力一致の両面で有望でした。FP32の最大確率差は元weights比で最大0.00000493、FP16は最大0.00374でした。動的/静的INT8は軽量化できても予測が大きく変化し、静的版はCPU/GPUとも遅くなりました。静的W8A8はONNX RuntimeのMinMax校正によるQDQであり、SmoothQuantではありません。INT8版は配布・自動選択の対象外です。FP32/FP16版も、独立goldでの確認や校正は未実施です。
+
+2026-09-27のWorld Choice V1公開weightsをRyzen 7 5800X（8C/16T）・推論8 threads・batch 1で追加測定しました。404件（実入力31〜747 tokens）を各方式の独立した新規プロセスで処理した参考値です。
+
+| CPU形式 | 単件p50 / p95 | 平均処理量 | ウォームアップ後RSS | 推論中ピークRSS | 平均CPU使用量 |
+|---|---:|---:|---:|---:|---:|
+| ONNX FP32（推奨） | **474 / 1,206 ms** | **1.93件/秒** | 2.34 GiB | 2.59 GiB | 7.95論理CPU相当（ホスト全体49.7%） |
+| PyTorch FP32 | 610 / 1,230 ms | 1.55件/秒 | **1.77 GiB** | **2.23 GiB** | 7.94論理CPU相当（ホスト全体49.6%） |
+
+ONNX FP32の入力長別p50は128 tokens以下137ms、129〜256 tokens 402ms、257〜512 tokens 690ms、513〜747 tokens 1,593msでした。`8 threads`設定なので、16論理CPUのうち約8個をほぼ使い切る挙動です。推論プロセスだけで最大約2.6 GiBを使ったため、実運用では**1プロセスにつき少なくとも約3 GiBの空きRAM**を見込み、OSや他アプリも含めるなら8 GB以上のシステムRAMを現実的な出発点としてください。並列ワーカーを増やす場合、RAM消費は概ねプロセス数に応じて増えます。
+
+### バッチ処理の実測
+
+2026-09-28、World Choice final 404件（31〜747 tokens）をトークン長順に内部バケット化し、tokenizeを含む全件wall timeで比較しました。RTX A4000は高温・他プロセス使用中のためGPUの絶対値は参考値です。
+
+| backend | batch 1 | 最良の測定batch | 結果 |
+|---|---:|---:|---:|
+| PyTorch CUDA | 6.16件/秒 | batch 16: **6.84件/秒** | **1.11倍**、Top-1 404/404一致 |
+| ONNX FP16 CUDA | **27.33件/秒** | batch 16: 20.84件/秒 | 0.76倍、batch 1が最速 |
+| ONNX FP32 CPU（8 threads） | **2.00件/秒** | batch 2: 1.84件/秒 | 0.92倍、batch 1が最速 |
+
+PyTorch CUDAでは小幅に処理量が増えました。一方、既定の高速経路であるONNXはCPU/GPUとも一括forwardで遅くなったため、自動推奨値を1にしています。ONNX FP16のbatch 4/8は丸め差で境界的な1件だけTop-1が変わり、batch 16は404/404一致でした。再現コードは[scripts/benchmark_world_choice_batch.py](scripts/benchmark_world_choice_batch.py)、生の測定値は`runs/world_choice_v1_batch_benchmark_20260928/`です。
+
+初期化時間はディスクキャッシュやウイルス対策ソフトの影響が大きく、同日実測でONNX 8.73〜33.42秒、PyTorch 2.20〜10.57秒でした。RSSはモデルファイル容量ではなく、Python・ランタイム・展開済みweights・一時バッファを含むプロセスの実使用量です。ERABI 0.1.4はこの測定に使ったHugging Face commit `72ef0212cddae20486009f9e4ce2498c75bb0b0c`を既定にしています。速度とRAMはCPU、threads、電源設定、同時負荷、入力長、候補数に依存します。
+
+### CUDA 13.2比較（PyTorch safetensors）
+
+2026-09-27、RTX A4000 16GB、World Choice final 404件、batch 1、8回ウォームアップで、エンジン初期化、同期済み単件推論、PyTorch allocatorのVRAMを測定しました。CUDA 13.2は隔離venvの`torch 2.12.0+cu132`で実行し、`torch.version.cuda == "13.2"`と実CUDA演算を確認しています。
+
+| 環境 | 回数 | 初期化 | p50 | 処理量 | ウォームアップ後VRAM | 推論ピークVRAM |
+|---|---:|---:|---:|---:|---:|---:|
+| 現行 `torch 2.6.0+cu124` | 1 | 6.72秒 | 240.34ms | 4.29件/秒 | 1,681.5MiB | 1,963.4MiB |
+| 統制 `torch 2.12.0+cu130` | 2 | 平均6.20秒 | 平均236.66ms | 合計4.19件/秒 | 1,681.5MiB | 1,963.4MiB |
+| 比較 `torch 2.12.0+cu132` | 2 | 平均6.38秒 | 平均236.77ms | 合計4.18件/秒 | 1,681.5MiB | 1,963.4MiB |
+
+同じPyTorch 2.12.0で比較すると、CUDA 13.2は13.0比でp50が0.05%遅く、合計処理量が0.23%低く、VRAMは同一でした。これは測定誤差範囲で、**CUDA 13.2による速度・VRAM改善は確認できません**。現行12.4比では13.2の初回p50が約2%速く見えますが、PyTorch 2.6→2.12の変更も含むためCUDAだけの効果とは判定できません。
+
+全runでGPUは90〜93℃、SM clock中央値210MHzまでサーマルスロットリングしており、この値は通常冷却時の絶対性能ではなく同一高温条件での相対比較です。全runで教師一致255/404、ピーク予約VRAM 2,070MiBでした。なお、この比較はPyTorch safetensorsエンジンです。`onnxruntime-gpu`のCUDA RuntimeはPyTorch wheelとは独立しているため、PyTorchをcu132へ替えてもONNX FP16エンジンは高速化されません。現時点ではCUDA 13.2への移行を推奨する根拠はありません。
 
 再現にはリポジトリをチェックアウトし、開発用仮想環境へ`pip install -e ".[dev]"`、環境に合う`onnxruntime`または`onnxruntime-gpu`と`onnx`を導入します。以下は公開モデルをHugging Face CLIで別ディレクトリへ取得する例です（約1.75GB、十分な空き容量が必要）。実験結果は`runs/`配下（Git管理外）へ書き、モデルと評価結果の既存ファイルは上書きしないでください。
 

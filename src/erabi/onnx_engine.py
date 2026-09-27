@@ -78,6 +78,9 @@ class ERABIONNXEngine:
             self.device = "cuda" if torch.cuda.is_available() else "cpu"
         else:
             self.device = "cuda" if "cuda" in str(device).lower() else "cpu"
+        # Measured ONNX kernels are faster one request at a time on the current
+        # CPU and CUDA runtimes. Callers can still request a larger explicit batch.
+        self.recommended_batch_size = 1
 
         available_providers = ort.get_available_providers()
         if self.device == "cuda" and "CUDAExecutionProvider" in available_providers:
@@ -144,61 +147,119 @@ class ERABIONNXEngine:
           4. Single Softmax over raw logits without sigmoid renormalization.
           5. Alignment with official GLiClass Task Description Prompt API.
         """
-        labels = [c.text for c in request.choices]
-        context_text = request.context if request.context is not None else ""
+        return self.predict_batch(
+            [request],
+            temperature=temperature,
+            return_logits=return_logits,
+            calibration=calibration,
+            batch_size=1,
+        )[0]
 
-        tokenized_inputs = self.preparer.prepare_inputs(
-            [context_text],
-            [labels],
-            same_labels=False,
-            prompt=[request.question],
-        )
+    def predict_batch(
+        self,
+        requests: List[ChoiceRequest],
+        temperature: float = 1.0,
+        return_logits: bool = False,
+        calibration: Optional[CalibrationOutput] = None,
+        batch_size: Optional[int] = None,
+    ) -> List[ChoiceResponse]:
+        """Infer multiple requests in one or more ONNX Runtime calls."""
+        if not requests:
+            raise ValidationError("empty_batch", "Batch must contain at least one request.")
+        if batch_size is None:
+            batch_size = self.recommended_batch_size
+        if batch_size < 1:
+            raise ValidationError("invalid_batch_size", "batch_size must be at least 1.")
 
-        input_ids = tokenized_inputs["input_ids"]
-        attention_mask = tokenized_inputs["attention_mask"]
-
-        input_tokens = int(input_ids.shape[1])
-        if input_tokens > self.max_tokens:
-            raise ValidationError(
-                "input_too_long",
-                f"Total input length ({input_tokens} tokens) exceeds maximum limit of {self.max_tokens} tokens.",
-                {"input_tokens": input_tokens, "max_tokens": self.max_tokens},
+        labels_by_request = [[choice.text for choice in req.choices] for req in requests]
+        formatted_inputs = [
+            self.preparer.prepare_input(
+                req.context if req.context is not None else "",
+                labels,
+                prompt=req.question,
             )
-
-        ort_inputs = {
-            "input_ids": input_ids.cpu().numpy(),
-            "attention_mask": attention_mask.cpu().numpy(),
-        }
-
-        # Run ONNX inference
-        ort_outputs = self.session.run(["logits"], ort_inputs)
-        raw_logits_all = ort_outputs[0]  # shape: (1, num_classes)
-        # Select first len(labels)
-        logits_arr = raw_logits_all[0, : len(labels)].astype(np.float32)
-        row_logits = logits_arr.tolist()
-
-        # Check for non-finite logits
-        for val in row_logits:
-            if not math.isfinite(val):
-                raise RuntimeError(f"Model returned non-finite logit: {val}")
-
-        # Argmax over raw logits
-        best_idx = int(np.argmax(logits_arr))
-
-        # Softmax with temperature scaling
-        probs = compute_softmax(row_logits, temperature=temperature)
-
-        choice_outputs = [
-            ChoiceOutput(id=c.id, probability=float(p))
-            for c, p in zip(request.choices, probs)
+            for req, labels in zip(requests, labels_by_request)
         ]
-        best_candidate_id = choice_outputs[best_idx].id
+        encoded = self.tokenizer(formatted_inputs, truncation=False, padding=False)
+        encoded_rows = [
+            {key: values[index] for key, values in encoded.items()}
+            for index in range(len(requests))
+        ]
+        input_lengths = [len(row["input_ids"]) for row in encoded_rows]
+        for request_index, input_tokens in enumerate(input_lengths):
+            if input_tokens > self.max_tokens:
+                raise ValidationError(
+                    "input_too_long",
+                    f"Total input length ({input_tokens} tokens) exceeds maximum limit of {self.max_tokens} tokens.",
+                    {
+                        "request_index": request_index,
+                        "input_tokens": input_tokens,
+                        "max_tokens": self.max_tokens,
+                    },
+                )
 
+        processing_order = sorted(range(len(requests)), key=input_lengths.__getitem__)
+        responses: List[Optional[ChoiceResponse]] = [None] * len(requests)
+        for start in range(0, len(requests), batch_size):
+            request_indices = processing_order[start : start + batch_size]
+            chunk = [requests[index] for index in request_indices]
+            labels_list = [labels_by_request[index] for index in request_indices]
+            tokenized_inputs = self.tokenizer.pad(
+                [encoded_rows[index] for index in request_indices],
+                padding="longest",
+                return_tensors="pt",
+            )
+            ort_inputs = {
+                "input_ids": tokenized_inputs["input_ids"].cpu().numpy(),
+                "attention_mask": tokenized_inputs["attention_mask"].cpu().numpy(),
+            }
+            raw_logits_all = self.session.run(["logits"], ort_inputs)[0]
+
+            for row_index, (request_index, req, labels) in enumerate(
+                zip(request_indices, chunk, labels_list)
+            ):
+                row_logits = (
+                    raw_logits_all[row_index, : len(labels)]
+                    .astype(np.float32)
+                    .tolist()
+                )
+                responses[request_index] = self._build_response(
+                    req,
+                    row_logits,
+                    input_lengths[request_index],
+                    temperature,
+                    return_logits,
+                    calibration,
+                )
+
+        if any(response is None for response in responses):
+            raise RuntimeError("Batch inference did not produce every requested response.")
+        return [response for response in responses if response is not None]
+
+    def _build_response(
+        self,
+        request: ChoiceRequest,
+        row_logits: List[float],
+        input_tokens: int,
+        temperature: float,
+        return_logits: bool,
+        calibration: Optional[CalibrationOutput],
+    ) -> ChoiceResponse:
+        for value in row_logits:
+            if not math.isfinite(value):
+                raise RuntimeError(f"Model returned non-finite logit: {value}")
+
+        best_idx = int(np.argmax(np.asarray(row_logits, dtype=np.float32)))
+        probabilities = compute_softmax(row_logits, temperature=temperature)
+        choice_outputs = [
+            ChoiceOutput(id=choice.id, probability=float(probability))
+            for choice, probability in zip(request.choices, probabilities)
+        ]
         return ChoiceResponse(
             schema_version="1",
             model_id=self.model_id,
             choices=choice_outputs,
-            best_candidate_id=best_candidate_id,
+            best_candidate_id=choice_outputs[best_idx].id,
             decision=DecisionOutput(status="review", reason="policy_not_configured"),
             calibration=calibration or CalibrationOutput(status="none", artifact_id=None),
             usage=UsageOutput(input_tokens=input_tokens, truncated=False),
