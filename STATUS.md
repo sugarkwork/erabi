@@ -1739,3 +1739,10 @@ Epoch 1（論理演算子 90.00%、優先例外 83.33%）と Epoch 2（Core保�
 - World Choice final 404件、31〜747 tokens、max 1,024で実測。PyTorch CUDAはbatch 1の6.156 req/sからbatch 16の6.838 req/sへ**1.111倍**。教師一致255/404とbatch 1比Top-1 404/404を維持し、最大logit差`4.58e-05`。
 - ONNX FP16 CUDAはbatch 1が27.331 req/sで最速。batch 16は20.844 req/s（0.763倍）でTop-1 404/404一致。batch 4/8はFP16丸め差により境界的な1件が変化した。ONNX FP32 CPU（8 threads）もbatch 1の2.000 req/sが最速で、batch 2は1.841、batch 4は1.743 req/s。全404件のTop-1は一致した。
 - したがって自動推奨batchはPyTorch CUDA=16、CPU PyTorch/ONNX=1。ONNXでも明示的な一括forwardは可能だが、この環境では高速化しなかった。測定はtokenize込みの全件wall time、各サイズ1周で、GPUは高温・他プロセス使用中。再現コードは`scripts/benchmark_world_choice_batch.py`、結果は`runs/world_choice_v1_batch_benchmark_20260928/`。
+
+## 66. ERABI 0.1.4公開（2026-09-28）
+
+- バッチ推論、World Choice再現コード、CPU/GPU実測、利用方法をGitHub `main`へcommit `b170333`でpush。READMEにはPython `predict_batch()`、HTTP `POST /v1/choice/batch`、404件のbackend別速度・Top-1一致結果・推奨batchを記載した。非公開データ、ローカルrun、release生成物、scratch、API資格情報は追跡対象外。
+- PyPI [`erabi==0.1.4`](https://pypi.org/project/erabi/0.1.4/)へwheelとsdistを公開。既定Hugging Face revisionをWorld Choice weights commit `72ef0212...`へ更新した。公開wheelをPyPIからキャッシュなしで再取得し、ローカル検査済みwheelとSHA256 `80276258522367749eebda7cf38219b8beebaf124a2e14a24a4ed5c5ace533d4`が一致。importでversion `0.1.4`、既定revision、最大batch 16を確認した。
+- wheel 34ファイル、sdist 69ファイルを検査し、`.env`、秘密鍵、非公開World Choiceデータ、ONNX/safetensors本体の混入0。`twine check`は両形式PASS。wheel SHA256は上記、sdistは`f24028ba7c33bb9b3c4314341934fa033aaa3673972ab7ff5980bbea284314a0`。
+- 公開前に`pytest tests -q` **141件PASS**。単独実行で判明したPython 3.12のイベントループ依存テストを修正し、`tests/test_api.py`単独9件もPASS。Hugging Faceモデルカードだけを0.1.4説明へ同期し、card commitは`bc7365673ab31d875e05e9344178de433cd89854`。weightsとONNXファイルは変更していない。
