@@ -9,13 +9,14 @@ from erabi.schema import ChoiceRequest
 parser = argparse.ArgumentParser()
 parser.add_argument("--device", default="cpu")
 parser.add_argument("--model-format", default="auto")
+parser.add_argument("--revision", default="main", help="Hub revision; main selects the latest published model")
 args = parser.parse_args()
 
 print("ERABI: recreating Jev-like choice decisions with GLiClass (experimental, not official Jev).", flush=True)
 print("Runtime: ONNX Runtime or PyTorch; model downloaded from Hugging Face.", flush=True)
 print(f"[1/2] Loading model (device={args.device}, format={args.model_format})...", flush=True)
 started = perf_counter()
-engine = load_engine(device=args.device, model_format=args.model_format)
+engine = load_engine(device=args.device, model_format=args.model_format, revision=args.revision)
 print(f"[1/2] Model ready in {perf_counter() - started:.2f}s (format={engine.model_format})", flush=True)
 
 request = ChoiceRequest.from_dict({

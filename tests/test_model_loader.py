@@ -55,6 +55,7 @@ def test_selected_onnx_downloads_only_its_variant(monkeypatch, tmp_path):
         model_id=DEFAULT_MODEL_ID, model_format="onnx-fp32", device="cpu", cache_dir="custom-cache"
     )
     assert captured["allow_patterns"] == ["onnx/fp32/model.onnx", *model_loader.ONNX_SUPPORT_FILES]
+    assert captured["max_workers"] == (1 if model_loader.os.name == "nt" else 8)
     assert captured["cache_dir"] == "custom-cache"
     assert captured["revision"] == model_loader.DEFAULT_MODEL_REVISION
     assert captured["engine"]["onnx_model_file"] == "onnx/fp32/model.onnx"

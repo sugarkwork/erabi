@@ -95,6 +95,9 @@ def load_engine(
             revision=effective_revision,
             cache_dir=effective_cache,
             allow_patterns=[relative_file, *ONNX_SUPPORT_FILES],
+            # Concurrent first-time symlink probes can race on Windows without
+            # symlink privileges. Four selected files do not need parallelism.
+            max_workers=1 if os.name == "nt" else 8,
         ))
         onnx_file = relative_file
     if not (model_root / onnx_file).is_file():

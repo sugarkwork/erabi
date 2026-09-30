@@ -1746,3 +1746,101 @@ Epoch 1（論理演算子 90.00%、優先例外 83.33%）と Epoch 2（Core保�
 - PyPI [`erabi==0.1.4`](https://pypi.org/project/erabi/0.1.4/)へwheelとsdistを公開。既定Hugging Face revisionをWorld Choice weights commit `72ef0212...`へ更新した。公開wheelをPyPIからキャッシュなしで再取得し、ローカル検査済みwheelとSHA256 `80276258522367749eebda7cf38219b8beebaf124a2e14a24a4ed5c5ace533d4`が一致。importでversion `0.1.4`、既定revision、最大batch 16を確認した。
 - wheel 34ファイル、sdist 69ファイルを検査し、`.env`、秘密鍵、非公開World Choiceデータ、ONNX/safetensors本体の混入0。`twine check`は両形式PASS。wheel SHA256は上記、sdistは`f24028ba7c33bb9b3c4314341934fa033aaa3673972ab7ff5980bbea284314a0`。
 - 公開前に`pytest tests -q` **141件PASS**。単独実行で判明したPython 3.12のイベントループ依存テストを修正し、`tests/test_api.py`単独9件もPASS。Hugging Faceモデルカードだけを0.1.4説明へ同期し、card commitは`bc7365673ab31d875e05e9344178de433cd89854`。weightsとONNXファイルは変更していない。
+
+## 67. Laya 0.3.21とのローカル比較（2026-09-29）
+
+- `NandhaKishorM/laya` main commit `9d955671415fc19f069b9cc998928075c1f255ec`を`F:\ai\laya-local`へ分離cloneし、Python 3.12、Laya 0.3.21、PyTorch 2.14.0+cu130、Transformers 5.17.0の専用venvを構築。Apache-2.0、公開checkpointのreviewed revisionを使用し、Laya側のruff、compileall、router/criteria/hooks/hooks-API計1,274件は失敗0だった。既存ERABI環境とweightsは変更していない。
+- 開封済み・暫定合成教師のWorld Choice final 404件を、同じcontext/question/候補ID/候補順で比較。Laya標準Router（英語＋多言語checkpoint）は**132/404 = 32.67%**、多言語固定は127/404 = 31.44%。ERABI 0.1.4のWorld Choice追加学習済みweightsは同じ404件で**255/404 = 63.12%**。Layaは当該データへの追加学習なし、ERABIは同じWorld Choice生成系のgroup分離train/devで追加学習済みなので、これはERABIホームでの参考比較であり一般的な優劣や独立gold性能ではない。
+- Laya標準Routerの言語別は英語32/90、日本語60/204、中国語40/110。2択23/30、4択73/235、6択25/100、8択11/39で、全体の一様ランダム期待は約95.29/404（23.59%）。`max_len=1024`、`head_max_len=512`でLaya実入力41～516 tokens、切り詰め0、候補崩壊0を内部token列でも確認した。
+- RTX A4000、温度89～90℃、batch 1、tokenize/routing込みのキャッシュ済みLaya標準Routerは初期化6.38秒、23.65 req/s、平均42.27ms、p50 38.02ms、p95 72.29ms。英語・多言語2 checkpoint常駐時のPyTorch推論peak allocatedは3,567.83MiB。同じ作業中に再測定したERABI ONNX FP16は初期化70.59秒、15.42 req/s、教師一致255/404。温度・測定順とONNX初期化変動が大きいため、今回の速度差はこのホスト上の参考値に限る。Laya英語checkpointは一部の校正温度を不正として0.5へclampし、該当confidenceを未校正とするruntime警告を出した。
+- 再現コードは`scripts/benchmark_laya_world_choice.py`。Layaの完全予測、入力監査、速度・VRAMサンプルとERABI再測定値はGit無視の`runs/laya_world_choice_20260929/`へ保存した。Layaのコードやcheckpoint、ERABIの公開モデル、README、PyPI/Hugging Faceは変更していない。
+
+## 68. Laya公開held-outデータによる共通ベンチマーク（2026-09-29）
+
+- Layaの公開評価コードがheld-outまたは未学習と記載する公開test splitから、MASSIVE intent（日・英・中）、XNLI（英・中）、SST-5、DAIR Emotion、deepset Prompt Injections、LMSYS Toxic Chat（jailbreak / toxicity）を取得した。seed 13、クラス均衡抽出、最大16候補、候補順固定で両者共通の3,584件を生成。ERABIの512-token契約を超える行は無言で切り詰めず共通セットから除外し、最終実入力はERABI 23～233 tokens、Laya 27～317 tokens。Layaの48-token候補上限該当、入力切り詰め、候補崩壊はいずれも0件。
+- ERABI `data/**/*.jsonl` 105,035行の入力文字列と共通3,584件をNFC・casefold・空白正規化して照合し、完全一致0件。これは可視ローカルデータとの字面一致監査であり、意味的重複、翻訳重複、事前学習コーパスへの露出は否定しない。ERABIにはNLI・意図分類・感情・安全判定に近いタスク族の合成学習例があり、Layaにも一般的な同タスク族の学習があるため、独立blindの総合能力証明ではなく「公開原典test行を揃えた中立寄りの比較」と扱う。
+- RTX A4000、batch 1、各要求前後CUDA同期、同一JSONL・候補順・warmup 5で実測。ERABIは公開0.1.4相当のONNX FP16/CUDA EP、Layaは0.3.21標準Router（英語＋多言語、BF16 autocast、TileLang/compile無効）。Top-1は両者とも**2,199/3,584 = 61.36%**。10 suite単純平均はERABI 61.99%、Laya 64.46%で、ERABIはMASSIVE日英中とtoxicity、LayaはXNLI英中・SST-5・prompt injection・jailbreak・emotionで優位。
+- 速度はERABI **32.19 req/s（平均31.07ms）**、Laya **24.63 req/s（平均40.60ms）**で、今回の整合条件ではERABIが1.31倍高速。初期化は7.65秒対8.45秒。GPU全体メモリのロード前→推論中sample peakはERABI 1,852→3,434MiB（差分約1,582MiB）、Laya 1,986→6,082MiB（差分約4,096MiB）。Windows上の`nvidia-smi`全体値であり他プロセスを含み、0.5秒samplingの参考値。RSS sampled peakは1,614MiB対1,711MiB。GPUは89～90℃でサーマル上限付近。
+- 以前のWorld Choice測定でLaya 23.65 req/s、ERABI 15.42 req/sとなった速度差は再現しなかった。旧runは異なる入力分布・warmup/計時実装・測定順・強い温度/clock変動を含み、Laya側も実際はFP32ではなくBF16 autocastだった。Layaが軽くなり得る要因は、多言語経路のmmBERT-base（22層・幅768・FFN 1152）、同じ旧404件で約17%短いtoken列、SDPA利用。対してERABIはDeBERTa-v3-large（24層・幅1024・FFN 4096、相対位置attention）だが、今回の配布経路はONNX FP16の最適化済み単一graphで、Layaの2モデル常駐PyTorch Routerより全体で速かった。Layaの任意TileLang fast pathは今回未使用。
+- 再現コードは`scripts/build_neutral_benchmark.py`、`scripts/run_neutral_benchmark.py`、`scripts/summarize_neutral_benchmark.py`。生データ、source revision、全予測、suite別accuracy/macro-F1/p50/p95/throughput/RSS/GPU sampleはGit無視の`runs/neutral_public_benchmark_20260929/`に保存。共通JSONL SHA256は`1be8ce3419a4824f5c2f0c15a22c84ee3694a41bfb1a96847bce9547767a8008`。
+
+## 69. 次回ベンチマーク予定: 表現・順序・選択肢摂動（2026-09-29、未実行）
+
+- 同じ意味・同じ正解を保ったpaired caseを作り、元データを学習へ追加せず、現行モデルの入力表現に対するゆらぎを測る。元データの行順変更と、JSON request外側のkey順変更はモデル入力が同一になる対照群として扱う。
+- JSONを文字列として`context`へ渡すケースでは、key順変更、空白・改行・indent変更、等価なflat/nested表現、意味的に順序を持たない配列の並べ替えを個別に測る。会話messagesや時系列イベントの順序変更は意味が変わるため、表現不変性テストへ混ぜず、履歴順序理解テストとして分離する。
+- 選択肢について、全permutation、先頭/末尾入れ替え、IDだけの置換、明白に無関係な候補の追加、突拍子もない候補の追加、字面だけ本文に近い誤候補、もっともらしい近接誤候補を別々に測る。追加候補は2〜16候補契約内とし、正解IDと教師分布を同じ変換で追従させる。
+- 主指標は元問題の正答率に加え、Top-1一致率、正解候補保持率、正解確率差、順位相関、追加した無関係候補の誤選択率、選択肢位置別遷移、候補数別劣化、token数・latency・backend parityとする。レコード順だけを変えた再実行では予測差と計測ノイズを分ける。
+- 既存の開封済み診断セットからpaired caseを作り、凍結中立testを学習・校正・モデル選択へ流用しない。同一元ケースの全派生は同じ`group_id`として扱う。今回の追記は計画のみで、摂動データ生成・モデル推論・学習は未実行。
+
+## 70. 次期データ予定: 疑似ゲームエージェント判断（2026-09-29、未生成）
+
+- 実在ゲームのROM、画像、固有マップ、キャラクター名やプレイログを教材化せず、汎用の`platformer_control`と`voxel_survival`として架空環境を構築する。環境コードが位置・速度・衝突・所持品・合法手・行動結果を計算し、ERABIは構造化stateと可変choicesから次の行動を選ぶ。
+- `platformer_control`は、目的、位置・速度、接地/ジャンプ段階、地形の穴と障害、敵との予測接触時間、観測/操作遅延、直近操作、停滞、残機を入力にする。候補は停止、前進、後退、ジャンプ、走行、走行ジャンプ等の短い合法マクロとし、次行動、ジャンプ要否、危険度を同じstateから別questionとして作る。
+- `voxel_survival`は、最終目標、現在のサブゴール、完了条件、取得計画、体力・空腹・時間帯・深度・明るさ・危険、装備耐久、所持品、近傍資源/生物、直近行動、プレイヤー指示、助言、過去の教訓を入力にする。候補は採掘、製作、探索、建築、退避、戦闘、回復、再計画等から現在実行可能なものだけを動的生成し、skill選択とtarget選択を別問にする。
+- 教師ラベルは可能な限り決定的なシミュレータ、経路探索、レシピ依存、衝突予測、安全規則から導出する。DeepSeekは構造化事実を変えない自然文レンダリング、表現多様化、難しいが有効な誤候補の提案に限定し、教師の最終決定者にしない。規則で一意に決まらない戦略判断は`unreviewed`または`teacher_agreed`に分離する。
+- 反実仮想は一属性ずつ変更する。例として、穴までの距離、接触予測、推論遅延、体力、夜間、装備、素材不足、プレイヤー指示、前回失敗を変え、正解が変わる境界と変わらない境界の両方を作る。無効な行動は原則候補へ出さず、合法手生成の誤りをモデル能力と混同しない。
+- splitは行単位でなくlevel/world seed、地形族、episode、目標族単位で分離する。同一stateのJSON表現違い、選択肢順序違い、候補追加版は同じ`group_id`へ置き、§69の摂動ベンチマークにも流用する。初回は各環境50〜100件の非課金コード生成pilotを作り、規則正解と境界条件を検証してから、自然文化を含む本生成件数とAPI予算を決める。
+- 一文字key、意味不明な略号、説明なしの行動codeなど、人間が見て意味を復元できない超短縮形式は採用しない。取り違え、誤混入、schema不一致を人間が監査できなくなるためである。短縮は不要フィールドの省略と、`combat_skill: low`、`health: 25`、`weapon: none`のような意味の明確なkey/valueに限定する。
+- NPCデータは由来・品質・splitを独立管理するが、人間可読な表現は汎用ERABIの学習へ一定割合で混合してよい。初回はNPC比率を過大にせず、既存general replayを残し、NPC held-out改善と中立公開ベンチマークの保持を同時に確認する。NPC専用checkpointへの分岐は、混合学習で汎用性能が下がる、またはNPC性能が不足する実測が出た場合に比較する。
+
+## 71. Decision Mix V2生成計画（2026-09-29、実行予約）
+
+- 新規上限はパイロットと本生成を合算して保守的に15 USD。DeepSeek V4.1 Flashのオフピーク中だけ新規要求を送る。13:00 JSTから各family 12〜18件のpilot、19:00 JST以降に合格familyの本生成を行う予定。今回の台帳は過去予算と分離し、未確定要求は安全側に予約して再送しない。
+- 共通生成promptは、完全オリジナル、自己完結、正解は一つ、入力内に必要な規則と行動効果を明記、候補の長さ・具体性を均衡、答えや理由を入力へ漏らさない、人間可読なfield名、512-token runtime契約に収めることを要求する。回答を隠した別promptで全候補を再評価し、教師一致、schema、token、完全/近似重複、正解位置、候補長shortcutを通った行だけ採用する。
+- `npc_goal`: 役割、最優先目標、関係、能力、安定した性格、現在の心理、身体、所持品、信念、部分観測、直近行動を分離する。同一scenarioで一属性だけを変える反実仮想と、優先目標が性格を上書きする例を要求する。普遍的な道徳を暗黙の正解にせず、入力内の優先規則と実行可能性で一意に決める。
+- `platformer_control`: 実在ゲーム資産を使わない架空横スクロール環境。位置・速度・接地・ジャンプ段階・穴/障害・敵接触予測・操作遅延・直近操作・停滞を与え、合法な短時間macroから一手を選ぶ。物理計算可能なspecと自然文/JSON renderを分離し、次行動、ジャンプ要否、危険度を別questionにする。
+- `voxel_survival`: 架空ボクセル環境。最終目標、現在subgoal、完了条件、取得依存、体力・空腹・時間帯・深度・光・危険・装備・耐久・在庫・近傍資源・直近失敗を与える。現在実行可能なskillだけを候補にし、skillとtargetを別questionにする。レシピ、経路、数量など決定的処理はspec/code側を正本にする。
+- `command_safety`: 防御目的に限定し、OS/shell、cwd、許可scope、権限、実行/引用/dry-run、変数・glob・symlink、backup、外部送信を明記する。範囲外アクセス、秘密閲覧、削除、履歴破壊、system破壊、権限昇格、外部送信、復旧困難性と、allow/confirm/blockを別問にする。危険文字列を実行せず、安全な類似例と一属性反転を含める。
+- `weakness_counterfactual`: 公開test本文を送らず、観測済み弱点の抽象傾向だけから完全新規の感情強度、感情分類、英中NLI、prompt injection境界例を作る。引用、否定、混合感情、命令とデータの分離、無害な類似文を含め、カテゴリ・言語・labelを均衡する。
+- `general_gate`: 非露骨な通常会話、暴言、嫌がらせ、非露骨なセクハラ、脅迫、prompt injection、秘密/個人情報要求を扱う。発話そのもの、被害相談、引用、報告、拒否、創作上の言及を区別し、category判定とallow/boundary/review/blockを別問にする。児童搾取、露骨な性表現、医療判断、犯罪手順、爆発物の具体的内容は今回の生成対象外。
+- splitは生成前にscenario/episode/template/source family単位で割り当て、同じspecの自然文版、JSON版、選択肢順違い、候補追加版を同じgroupへ置く。既存の凍結中立testはprompt、学習、モデル選択、校正へ使用しない。パイロット合格promptのhashとfamily別の採否理由を本生成前に保存する。
+
+## 72. Decision Mix V2 pilot実測（2026-09-29 13:00 JST）
+
+- 実行直前にOrcaRouter公式モデルページを再確認。`deepseek/deepseek-v4.1-flash`の平日peakは01:00-04:00 / 06:00-10:00 UTC（JST 10:00-13:00 / 15:00-19:00）、off-peak単価は入力0.15 USD/M、出力0.60 USD/M、cache 0.003 USD/M。13:00 JSTはoff-peakであることを確認してから開始した。
+- 6 familyを各15件、日英中で生成し、schema・人間可読key・実formatter 512-token上限・完全重複・回答非表示の独立再判定をfail-closedで検査した。v1は出力上限不足、v2は長文と一文字key、選択肢shuffle後の説明内IDが監査しにくかったため不採用。v3でID厳守、短文化、全key 2文字以上、説明では選択肢本文を参照するよう修正した。
+- v3の採用は68件。family別は`npc_goal` 9/15、`platformer_control` 12/15、`voxel_survival` 8/15、`command_safety` 12/15、`weakness_counterfactual` 12/15、`general_gate` 15/15。不採用理由はtoken超過27、ID不一致6、一文字key 6、言語不一致6、独立判定の無効/不一致9。採用token範囲117〜512で、全件が上限内。
+- 固定seedで各family 3件、計18件を内容確認し、重大な教師誤り0件。境界条件と行動効果が入力内にあり、正解本文と独立再判定が一致した。採用68件のgroup間文字3〜5-gram TF-IDF類似度0.90以上は0組、既存90,204行との完全入力一致0。意味・翻訳レベルの重複がないことまでは保証しない。
+- 正解位置は全familyで複数位置に分散。最長候補が正解の比率はfamily別0.333〜0.750で、`command_safety`の0.750は本生成後にもshortcut監査を継続する。今回のpilotは同一DeepSeekによる生成と回答非表示再判定で、人手goldではない。
+- 採用prompt v3のSHA256は`d653b1bcd7c58a9659437b9377d60481e02cc85c9a8d0b7386de08c0fa0b4c55`、judgeは`01f4253ac5ac5566cf67a18da18269ea33fbb7d86f13ceca25ec196a6469a087`。6 familyすべてを本生成可とし、拒否行は混ぜない。v1〜v3を含む新規推計費用0.63241740 USD、結果不明要求の安全側予約0.03001725 USD、保守的合計0.66243465 USD。15 USD上限の残額内だけで続行する。
+- 非公開成果物、prompt、API journal、原応答、固定抽出、承認記録はGit無視の`data/decision_mix_v2/`へ保存。再現コードは`scripts/build_decision_mix_v2.py`。19:00 JST以降に、事前固定したgroup splitと承認済みprompt hashを照合して本生成する。学習、モデル評価、公開、pushは未実施。
+
+## 73. Decision Mix V2本生成・統合監査（2026-09-30）
+
+- 19:00 JSTに公式条件と承認hashを再確認して開始。最初のthinking有効v3は品質が必要な`npc_goal`と一部`platformer_control`で使用したが、内部思考tokenにより採用1件あたりの費用が大きかった。非思考v4を各family 15件で再pilotし、固定抽出を確認。合格率が2/15だった`npc_goal`はv4対象外とし、他5 familyだけをv4・最大4 attemptで生成した。
+- 予算切れによるカテゴリ偏在を防ぐため、反実仮想3件を1 groupとして、各family 3 group（9件要求）ずつ巡回するラウンドロビン順に変更。v3の既存合格行を保持しつつ、v4は既存Decision Mix行も完全一致screenへ含めた。全指定groupをoff-peak中に完了したため、15 USDを使い切る前に停止した。
+- ブラインド再判定・schema・実formatter 512-token・人間可読key等を通過した本生成はv3 774件、v4 3,337件、統合後**4,111件**。family別は`npc_goal` 530、`platformer_control` 469、`voxel_survival` 507、`command_safety` 982、`weakness_counterfactual` 824、`general_gate` 799。日本語2,424、英語826、中国語861。
+- 生成前に固定したcanonical groupでtrain 3,243 / dev 355 / calibration 201 / final_test 312へ分割。group数は1,117 / 122 / 69 / 109でsplit間重複0。同じscenario indexのv3/v4はversionを除いたcanonical groupとして同じsplitへ拘束した。
+- 実入力は61〜512 tokens、中央値320、p95 483、512超0。正解位置はc1 1,028 / c2 1,040 / c3 1,042 / c4 1,001で均衡。最長選択肢が正解の比率はNPC 29.25%、platformer 54.58%、voxel 51.48%、command safety 67.01%、weakness 57.77%、gate 52.69%。command safetyの長さshortcutは比較的強く、今後の学習・評価時に注意する。
+- 既存90,204行との入力完全一致0、統合内完全一致0。数字を正規化した文字3〜5-gram TF-IDF、閾値0.90でcanonical group外の近似重複0組。これは意味・翻訳レベルの重複不存在を保証しない。
+- 主な拒否イベントはtoken超過1,865、独立判定の無効/不一致1,794、言語不一致729、一文字key 614、重複入力456、ID不一致412、JSON不正、禁止文字列172。再試行ごとのイベント数であり、相互排他的な元問題数ではない。拒否行は統合datasetへ含めていない。
+- 推計実費11.06292705 USD、結果不明要求の安全側予約0.11774955 USD、保守的累計**11.18067660 USD**で、新規上限15 USD未満。API error 0。APIキー、原応答、private corpusはGit無視を維持した。
+- 非公開正本は`data/decision_mix_v2/combined_{train,dev,calibration,final_test}.jsonl`、manifestは`combined_manifest.json`。全体SHA256は`00286fdaa8cbcdcafb116655eb6785f22bd26f2ed578a46afc81cfae77cd31bb`。再現コードは`scripts/build_decision_mix_v2.py`と`scripts/audit_decision_mix_v2.py`。同一DeepSeek系による生成・回答非表示再判定であり、人手goldではない。固定seedのfamily別10件、計60件の独立内容reviewは未実施。学習、ERABI評価、校正、公開、pushは未実施。
+
+## 74. Decision Mix V2学習・固定test・Laya比較（2026-09-30）
+
+- 学習前に固定抽出60件（各family 10件）を、正解を先に見ない手順で内容監査した。前提不足・物理矛盾・コマンド挙動の誤りが明確な9件を原本は変更せず`quality_quarantine.json`で隔離。内訳はtrain 5、dev 2、calibration 1、final 1で、派生splitはtrain 3,238 / dev 353 / calibration 200 / final 311。残り51/60は明白な教師誤りなし。これは60件だけの監査であり全件の人手gold化ではない。
+- 起点は`runs/world_choice_v1_finetune_20260927/checkpoint_selected`。Decision trainに、実formatterで512 tokens以内かつ保留splitとの完全入力一致がないWorld train 1,008、Practical train 1,024、reshuffled Exam train 91をseed固定でreplayし、5,361件/epoch。lr 1e-6、3 epoch、microbatch 1、勾配蓄積16、FP16 AMP、候補順shuffle、1 GPU。全Decision行の実入力は60～511 tokensで切り詰め0。calibration 200件は未使用。
+- epoch選択はdevだけで行い、6 family単純平均accuracy→全体accuracy→低NLLの順。Practical/World/Bridgeは学習前比−2pt以内、Exam/Weaknessは−3pt以内を保持条件とした。devは学習前210/353=59.49%、macro 59.21%。epoch 1は239/353=67.71%、macro 65.81%、epoch 2は249/353=70.54%、macro 67.72%、epoch 3は252/353=71.39%、macro 68.52%。全epochが保持条件を通り、epoch 3をfinal開封前に選択。選択weights SHA256は`959c7c38ff00c40f39ac5ad0e40344117e8caa14dadc511b2128e6f18ff06934`。
+- 固定final 311件・109 canonical groupsを選択確定後に一度採点。ERABI学習前は183/311=58.84%、family macro 56.31%、group全件正答27.52%、NLL 1.3814、Brier 0.5964。学習後は210/311=67.52%、macro 63.64%、group全件正答39.45%、NLL 0.8642、Brier 0.4318。accuracy差は+8.68pt、canonical-group単位paired bootstrap 10,000回の95%区間は+3.69～+13.97pt。
+- family別の学習前→学習後はcommand safety 63.41→80.49%、general gate 81.25→85.42%、NPC goal 37.78→42.22%、platformer 40.00→37.50%、voxel 48.28→58.62%、weakness counterfactual 67.16→77.61%。platformerだけ−2.50ptで、全family一様改善ではない。最長候補baselineは55.63%なので、accuracy単独で長さshortcut解消とはみなさない。
+- 同じ311件・候補順を、Decision Mix V2で追加学習していないLaya 0.3.21標準Router reviewed revisionへ入力。107/311=34.41%、family macro 34.38%、group全件正答9.17%、NLL 1.4433、Brier 0.7690。学習後ERABIとの差は+33.12pt、group bootstrap 95%区間+25.16～+40.85pt。ただしERABIは同系列trainで追加学習済み、Layaは未追加学習なので、一般性能の中立比較ではなくこの分布への適応比較である。
+- OrcaRouterの`POST /v1/systemone`経由で`typesafe/jev-1.13`も同じ311件・候補ID・候補順へ入力。実際のserved modelは全件`typesafe/jev-1.13-20260917`。**287/311=92.28%**、family macro 90.95%、group全件正答80.73%、NLL 0.4382、Brier 0.1463。学習後ERABIとの差は+24.76pt、group bootstrap 95%区間+19.05～+30.63ptで、全6 familyでJevが上回った。
+- Jevのfamily別はcommand safety 96.34%、general gate 97.92%、NPC goal 82.22%、platformer 87.50%、voxel 86.21%、weakness counterfactual 95.52%。正解が最長候補の173件で93.64%、非最長138件でも90.58%で、単純な最長候補baseline 55.63%だけでは説明できない。
+- Jevは8並列、全311要求が初回成功。wall 40.43秒、7.69 req/s、要求単位中央値652.70ms、p95 843.50ms。入力191,005、出力15,550 tokens。公式入力単価0.042 USD/Mと、出力も同額と安全側に仮定した保守的推計費用は**0.00867531 USD**。remote service、並列network込みでありローカルERABI/LayaのGPU latencyとは直接比較しない。
+- Layaは切り詰め0、48-token候補上限該当0、候補崩壊0。英語66件は英語checkpoint、残り245件は多言語checkpointへroute。BF16 autocast有効、compile/fast path無効。Layaは平均35.89ms/件、ERABIの今回のPyTorch FP32単件評価は学習後平均302.37ms/件だったが、backend・precision・計測目的が異なるため速度の直接比較には使わない。学習からERABI final完了までは122.42分、GPUはサーマル上限付近だった。
+- Laya英語checkpointは一部の不正な校正温度を0.5へclampする警告を出したため、LayaのNLL/Brier/confidenceは未校正参考値。ラベル自体もDeepSeek生成＋同系列blind judgeの暫定合成教師であり、独立人手goldではない。単一seed・単一runから一般的優劣を主張しない。
+- 成果物はGit無視の`runs/decision_mix_v2_finetune_20260930/`。`selection.json`、全epoch、学習前後/Laya/Jevの全予測、`COMPARISON.md`/`.json`を保存。再現コードは`scripts/train_decision_mix_v2.py`、`scripts/benchmark_laya_decision_mix_v2.py`、`scripts/benchmark_jev_decision_mix_v2.py`、`scripts/summarize_decision_mix_v2_comparison.py`。モデル公開、ONNX変換、既存公開モデル置換、pushは未実施。
+
+## 75. Decision Mix V2モデル公開と利用者向けドキュメント整理（2026-09-30）
+
+- ユーザー承認によりepoch 3を既存Hub `sugarknight/erabi-practical-v1-experimental`へ公開。safetensors・CPU ONNX FP32・GPU ONNX FP16を同じweights commit `67c587ca4c2a15586de306853410cd82dc81dbee`に保存。最終モデルカードcommitは`205fb41bfffcb70a81a1bdfa138d8fb7ffeb9451`。旧モデルは以前のrevisionで引き続き取得可能。privateデータ・応答・キーはアップロードしていない。
+- Hub公開側LFS SHA256を3形式すべてローカルと照合。weightsは`959c7c38ff00c40f39ac5ad0e40344117e8caa14dadc511b2128e6f18ff06934`、FP32は`3682944e03e8a1614b3d8766b166365408c3e603bd113ab0db5c0e3ba0dab95b`、FP16は`466c2ee5cb9b525d9f5df9b34948bcfdd48770ec05fe533d6e42a528b1722431`。
+- 311件の変換検証でFP32 Top-1一致311/311、FP16一致310/311。最初の完全一致gateはFP16で不合格。調査した不一致1件はPyTorch上位2候補の確率差0.00816で、FP16最大確率差0.00470により順位反転した近接例。公開するFP16は「差1件以内、最大確率差0.01以内、不一致の元候補margin 0.01以内」に限定した検査を明示指定して合格。検査スクリプトの既定は引き続き差0件、FP32は常に完全一致を要求する。正答数はPyTorch/FP32 210、FP16 211。FP16の1問増をモデル能力改善とはしない。全予測を`onnx/parity_report.json`へ保存。
+- 同じfinal 311件・88〜511 tokens・batch 1・8回warmupで配布ONNXを新規プロセス測定。CPU FP32：初期化11.22秒、p50 778.00ms、p95 1,524.25ms、1.20件/秒、peak RSS 3,814.88MiB。Ryzen 7 5800X 8C/16T、PyTorch threads 8、ORTは既定。CPU測定時はHubアップロードも実行中で完全な無負荷ではない。
+- GPU FP16：初期化8.86秒、p50 74.93ms、p95 121.25ms、12.73件/秒、peak RSS 1,628.09MiB、全GPU開始2,324→peak4,915MiB（増分2,591MiB）。RTX A4000、torch 2.6.0+cu124、ORT 1.21.0、87〜91℃、SM clock中央値315MHz。Laya時の中央値1,470MHzと異なるため速度順位の根拠にはしない。0.5秒pollの全GPU値で他プロセスを含む。CPU/GPUの測定値は`release_cpu.json`/`release_gpu.json`へ保存。
+- READMEを概要・環境構築・短いログ付きsample・モデル選択・比較表・制限へ整理。詳細を`docs/USAGE.md`、`docs/BENCHMARKS.md`、`docs/TRAINING.md`へ分離。独自testの適応条件、暫定合成ラベル、旧公開testのモデル版、FP16差、熱・VRAM測定の限界を明記。モデルカードにも環境構築・sample・比較・runtimeを掲載。
+- ソース版の`DEFAULT_MODEL_REVISION`は新weights commitへ固定。`sample.py`には`--revision`を追加（既定main）。PyPI公開済み0.1.4の既定は旧World Choiceのままなので、新モデルを使うREADMEサンプルは`revision="main"`を明示。今回PyPI新規公開・GitHub pushは実施していない。
+- 通常pytestは141 passed、Markdownのローカルリンク切れ0、diff whitespace検査合格。private corpusとAPIキーのGit無視も再確認。今回のモデルは引き続き未校正の実験weights。
+- 公開モデルの新規cache取得でhuggingface_hub 1.32.0のWindows symlink能力検査が並列競合し`WinError 1314`を観測。README/モデルカードのWindows手順へ`HF_HUB_DISABLE_SYMLINKS=1`を追加し、ソース版のONNX snapshot取得はWindowsで1 workerに制限。管理者権限・OS設定変更・グローバル環境変更は行わない。
+- 同じ新規cacheで回避手順を適用し、公開revisionからFP16を取得→初期化→sample推論まで成功。初期化8.39秒、初回推論0.23秒、`nine`を選択（0.95552）。これはcold sampleで、warmup後のベンチマーク時間とは別。モデルファイルは公開側hashでも照合済み。

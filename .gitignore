@@ -75,6 +75,7 @@ data/exam_qa_weakness_v1*/
 data/npc_deepseek_v1/
 data/npc_tool_routing_v1/
 data/world_choice_v1/
+data/decision_mix_v2/
 data/rc2_1_research_fresh/
 data/rc2_1_train/
 
