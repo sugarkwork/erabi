@@ -30,7 +30,9 @@ Linux/macOSは `python3 -m venv .venv` と `source .venv/bin/activate` に置き
 NVIDIA GPUを使う場合は、別の仮想環境で、環境に合う[GPU用PyTorch](https://pytorch.org/get-started/locally/)を導入してから次を実行します。
 
 ```powershell
-python -m pip install erabi onnxruntime-gpu
+# 再測定で動作確認したCUDA 13構成（RTX 5060 Ti）
+python -m pip install torch==2.12.0 --index-url https://download.pytorch.org/whl/cu130
+python -m pip install erabi onnxruntime-gpu==1.30.0
 ```
 
 CPU版 `onnxruntime` とGPU版 `onnxruntime-gpu` は同じ環境に両方入れないでください。GPUには互換なCUDA/cuDNNが必要です（[対応表](https://onnxruntime.ai/docs/execution-providers/CUDA-ExecutionProvider.html)）。ONNXを使わない場合は `pip install erabi` だけでPyTorch版を利用できます。
@@ -92,35 +94,47 @@ engine = load_engine(
 
 保存先は `ERABI_MODEL_CACHE_DIR` 環境変数でも指定できます。形式の明示指定、バッチ処理、CLI、ローカルHTTP APIは[使い方](docs/USAGE.md)を参照してください。
 
+GPUの自動選択は容量を抑えたFP16です。ただし機種・入力によってはFP32の方が速い場合があります。GPUでFP32を試すには `load_engine(device="cuda:0", model_format="onnx-fp32", revision="main")` を指定します。
+
 ## ベンチマーク
 
-### 独自データセットでLaya・Jevと比較
+### 正答率
 
-Decision Mix V2の未学習テスト311件に、同じ状況・質問・候補順を渡しました（2026-09-30）。
+現行モデルをRTX 5060 Ti 16GBで再測定しました（2026-10-02）。独自Decision Mix V2の未学習テスト311件すべてと、公開データ10種類からseed 42で各16件抽出した共通160件で比較しています。Jevのみ2026-09-30の同じ311件のリモート結果です。
 
-| モデル | 正答数 | 正答率 |
+| モデル・入力形式 | 独自311件 | 公開・共通160件 |
 |---|---:|---:|
-| ERABI（PyTorch / ONNX FP32） | 210 / 311 | 67.52% |
-| ERABI（ONNX FP16） | 211 / 311 | 67.85% |
-| Laya 0.3.21 reviewed | 107 / 311 | 34.41% |
-| Jev 1.13（リモートAPI） | 287 / 311 | 92.28% |
+| ERABI GPU PyTorch / ONNX FP32 / FP16 | 210 / 311（67.52%） | 99 / 160（61.88%） |
+| Laya 0.3.21 reviewed：ID＋説明文 | 109 / 311（35.05%） | 92 / 160（57.50%） |
+| Laya 0.3.21 reviewed：文章キー | 119 / 311（38.26%） | 105 / 160（65.63%） |
+| CLEF 27B：NF4＋CPU退避 | 276 / 311（88.75%） | 131 / 160（81.88%） |
+| CLEF 27B：BF16＋CPU退避 | 276 / 311（88.75%） | 132 / 160（82.50%） |
+| Jev 1.13：リモートAPI | 287 / 311（92.28%） | 未測定 |
 
-ラベルは独立した人手goldではなく、合成教師の再判定一致です。ERABIは同系統のtrain splitで調整済み、Layaには同じ調整を行っていないため、一般的な性能順位ではありません。FP16の丸め差やカテゴリ別成績などの[比較条件・詳細](docs/BENCHMARKS.md)も確認してください。
+Layaは同じ候補でもAPIへの渡し方で結果が変わるため、`{ID: 説明文}` と `{候補文: None}` を分けています。公開テストはMASSIVE・XNLI・感情・ゲート分類などです。ERABIとLayaの公開3,584件の追加測定は[詳細資料](docs/BENCHMARKS.md)に掲載しています。160件の成績と混ぜて順位付けはしません。
+
+独自ラベルは合成教師の再判定一致で、独立した人手goldではありません。ERABIは同系統のtrainで調整済み、他モデルに同じ追加学習はしていないため、独自testの順位を一般性能の順位とは呼びません。[カテゴリ別成績・比較条件](docs/BENCHMARKS.md)も確認してください。
 
 ### 速度とメモリの目安
 
-今回のモデルを同じ311件・batch 1で測定しました。初回ダウンロードは含めません。
+同じ独自311件・batch 1・8回ウォームアップ後、入力整形を含めて測定しました。初回ダウンロードは除外。処理量は推論時間から算出します。RAM/VRAMピークは公開testを含む測定全体の値で、ERABI/Layaは3,895件、CLEFは471件、CPUは311件です。
 
 | 実行系 | 初期化 | 推論p50 / p95 | 処理量 | RAM / VRAM目安 |
 |---|---:|---:|---:|---|
-| GPU ONNX FP16 | 8.86秒 | 74.93 / 121.25ms | 12.73件/秒 | ピークRSS約1.59GiB / 全GPU使用量増分約2.53GiB |
-| CPU ONNX FP32 | 11.22秒 | 778.00 / 1,524.25ms | 1.20件/秒 | ピークRSS約3.73GiB / VRAMなし |
-| Laya 標準BF16 | 6.96秒 | 32.81 / 52.13ms | 27.84件/秒 | RAM未計測 / 全GPU使用量増分約3.92GiB |
-| Jev リモートAPI | — | 652.70 / 843.50ms | 7.69件/秒（8並列） | サーバーRAM・VRAM未取得 |
+| ERABI GPU PyTorch FP32 | 19.83秒 | 59.46 / 96.27ms | 15.49件/秒 | RSS 2.58GiB / 全GPU増分2.08GiB |
+| ERABI GPU ONNX FP16 | 10.12秒 | 30.51 / 80.91ms | 25.27件/秒 | RSS 1.68GiB / 全GPU増分2.35GiB |
+| ERABI GPU ONNX FP32（TF32有効） | 10.04秒 | 32.88 / 62.71ms | 27.94件/秒 | RSS 2.37GiB / 全GPU増分2.69GiB |
+| ERABI CPU ONNX FP32 | 11.26秒 | 826.28 / 1,598.28ms | 1.12件/秒 | RSS 2.78GiB / VRAMなし |
+| Laya BF16：ID＋説明文 | 11.08秒 | 28.10 / 72.73ms | 28.37件/秒 | RSS 3.17GiB / 全GPU増分3.13GiB |
+| Laya BF16：文章キー | 9.68秒 | 31.44 / 74.23ms | 26.65件/秒 | RSS 2.69GiB / 全GPU増分3.13GiB |
+| CLEF NF4＋CPU退避 | 56.74秒 | 2,076.83 / 2,335.16ms | 0.48件/秒 | RSS 14.37GiB / 全GPU増分13.00GiB |
+| CLEF BF16＋CPU退避 | 58.46秒 | 7,207.44 / 7,749.63ms | 0.14件/秒 | RSS 43.93GiB / 全GPU増分11.20GiB |
 
-CPUはRyzen 7 5800X、GPUはRTX A4000 16GBです。ERABIのGPU測定は強いクロック低下があり、Laya測定時と条件が揃っていないため、通常時の性能や速度順位は示しません。VRAM増分は他プロセスを含む全GPUのサンプル値、Jevは通信・サーバー待ち込みです。CPUは1プロセスあたり約4GiB以上の空きRAMを目安にしてください。詳しい[測定条件](docs/BENCHMARKS.md)も確認してください。
+CPUはRyzen 7 5800X。GPUはRTX 5060 Ti、PyTorch 2.12.0＋CUDA 13.0、ONNX Runtime 1.30.0です。共通公開160件のERABI中央値はFP16 27.42ms、FP32 19.98msで、FP16が常に最速ではありません。FP32側のTF32は低精度の高速演算なので、厳密なFP32演算とは区別します。
 
-公開データでの比較や過去のモデルの測定記録は、[ベンチマーク詳細](docs/BENCHMARKS.md)に分けて掲載しています。
+[CLEF](https://huggingface.co/Cloudflare/clef)は27Bモデルです。この16GB GPUでは両方式ともCPU退避を併用し、専用の高速化kernelは未導入です。ここでの速度は本構成の実測で、大容量GPU上のCLEF本来の性能を表すものではありません。BF16はGPU常駐層が少ないためVRAMは小さくなりますが、RAMと転送時間が増えます。Layaは英語・多言語2モデル常駐。今回はテキスト入力・1つの選択問題のみを比較しています。
+
+VRAM増分は他プロセスも含む全GPUのサンプル値です。JevのサーバーRAM/VRAMは取得できず、リモート速度もローカルGPU速度と直接比較しません。CPUは1プロセスあたり約4GiB以上の空きRAMを目安にしてください。[データセット別の速度・メモリ測定の定義](docs/BENCHMARKS.md)は詳細資料に掲載しています。
 
 ## 制限と安全性
 

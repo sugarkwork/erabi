@@ -2,7 +2,168 @@
 
 正答率はデータ分布に、速度は入力長・候補数・backend・精度・GPU温度・同時負荷に依存します。以下は保証値ではなく、特定条件での実測です。旧モデルと今回のモデル、リモートAPIとローカル推論を区別しています。
 
-## Decision Mix V2：同じ311件での比較
+## 現行モデル：RTX 5060 Tiでの再測定（2026-10-02）
+
+現行配布weightsを変更せず、同じ固定testでローカルモデルを測り直しました。CLEFとの共通比較は独自Decision Mix V2の311件すべてと、公開test 10 suitesから各16件抽出した160件です。ERABIとLayaには公開test全3,584件も実行しています。Jevは今回再要求していません。独自testの合成ラベル・分布適応の制約は後述の比較条件と同じです。
+
+### CLEFを含む共通テスト
+
+公開160件は固定公開testから`--public-limit-per-domain 16 --sample-seed 42`で抽出し、全モデルで同じcase IDを使いました。抽出はモデル結果を見る前に固定しています。独自311件は省略しません。公開subsetはsuite単位の抽出でラベル別均等ではなく、3,584件の全体正答率とは異なる指標です。160件・各カテゴリ16件の小標本から一般的な性能順位を断定しません。
+
+公開データは共通の`context / question / choices`へ変換したローカルchoice benchmarkです。MASSIVEは元の60意図すべてを候補にせず、正解を含む最大16候補にしています。長すぎる入力は構築時に除外します。各データセットやモデルの公式task scoreと同じ数字ではありません。
+
+| 実行系 | 独自311件 | 公開共通160件 |
+|---|---:|---:|
+| ERABI GPU PyTorch / ONNX FP32 / FP16 | 210（67.52%） | 99（61.88%） |
+| Laya ID＋説明文 | 109（35.05%） | 92（57.50%） |
+| Laya文章キー | 119（38.26%） | 105（65.63%） |
+| CLEF NF4＋CPU退避 | 276（88.75%） | 131（81.88%） |
+| CLEF BF16＋CPU退避 | 276（88.75%） | 132（82.50%） |
+
+共通公開160件のID hashは`39ba111f460f6c2c7224e2b25a69b5355776c519625b64a4579ba2ccf8643ff4`、独自311件は`fcd8766f06140b7feb1e04111a7c2f793ee9ba08d3cafacdcdd4b9f95496da62`です。ERABI/Layaの共通160件の値は全3,895件run内の該当予測・要求時間を抽出して計算し、再推論で選び直していません。
+
+以下は共通テストのカテゴリ別**正答数**です。正答率は正答数÷件数です。公開各カテゴリは16件なので、1問で6.25ポイント変わります。
+
+| データ | 件数 | ERABI GPU FP16 | Laya ID＋説明文 | Laya文章キー | CLEF NF4 | CLEF BF16 |
+|---|---:|---:|---:|---:|---:|---:|
+| コマンド危険性 | 82 | 66 | 28 | 27 | 77 | 78 |
+| 一般ゲート | 48 | 41 | 26 | 27 | 45 | 46 |
+| NPC内面・目標 | 45 | 19 | 12 | 14 | 31 | 31 |
+| 架空platformer | 40 | 15 | 12 | 9 | 32 | 31 |
+| 架空voxel survival | 29 | 17 | 10 | 12 | 26 | 26 |
+| 反実仮想 | 67 | 52 | 21 | 30 | 65 | 64 |
+| Emotion | 16 | 6 | 9 | 8 | 7 | 7 |
+| MASSIVE英語 | 16 | 13 | 11 | 13 | 16 | 16 |
+| MASSIVE日本語 | 16 | 13 | 7 | 7 | 16 | 16 |
+| MASSIVE中国語 | 16 | 9 | 7 | 7 | 15 | 15 |
+| Prompt injections | 16 | 10 | 13 | 11 | 12 | 12 |
+| SST-5 | 16 | 7 | 5 | 10 | 10 | 10 |
+| Toxic-chat jailbreak | 16 | 11 | 12 | 12 | 14 | 15 |
+| Toxic-chat toxicity | 16 | 13 | 9 | 10 | 14 | 14 |
+| XNLI英語 | 16 | 10 | 15 | 15 | 14 | 14 |
+| XNLI中国語 | 16 | 7 | 4 | 12 | 13 | 13 |
+
+| 実行系 | 独自test p50 / p95 | 共通公開test p50 / p95 |
+|---|---:|---:|
+| ERABI GPU PyTorch FP32 | 59.46 / 96.27ms | 50.41 / 105.26ms |
+| ERABI GPU ONNX FP16 | 30.51 / 80.91ms | 27.42 / 84.48ms |
+| ERABI GPU ONNX FP32・TF32 | 32.88 / 62.71ms | 19.98 / 65.62ms |
+| Laya ID＋説明文 | 28.10 / 72.73ms | 35.31 / 83.44ms |
+| Laya文章キー | 31.44 / 74.23ms | 37.50 / 82.07ms |
+| CLEF NF4＋CPU退避 | 2,076.83 / 2,335.16ms | 1,972.62 / 2,322.15ms |
+| CLEF BF16＋CPU退避 | 7,207.44 / 7,749.63ms | 6,994.53 / 7,410.67ms |
+
+### CLEFの構成と解釈
+
+[Cloudflare/clef](https://huggingface.co/Cloudflare/clef)の公式27B BF16 weightsとjoint schema headを、commit `2f3de3dd85f379784083b0814d997ab627200f0c`へ固定しました。13 shards等で約55GBです。公式`joint_schema_model.py`を読んでから実行し、SHA256 `0e304cf7c6500e8bb59bef7e2afd2c6373f82596dfb3b57d1aa93c175e2dc3a3`を実行前に検査します。safetensors、`trust_remote_code=False`、ローカルweightsを使います。
+
+- NF4はbitsandbytes 0.50.2のdouble quant、BF16 compute。64 decoder layersのうち52をGPU、12をCPUに明示配置し、CPU layersは非量子化です。visual encoderとlm_headはCPU、text embeddings・norm・RoPE・公式headはGPUです。明示mapなので`max_memory`はこの配置の容量上限として機能しません。全面4bit・全面GPUとは呼びません。
+- BF16は量子化なし、Accelerateのauto mapとGPU 12GiB / CPU 52GiBの配置予算を使います。16GB VRAMには27B BF16全体が入らないため、CPUからの転送を伴います。
+- CPU配置はweightsの退避先です。Accelerateは対象層のweightsをforward時にGPUへ移して演算するため、純粋なCPU推論との比較ではありません。BF16 smokeでは64 decoder layers中9層がGPU常駐、残り55層がCPU退避でした。NF4は52層GPU常駐で配置も異なるため、速度差を量子化だけの効果として分離できません。実測時の接続はPCIe 4.0 x8でした。
+- テキストのみ、1 requestにchoice質問1つ、batch 1、SDPA、KV cacheなし。画像や複数質問を同時に処理するCLEFの機能は評価していません。公式encoderは候補IDをsortしますが、今回の全入力は元から同じ順序で、ID対応も検査します。
+- 入力は一度十分大きな上限でencodeし、16,384 tokens超ならエラーにします。全3,895件の事前監査は139〜521 tokens、中央値233、超過0。tokenizerが異なるのでERABIとtoken数自体の大小は直接比較しません。
+- `causal_conv1d` / `flash-linear-attention`の高速kernelは未導入で、正しいが遅いPyTorch reference pathの警告が出ました。CPU退避とこの実装条件を含む測定です。大容量GPU・最適化済みserverでのCLEF速度や公式値を再現したものではありません。
+
+両方式のメモリは公開＋独自471件の測定全体、初回downloadは含みません。VRAMは全GPUの0.5秒サンプル差分なので、短いpeakを見逃し、他プロセスも含みます。
+
+| CLEF構成 | 初期化 | peak RSS | 全GPU peak−開始 | torch peak allocated / reserved | 独自処理量 | 471件の測定wall |
+|---|---:|---:|---:|---:|---:|---:|
+| NF4＋CPU退避 | 56.74秒 | 14,715MiB（14.37GiB） | 13,310MiB（13.00GiB） | 12,775 / 13,098MiB | 0.48件/秒 | 16.14分 |
+| BF16＋CPU退避 | 58.46秒 | 44,988MiB（43.93GiB） | 11,467MiB（11.20GiB） | 10,396 / 10,598MiB | 0.14件/秒 | 56.10分 |
+
+測定wallは初期化・warmupを除き、予測journalの書込を含みます。温度はNF4 38〜69℃、BF16 43〜70℃、SM clock中央値は両方2,842MHz。BF16の方がGPU常駐層が少ないため、VRAM値は低く、CPU RSSと転送量が大きくなります。独自311件の正答数は同じですが、全471件のTop-1は12件異なりました。量子化しても常に同じ判断になるとは保証しません。
+
+自動NF4配置は量子化tensorのCPU/meta dispatchで失敗したため、CPU側を非量子化にする明示mapで動作を確認しました。またCPU-offload hookがRoPEの非永続bufferを移動しなかったため、そのbufferをGPUへ配置しています。lm_headの全vocabularyをGPUに載せず、公式headが参照するoption embedding slicesだけを転送します。これらは推論を成立させる配置上の対応で、headや重みの追加学習ではありません。
+
+再現には`accelerate==1.15.0 bitsandbytes==0.50.2 pillow sentencepiece psutil`を測定用venvへ追加し、公式weightsを取得してください（[量子化の対応環境](https://huggingface.co/docs/transformers/quantization/bitsandbytes)、[CPUオフロード](https://huggingface.co/docs/accelerate/usage_guides/big_modeling)）。
+
+```powershell
+hf download Cloudflare/clef --revision 2f3de3dd85f379784083b0814d997ab627200f0c --local-dir models/clef-27b --max-workers 4
+python -m scripts.benchmark_gpu_refresh --system clef_nf4 --model-dir models/clef-27b --public-limit-per-domain 16 --sample-seed 42 --input path/to/public-cases.jsonl path/to/private-test.jsonl --output runs/clef-nf4.json
+python -m scripts.benchmark_gpu_refresh --system clef_offload --model-dir models/clef-27b --public-limit-per-domain 16 --sample-seed 42 --input path/to/public-cases.jsonl path/to/private-test.jsonl --output runs/clef-bf16.json
+python -m scripts.summarize_gpu_refresh --match-cases runs/clef-nf4.jsonl --reports runs/fp16.json runs/laya-id.json runs/clef-nf4.json runs/clef-bf16.json --output runs/common-comparison.json
+```
+
+### 追加測定：ERABI・Layaの公開test全3,584件
+
+| 実行系・候補の包装 | 独自311件 | 公開3,584件 |
+|---|---:|---:|
+| ERABI GPU PyTorch FP32 | 210（67.52%） | 2,203（61.47%） |
+| ERABI GPU ONNX FP16 | 210（67.52%） | 2,204（61.50%） |
+| ERABI GPU ONNX FP32・既定TF32 | 210（67.52%） | 2,203（61.47%） |
+| ERABI CPU ONNX FP32 | 210（67.52%） | 未測定 |
+| Laya reviewed・ID＋説明文 | 109（35.05%） | 2,003（55.89%） |
+| Laya reviewed・文章キー | 119（38.26%） | 2,201（61.41%） |
+
+ERABIは候補IDを返却用に保持し、モデルには候補文を渡します。Layaの標準APIには`criteria={id: description}`を渡す形式と、`criteria={description: None}`として元のIDへ対応を戻す形式があり、両方を測定しました。本文・問題・候補の意味・正解は同じですが、モデルへの包装が異なります。以前の公開benchmarkは文章キー、独自benchmarkはID＋説明文だったため、包装差をGPU変更による精度差と混同しないよう別行にしています。文章キー形式では候補本文が一意であることを検査します。
+
+LayaのBF16表記は標準CUDA autocastの演算精度です。モデルparametersは標準loaderのFP32のままで、英語・多言語2 checkpointを常駐させています。ERABI PyTorchはFP32、CLEFは量子化／CPU退避という別構成です。各モデルの通常利用構成の比較であり、同一precision・同一parameter数の比較ではありません。
+
+Layaは同系統の追加学習をしていません。独自testでの優劣は分布適応の比較で、一般性能の順位ではありません。公開testもモデルの事前学習との重複を否定できず、独立blind goldではありません。
+
+### データセット別正答率
+
+| データ | 件数 | ERABI GPU FP16 | Laya ID＋説明文 | Laya文章キー |
+|---|---:|---:|---:|---:|
+| コマンド危険性 | 82 | 80.49% | 34.15% | 32.93% |
+| 一般ゲート | 48 | 85.42% | 54.17% | 56.25% |
+| NPC内面・目標 | 45 | 42.22% | 26.67% | 31.11% |
+| 架空platformer | 40 | 37.50% | 30.00% | 22.50% |
+| 架空voxel survival | 29 | 58.62% | 34.48% | 41.38% |
+| 反実仮想 | 67 | 77.61% | 31.34% | 44.78% |
+| Emotion | 566 | 48.76% | 49.82% | 50.53% |
+| MASSIVE英語 | 452 | 85.18% | 65.71% | 69.91% |
+| MASSIVE日本語 | 452 | 79.42% | 53.76% | 58.19% |
+| MASSIVE中国語 | 452 | 62.39% | 49.56% | 56.64% |
+| Prompt injections | 116 | 50.00% | 63.79% | 66.38% |
+| SST-5 | 500 | 36.20% | 36.40% | 43.60% |
+| Toxic-chat jailbreak | 182 | 84.62% | 81.32% | 78.57% |
+| Toxic-chat toxicity | 264 | 65.91% | 60.98% | 59.85% |
+| XNLI英語 | 300 | 62.67% | 85.33% | 86.00% |
+| XNLI中国語 | 300 | 49.00% | 45.33% | 75.33% |
+
+### 速度・メモリ
+
+batch 1、8 warmups、CUDA同期、入力整形を含む要求単位の時間です。初回ダウンロードと予測journal書込は推論時間から除外しています。初期化はモデル読込・runtime準備で、Python/import自体は含みません。Laya初期化にはキャッシュ済みHub snapshotの確認と2 checkpointのpreloadを含みます。
+
+| 実行系 | 初期化 | 独自test p50 / p95 | 公開test p50 / p95 | peak RSS | 全GPU peak−開始 |
+|---|---:|---:|---:|---:|---:|
+| ERABI GPU PyTorch FP32 | 19.83秒 | 59.46 / 96.27ms | 51.24 / 104.53ms | 2,640MiB | 2,133MiB |
+| ERABI GPU ONNX FP16 | 10.12秒 | 30.51 / 80.91ms | 27.78 / 83.98ms | 1,716MiB | 2,408MiB |
+| ERABI GPU ONNX FP32・TF32 | 10.04秒 | 32.88 / 62.71ms | 19.87 / 64.57ms | 2,429MiB | 2,757MiB |
+| ERABI CPU ONNX FP32 | 11.26秒 | 826.28 / 1,598.28ms | 未測定 | 2,848MiB | 使用なし |
+| Laya ID＋説明文 | 11.08秒 | 28.10 / 72.73ms | 34.81 / 83.21ms | 3,250MiB | 3,207MiB |
+| Laya文章キー | 9.68秒 | 31.44 / 74.23ms | 37.66 / 84.55ms | 2,757MiB | 3,202MiB |
+
+GPUモデルのメモリピークは公開＋独自の3,895件を通した値、CPUは311件です。`nvidia-smi`を0.5秒ごとに採り、開始時からの全GPU使用量差を計算しています。他プロセスを含み、短いピークを見逃すのでモデル単体のVRAM割当とは呼びません。PyTorch allocatorのpeak allocated / reservedはERABI PyTorch 1,859 / 1,940MiB、Laya ID形式2,912 / 3,026MiB、Laya文章キー2,911 / 3,028MiBです。ONNXの割当はこのPyTorchカウンターに現れず、0をVRAM不使用とは扱いません。
+
+GPUはRTX 5060 Ti 16GB、driver 617.14。CPUはRyzen 7 5800X 8C/16T、RAM 96GB。torch 2.12.0+cu130、transformers 5.17.0、GLiClass 0.1.20、ORT GPU 1.30.0、Python 3.12.10を使いました。PyTorchは8 threads、ORTは既定threads。CPU再測定もORT 1.30.0です。GPUを使う測定は単独・順番に実行しています。背景でモデルの取得が走っていたため、ディスク・CPU・初期化時間は完全無負荷ではありません。
+
+CPUの値は同じORT GPU wheel 1.30.0の`CPUExecutionProvider`で測定し、GPU演算は使っていません。CPU専用wheelとのbinary比較は未実施です。
+
+採用GPU runの全サンプル温度は37〜73℃、SM clock中央値はPyTorch 2,775MHz、他GPU runは2,827MHzでした。旧A4000の強いクロック低下時の絶対速度は現行値として流用しません。
+
+この環境では公開testでONNX FP32がFP16より速く、独自testではFP16のp50が僅かに速い一方、FP32のp95が小さくなりました。ORTの`use_tf32=1`を別のprovider確認runで確認しています。TF32は低精度の高速FP32演算で、厳密なFP32演算とは異なります（[公式設定](https://onnxruntime.ai/docs/execution-providers/CUDA-ExecutionProvider.html#use_tf32)）。PyTorch側はfloat32 matmul precision `highest`でした。形式の名前だけで速度順位を決めず、実入力で確認してください。
+
+PyTorchとGPU FP16は独自311件のTop-1全件一致、公開では4件差。全3,895件の最大確率差は0.01946で、runtime・GPU変更後に旧環境と同じ丸め誤差幅を保証しません。これはweightsの追加学習ではありません。Layaは全行でstate clipping、実際にrenderした候補の48-token超過が0（ID形式最大46、文章キー最大43 tokens）ですが、英語checkpointの校正温度clamp警告があり、確率は未校正参考値です。両包装とも英語route 2,205件・多言語route 1,690件で、今回の包装差による成績変化はroute選択差ではありません。
+
+### 再現
+
+公開testの構築は`build_neutral_benchmark.py`、私有testは正当に保有するJSONLを使ってください。モデルはローカルへ取得し、Layaは[公式リポジトリ](https://github.com/NandhaKishorM/laya)のcommit `9d955671415fc19f069b9cc998928075c1f255ec`を使いました。標準Routerの取得元はbundle repo `convaiinnovations/laya` commit `55cf4c4ebb4ebe31b2550e8bdf3bd21b99753851`で、英語はroot、多言語は`multilingual/` subfolderです。別のstandalone多言語repoのrevisionは今回使っていません。
+
+```powershell
+python -m scripts.benchmark_gpu_refresh --system erabi_fp16 --device cuda:0 --model-dir path/to/onnx/fp16 --input path/to/test.jsonl --output runs/fp16.json
+python -m scripts.benchmark_gpu_refresh --system erabi_fp32 --device cuda:0 --model-dir path/to/onnx/fp32 --input path/to/test.jsonl --output runs/fp32.json
+python -m scripts.benchmark_gpu_refresh --system erabi_pytorch --device cuda:0 --model-dir path/to/checkpoint --input path/to/test.jsonl --output runs/pytorch.json
+python -m scripts.benchmark_gpu_refresh --system erabi_fp32 --device cpu --model-dir path/to/onnx/fp32 --input path/to/test.jsonl --output runs/cpu.json
+python -m scripts.benchmark_gpu_refresh --system laya --laya-repo path/to/laya --input path/to/test.jsonl --output runs/laya-id.json
+python -m scripts.benchmark_gpu_refresh --system laya --laya-repo path/to/laya --laya-text-keys --input path/to/test.jsonl --output runs/laya-text.json
+python -m scripts.summarize_gpu_refresh --reports runs/fp16.json runs/laya-id.json --output runs/comparison.json
+```
+
+必要な測定用依存は`psutil`です。複数の`--input`を渡せます。出力が既存なら上書きせず停止します。小規模確認は`--limit-per-domain 1`ですが、この結果を全testの成績とは呼ばないでください。集計のcase ID hashで同じ部分集合か確認できます。公開test SHA256は`1be8ce3419a4824f5c2f0c15a22c84ee3694a41bfb1a96847bce9547767a8008`、独自testは`c9e8227429fe5388cae9b45bcc040d029336cfb2c988bd2c32b5faa19f3677ee`です。
+
+## 過去の測定：Decision Mix V2・RTX A4000（2026-09-30）
 
 2026-09-30、train/dev/calibrationとcanonical group単位で分離したfinal 311件・109 groupsです。全システムに同じcontext、question、候補IDと順序を渡しました。ERABIのfinal入力は88〜511 tokens。testのSHA256は`c9e8227429fe5388cae9b45bcc040d029336cfb2c988bd2c32b5faa19f3677ee`です。データ本体は非公開です。
 

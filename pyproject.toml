@@ -48,3 +48,6 @@ Model = "https://huggingface.co/sugarknight/erabi-practical-v1-experimental"
 
 [tool.setuptools.packages.find]
 where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

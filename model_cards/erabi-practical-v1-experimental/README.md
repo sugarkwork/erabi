@@ -4,61 +4,147 @@ language:
 - en
 - zh
 license: apache-2.0
+base_model: knowledgator/gliclass-instruct-large-v1.0
 library_name: transformers
 pipeline_tag: text-classification
-base_model: knowledgator/gliclass-instruct-large-v1.0
 tags:
 - gliclass
 - choice-classification
 - experimental
+- onnx
 ---
 
-# ERABI Practical V1 (experimental)
+# ERABI（えらび）
 
-This is an **experimental**, uncalibrated choice-ranking model. It is not an official Jev model, a validated general-purpose reasoner, or an automatic decision-maker. The model ranks 2–16 user-supplied candidate texts for a natural-language context and question and returns all candidate probabilities through the [ERABI code](https://github.com/sugarkwork/erabi). Decisions should be reviewed by a person.
+Jevっぽい「状況を読んで候補を選ぶ」動きを、GLiClassで再現してみたローカル判断エンジンです。Jevの公式版・内部実装の再現版ではありません。
 
-## Provenance
+状況 `context`、判断基準 `question`、2〜16個の `choices` を渡すと、全候補の確率分布を返します。会話のツール選択、ゲームNPCの行動、コマンド危険性分類などの実験向けで、文章生成やツール実行はしません。
 
-- Base: [knowledgator/gliclass-instruct-large-v1.0](https://huggingface.co/knowledgator/gliclass-instruct-large-v1.0), Apache-2.0, 438,672,897 parameters.
-- First fine-tune: one epoch on 2,414 Practical V1 training records, peak learning rate 2.5e-6, 151 optimizer steps, microbatch 2, gradient accumulation 8, fp16 AMP.
-- Second, exploratory fine-tune (2026-09-23): one selected epoch on 175 privately held Exam-QA transformations mixed with 175 deterministic Practical V1 replay records, learning rate 1.5e-6, 22 optimizer steps, maximum training length 1,024 tokens.
-- Practical V1 data consists of original synthetic Japanese, English, and Simplified Chinese examples in six task families, generated and answer-blind rejudged with DeepSeek V4.1 Flash.
-- The Exam-QA source was filtered and transformed with the same DeepSeek model. Symbolic answer labels were mapped to source choice text. Ambiguous, multi-answer, figure-dependent, partial-credit, incomplete, or over-1,024-token items were skipped. Generated distractors were train-only; validation used source-provided choices only.
-- Exam-QA source records, transformed JSONL, and API responses are **not published** pending human review and source-by-source redistribution review. They are not claimed as human gold.
-- Data and training code: [GitHub repository](https://github.com/sugarkwork/erabi/tree/main/data/practical_v1) and [training script](https://github.com/sugarkwork/erabi/blob/main/scripts/train_practical_v1.py). Labels remain **unreviewed synthetic teacher agreement**, not human gold.
+約438MパラメータのGLiClass追加学習モデルです。日本語・英語・中国語を含むデータを使用し、PyTorch safetensors・CPU用ONNX FP32・GPU用ONNX FP16を配布しています。入力全体の上限は512トークンです。
 
-## Exploratory evaluation
+[GitHub・Pythonコード](https://github.com/sugarkwork/erabi) · [詳しい使い方](https://github.com/sugarkwork/erabi/blob/main/docs/USAGE.md) · [追加学習・データ形式](https://github.com/sugarkwork/erabi/blob/main/docs/TRAINING.md)
 
-| Set | Frozen RC3 before this fine-tune | This checkpoint |
-|---|---:|---:|
-| Practical V1 dev, 399 cases | 59.90% | 77.19% |
-| Practical V1 held-out synthetic eval, 386 cases | 61.66% | 76.17% |
-| Existing RC3 Bridge, 480 cases | 88.75% | 88.54% |
+## すぐに試す
 
-The Practical V1 eval set was used once after selecting by dev and existing-bridge results. Reading inference **regressed** from 54/71 to 50/71 despite aggregate gains. Candidate-order consistency on the existing bridge was 97.50%. These figures are not a benchmark of real-world correctness or Jev parity, because Practical V1 questions and labels come from the same teacher family. There is no independent human-verified final test, temperature calibration, or formal release approval for this checkpoint.
+Python 3.11以上が必要です。Windows PowerShellでCPU ONNXを使う例です。
 
-The current weights add the private Exam-QA experiment to that checkpoint:
-
-| Set | Before Exam-QA fine-tune | Current weights |
-|---|---:|---:|
-| Private Exam-QA validation, source choices only, 37 cases | 21.62% (8/37) | **24.32% (9/37)** |
-| Practical V1 dev, 399 cases | 77.19% (308/399) | **78.20% (312/399)** |
-| Existing RC3 Bridge, 480 cases | 88.54% (425/480) | **88.54% (425/480)** |
-| Practical V1 teacher-agreed eval, 386 cases | 76.17% (294/386) | 75.65% (292/386) |
-
-The Exam-QA gain is only **one additional correct item**, so it is weak exploratory evidence, not a claim of exam competence. The validation set has just nine source groups and has not been independently human-audited. The current safetensors SHA256 is `1ae38ef6c1103f8c021b0d3a974f3b1aedc42d89832d11761e74b95664216251`.
-
-## Use
-
-```bash
-python -m pip install erabi
-erabi predict --request request.json
+```powershell
+py -3.12 -m venv .venv
+.\.venv\Scripts\Activate.ps1
+python -m pip install --upgrade pip
+$env:HF_HUB_DISABLE_SYMLINKS = "1"  # Windowsで管理者権限なしのキャッシュを使用
+python -m pip install torch --index-url https://download.pytorch.org/whl/cpu
+python -m pip install erabi onnxruntime
 ```
 
-The repository contains three inference formats from the same checkpoint: `model.safetensors` (PyTorch), `onnx/fp32/model.onnx` (CPU), and `onnx/fp16/model.onnx` (NVIDIA GPU). ERABI 0.1.4 pins this World Choice checkpoint by default; 0.1.3 pins the earlier Exam-QA revision, and 0.1.2 pins the Practical V1-only revision. Upgrade with `python -m pip install --upgrade erabi`. `--model-format auto` downloads only the selected variant: FP32 ONNX for CPU with ONNX Runtime, FP16 ONNX for CUDA with CUDA Execution Provider, and otherwise PyTorch safetensors. Install the compatible `onnxruntime` (CPU) or `onnxruntime-gpu` (GPU) separately; do not install both in one environment. You can also select `--model-format pytorch`, `onnx-fp32`, or `onnx-fp16` explicitly.
+Linux/macOSでは `python3 -m venv .venv`、`source .venv/bin/activate` に置き換えます。以下を `sample.py` に保存し、`python sample.py` で実行してください。
 
-The newly exported ONNX FP32 and FP16 variants preserved the PyTorch top-ranked choice on 37/37 private Exam-QA validation cases, up to 853 input tokens. Experimental INT8 variants changed predictions substantially and are not distributed. The first invocation downloads the selected model; later invocations use the Hugging Face cache. Input and output JSON contracts and runtime recommendations are documented in the [ERABI README](https://github.com/sugarkwork/erabi#モデル形式の自動選択とおすすめ). The public ERABI runtime still defaults to a 512-token fail-closed contract. The weights were trained and experimentally checked at up to 1,024 tokens, but using that length requires changing both the runtime limit and preprocessing length while checking the untruncated input. Candidate probabilities are not calibrated confidence guarantees.
+```python
+from time import perf_counter
+from erabi.model_loader import load_engine
+from erabi.schema import ChoiceRequest
 
-## License and limitations
+print("モデルを読み込みます（初回はダウンロード）...", flush=True)
+t = perf_counter()
+engine = load_engine(device="cpu", revision="main")
+print(f"初期化: {perf_counter() - t:.2f}秒 / {engine.model_format}")
 
-These fine-tuned weights derive from the Apache-2.0-licensed GLiClass base model and are distributed under Apache-2.0; see the [Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0) and the [base model card](https://huggingface.co/knowledgator/gliclass-instruct-large-v1.0). ERABI source code is separately MIT-licensed. Do not rely on this experimental model for high-stakes or unattended decisions.
+request = ChoiceRequest.from_dict({
+    "context": "ユーザーが今日の宮崎の天気を知りたいと言った。",
+    "question": "次に使う機能を選んでください。",
+    "choices": [
+        {"id": "chat", "text": "雑談をする"},
+        {"id": "web", "text": "Web検索する"},
+        {"id": "image", "text": "イラストを作成する"},
+    ],
+})
+
+print("推論します...", flush=True)
+t = perf_counter()
+result = engine.predict(request)
+print(f"推論: {perf_counter() - t:.3f}秒")
+print("選択:", result.best_candidate_id)
+print("確率:", {c.id: round(c.probability, 4) for c in result.choices})
+```
+
+`revision="main"` を付けて、このページで公開しているモデルを選択してください。再現性が必要なら、末尾のweightsコミットIDを指定します。初回は必要なモデル形式だけダウンロードし、以後はキャッシュを再利用します。
+
+### GPU・モデル形式・保存先
+
+NVIDIA GPUでは別の仮想環境を使い、サンプルを `device="cuda:0"` に変更します。RTX 5060 Tiで確認したCUDA 13構成は以下です。
+
+```powershell
+python -m pip install torch==2.12.0 --index-url https://download.pytorch.org/whl/cu130
+python -m pip install erabi onnxruntime-gpu==1.30.0
+```
+
+他の構成では環境に合う[GPU用PyTorch](https://pytorch.org/get-started/locally/)と[ONNX Runtimeの対応表](https://onnxruntime.ai/docs/execution-providers/CUDA-ExecutionProvider.html)を確認してください。CPU版 `onnxruntime` とGPU版 `onnxruntime-gpu` は同じ環境に入れないでください。
+
+| 利用環境 | 自動選択・おすすめ | ファイルサイズの目安 |
+|---|---|---:|
+| CPU + ONNX Runtime | ONNX FP32 | 約1.76GB |
+| NVIDIA GPU + CUDA Provider | ONNX FP16 | 約0.88GB |
+| ONNX Runtimeなし | PyTorch safetensors | 約1.75GB |
+
+形式・保存先は明示指定もできます。
+
+```python
+engine = load_engine(
+    device="cpu", model_format="onnx-fp32",
+    revision="main", cache_dir="./model-cache",
+)
+```
+
+形式は `pytorch / onnx-fp32 / onnx-fp16`、保存先は `ERABI_MODEL_CACHE_DIR` 環境変数でも指定できます。バッチ処理・CLI・ローカルHTTP APIは[使い方](https://github.com/sugarkwork/erabi/blob/main/docs/USAGE.md)を参照してください。
+
+GPU自動選択は容量を抑えたFP16ですが、機種・入力によってはFP32の方が速くなります。`load_engine(device="cuda:0", model_format="onnx-fp32", revision="main")` でGPUのFP32も試せます。
+
+## ベンチマーク
+
+現行モデルをRTX 5060 Ti 16GBで再測定しました（2026-10-02）。独自Decision Mix V2の未学習311件すべてと、公開データ10種類からseed 42で各16件抽出した共通160件で比較しています。Jevだけは2026-09-30の同じ311件のリモート結果です。
+
+| モデル・入力形式 | 独自311件 | 公開・共通160件 |
+|---|---:|---:|
+| ERABI GPU PyTorch / ONNX FP32 / FP16 | 210 / 311（67.52%） | 99 / 160（61.88%） |
+| Laya 0.3.21 reviewed：ID＋説明文 | 109 / 311（35.05%） | 92 / 160（57.50%） |
+| Laya 0.3.21 reviewed：文章キー | 119 / 311（38.26%） | 105 / 160（65.63%） |
+| CLEF 27B：NF4＋CPU退避 | 276 / 311（88.75%） | 131 / 160（81.88%） |
+| CLEF 27B：BF16＋CPU退避 | 276 / 311（88.75%） | 132 / 160（82.50%） |
+| Jev 1.13：リモートAPI | 287 / 311（92.28%） | 未測定 |
+
+ERABIのカテゴリ別正答率（PyTorch / ONNX FP32）は、コマンド危険性80.49%、一般ゲート85.42%、NPC内面・目標42.22%、架空platformer37.50%、架空voxel survival58.62%、反実仮想77.61%です。
+
+ラベルは合成教師の正解非表示再判定による一致で、独立した人手goldではありません。ERABIは同系統のtrainで調整済み、Layaは同じ調整を行っていないため、一般的な性能順位ではありません。テストは学習データとgroup単位で分離されています。データ本体は非公開です。比較条件の詳細は[ベンチマーク資料](https://github.com/sugarkwork/erabi/blob/main/docs/BENCHMARKS.md)に掲載しています。
+
+Layaは同じ候補でも`{ID: 説明文}`と`{候補文: None}`で結果が変わるため、包装を分けて記載しています。公開testはMASSIVE・XNLI・感情・ゲート分類などで、事前学習との重複までは否定できません。ERABIとLayaの公開3,584件の追加測定は詳細資料に分離し、160件の成績と混ぜて順位付けはしません。
+
+### 速度・メモリの参考値
+
+同じ独自311件・batch 1・8 warmups後、入力整形を含めて測定しました。初回ダウンロードは除外。処理量は推論時間から算出します。メモリピークは公開testを含む測定全体の値で、ERABI/Layaは3,895件、CLEFは471件、CPUは311件です。
+
+| 実行系 | 初期化 | 推論p50 / p95 | 処理量 | RAM / VRAM目安 |
+|---|---:|---:|---:|---|
+| ERABI GPU PyTorch FP32 | 19.83秒 | 59.46 / 96.27ms | 15.49件/秒 | RSS 2.58GiB / 全GPU増分2.08GiB |
+| ERABI GPU ONNX FP16 | 10.12秒 | 30.51 / 80.91ms | 25.27件/秒 | RSS 1.68GiB / 全GPU増分2.35GiB |
+| ERABI GPU ONNX FP32（TF32有効） | 10.04秒 | 32.88 / 62.71ms | 27.94件/秒 | RSS 2.37GiB / 全GPU増分2.69GiB |
+| ERABI CPU ONNX FP32 | 11.26秒 | 826.28 / 1,598.28ms | 1.12件/秒 | RSS 2.78GiB / VRAMなし |
+| Laya BF16：ID＋説明文 | 11.08秒 | 28.10 / 72.73ms | 28.37件/秒 | RSS 3.17GiB / 全GPU増分3.13GiB |
+| Laya BF16：文章キー | 9.68秒 | 31.44 / 74.23ms | 26.65件/秒 | RSS 2.69GiB / 全GPU増分3.13GiB |
+| CLEF NF4＋CPU退避 | 56.74秒 | 2,076.83 / 2,335.16ms | 0.48件/秒 | RSS 14.37GiB / 全GPU増分13.00GiB |
+| CLEF BF16＋CPU退避 | 58.46秒 | 7,207.44 / 7,749.63ms | 0.14件/秒 | RSS 43.93GiB / 全GPU増分11.20GiB |
+
+CPUはRyzen 7 5800X、GPUはRTX 5060 Ti 16GB。PyTorch 2.12.0＋CUDA 13.0、ONNX Runtime 1.30.0です。共通公開160件のERABI中央値はFP16 27.42ms、FP32 19.98msで、FP16が常に最速ではありません。FP32側のTF32は低精度の高速演算で、厳密なFP32演算とは区別します。
+
+[CLEF](https://huggingface.co/Cloudflare/clef)は27Bモデルで、この16GB GPUでは両方式ともCPU退避を併用しています。専用の高速化kernelは未導入のため、本構成の速度を大容量GPU上のCLEF本来の性能とはみなしません。BF16はGPU常駐層が少なく、VRAMは小さい一方、RAMと転送時間が増えます。Layaは英語・多言語2モデル常駐。今回はテキスト入力・1つの選択問題のみの比較です。
+
+VRAM増分は他プロセスを含む全GPUのサンプル値です。JevのサーバーRAM/VRAMは取得できず、リモート速度もローカルGPU速度と直接比較しません。CPUは1プロセスあたり約4GiB以上の空きRAMに、OS・他アプリ分の余裕を確保してください。[測定条件・カテゴリ別結果](https://github.com/sugarkwork/erabi/blob/main/docs/BENCHMARKS.md)も確認してください。
+
+## 制限・ライセンス
+
+- 状況・質問・全候補を整形した入力全体で512トークンまで。超過時は切り詰めずエラーにします。
+- 出力は確認対象（`review`）で、確率は未校正です。高い確率は正解や安全を保証しません。
+- FP16では丸め差によって近接した候補の順位が変わる場合があります。FP32との完全一致は保証しません。
+- NPC判断やゲーム制御には用途別の検証が必要です。危険コマンド分類は実行許可の代わりにはならず、権限・パス・許可リストなど別の制御が必要です。
+- モデルは[GLiClass](https://huggingface.co/knowledgator/gliclass-instruct-large-v1.0)由来のApache-2.0、ERABIのPythonコードはMITです。
+
+固定運用向けweightsコミット：`67c587ca4c2a15586de306853410cd82dc81dbee`（3形式共通）。`revision="main"` の代わりにこのIDを指定できます。
