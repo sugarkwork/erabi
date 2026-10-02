@@ -1,10 +1,10 @@
 # ベンチマークと推論性能
 
-正答率はデータ分布に、速度は入力長・候補数・backend・精度・GPU温度・同時負荷に依存します。以下は保証値ではなく、特定条件での実測です。旧モデルと今回のモデル、リモートAPIとローカル推論を区別しています。
+正答率はデータ分布に、速度は入力長・候補数・backend・精度・GPU温度・同時負荷に依存します。以下は保証値ではなく、特定条件での実測です。現行モデルと過去の測定、リモートAPIとローカル推論を区別しています。
 
-## 現行モデル：RTX 5060 Tiでの再測定（2026-10-02）
+## 現行モデル：RTX 5060 Tiでの測定結果（2026-10-02）
 
-現行配布weightsを変更せず、同じ固定testでローカルモデルを測り直しました。CLEFとの共通比較は独自Decision Mix V2の311件すべてと、公開test 10 suitesから各16件抽出した160件です。ERABIとLayaには公開test全3,584件も実行しています。Jevは今回再要求していません。独自testの合成ラベル・分布適応の制約は後述の比較条件と同じです。
+評価対象は現行配布weightsと固定testです。CLEFとの共通比較は独自Decision Mix V2の311件すべてと、公開test 10 suitesから各16件抽出した160件です。ERABIとLayaには公開test全3,584件の結果もあります。Jevは2026-09-30のリモート結果です。独自testの合成ラベル・分布適応の制約は後述の比較条件と同じです。
 
 ### CLEFを含む共通テスト
 
@@ -174,6 +174,12 @@ python -m scripts.summarize_gpu_refresh --reports runs/fp16.json runs/laya-id.js
 | Laya 0.3.21 reviewed | 107/311 | 34.41% | 34.38% | 9.17% | 1.4433 | 0.7690 |
 | Jev 1.13（リモート） | 287/311 | 92.28% | 90.95% | 80.73% | 0.4382 | 0.1463 |
 
+### 過去の配布時検査：RTX A4000（2026-09-30）
+
+以下は旧測定環境（PyTorch 2.6.0+cu124、ONNX Runtime 1.21.0）の配布時検査であり、RTX 5060 Tiの測定結果ではありません。同一weightsでもruntime・演算精度による丸め差があります。現行環境のGPU 3形式は210/311（67.52%）です。
+
+旧環境ではPyTorchとCPU FP32 ONNXは210/311（67.52%）、GPU FP16 ONNXは211/311（67.85%）でした。FP32はTop-1 311/311一致、FP16は310/311一致です。異なる1件の元モデル上位2候補の確率差は0.00816で、FP16の丸め差で順位が反転しました。全件の最大確率差は0.00470、最大logit差は0.01979。FP32完全一致・FP16差1件以下・最大確率差0.01以下・不一致が確率差0.01以下の近接候補だけ、という限定した配布検査の結果です。FP16の1問改善は汎化改善ではなく、旧環境の一致率を別環境へ保証しません。
+
 ### カテゴリ別
 
 | カテゴリ | 件数 | ERABI学習前 | ERABI学習後 | Laya | Jev |
@@ -198,9 +204,9 @@ canonical group単位のpaired bootstrap 10,000回による正答率差の95%区
 - Jevの要求モデルは`typesafe/jev-1.13`、実応答モデルは全件`typesafe/jev-1.13-20260917`です。リモートサービスの内部weights・学習データ・GPUは確認できません。
 - 単一seed・単一runの結果であり、実ゲーム、複雑なコマンド、一般会話全体での安全性や品質を保証しません。
 
-## 速度・RAM・VRAM
+### 過去の速度・RAM・VRAM：RTX A4000（2026-09-30）
 
-今回の配布ONNXを使った311件の単件測定を以下に追記します。初回ダウンロードを除外し、8回ウォームアップ後、tokenizationを含めて計測します。GPUは同期済みです。
+以下はRTX A4000での過去の測定です。配布ONNXを使った311件、初回ダウンロードを除外、8回ウォームアップ後、tokenizationを含む単件推論、GPU同期ありという条件です。現行RTX 5060 Tiの数値は冒頭の節を参照してください。
 
 | 実行系 | 初期化 | p50 / p95 | 処理量 | ピークRSS | 全GPUピーク−開始 |
 |---|---:|---:|---:|---:|---:|
@@ -272,7 +278,7 @@ python -m scripts.benchmark_release --model path/to/onnx-fp16 --format onnx-fp16
 
 ## 配布物の識別
 
-今回のモデルはDecision Mix V2追加学習epoch 3です。Hub名は互換性維持のため以前と同じです。
+配布モデルはDecision Mix V2追加学習epoch 3です。Hub名は互換性維持のため固定しています。
 
 - Hub：[sugarknight/erabi-practical-v1-experimental](https://huggingface.co/sugarknight/erabi-practical-v1-experimental)
 - weights SHA256：`959c7c38ff00c40f39ac5ad0e40344117e8caa14dadc511b2128e6f18ff06934`
@@ -280,7 +286,5 @@ python -m scripts.benchmark_release --model path/to/onnx-fp16 --format onnx-fp16
 - 校正：未実施。古いモデルの校正を流用しない
 
 weightsの公開コミット：[`67c587ca4c2a15586de306853410cd82dc81dbee`](https://huggingface.co/sugarknight/erabi-practical-v1-experimental/commit/67c587ca4c2a15586de306853410cd82dc81dbee)。`load_engine(revision="67c587ca4c2a15586de306853410cd82dc81dbee", device="cpu")`で固定できます。リポジトリ版の既定値もこのcommitへ更新しています。公開済みPyPI 0.1.4の無指定値は旧版のままです。
-
-PyTorchとCPU FP32 ONNXは210/311（67.52%）、GPU FP16 ONNXは211/311（67.85%）でした。FP32はTop-1 311/311一致、FP16は310/311一致です。異なる1件の元モデル上位2候補の確率差は0.00816で、FP16の丸め差で順位が反転しました。全件の最大確率差は0.00470、最大logit差は0.01979。完全一致ではないことを明記し、FP32完全一致・FP16差1件以下・最大確率差0.01以下・不一致が確率差0.01以下の近接候補だけ、という限定した配布検査を通しました。FP16の1問改善をモデルの汎化改善とは扱いません。
 
 FP32 ONNX SHA256：`3682944e03e8a1614b3d8766b166365408c3e603bd113ab0db5c0e3ba0dab95b`。FP16 ONNX SHA256：`466c2ee5cb9b525d9f5df9b34948bcfdd48770ec05fe533d6e42a528b1722431`。

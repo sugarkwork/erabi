@@ -86,3 +86,7 @@ python scripts/export_exam_qa_erabi_v1_onnx.py --checkpoint runs/dm2-training/ch
 ## 過去の実験
 
 Practical V1、Exam-QA、World Choice、長文、量子化の経緯・実測は[STATUS](../STATUS.md)とGit履歴に残しています。古いモデルの測定を今回の配布モデルの結果として扱わないでください。RC3の設計契約は[設計仕様](ERABI_DESIGN.md)を参照してください。
+
+## 開発者向けの作業記録
+
+[STATUS.md](../STATUS.md)には実測の履歴、失敗した試行、未完了事項、次の作業を記録しています。利用方法は[README](../README.md)、配布モデルの性能と測定条件は[ベンチマーク](BENCHMARKS.md)を参照してください。
