@@ -134,17 +134,19 @@ def load_predictor(args):
     from joint_schema_model import JointSchemaHead, collate_records, encode_record
     kwargs = {"dtype": torch.bfloat16, "local_files_only": True, "trust_remote_code": False,
               "device_map": "auto", "max_memory": {0: "12GiB", "cpu": "52GiB"}, "attn_implementation": "sdpa"}
-    if args.system == "clef_nf4":
+    quantized = args.system.endswith("nf4")
+    flash = args.system.startswith("clef_flash")
+    if quantized:
         kwargs["quantization_config"] = BitsAndBytesConfig(load_in_4bit=True, bnb_4bit_quant_type="nf4",
             bnb_4bit_use_double_quant=True, bnb_4bit_compute_dtype=torch.bfloat16, llm_int8_enable_fp32_cpu_offload=True)
-        # Explicit CPU modules are excluded from quantization by Transformers. With
-        # an "auto" map, quantized CPU layers hit a nested quant-state/meta error
-        # in the tested bitsandbytes/Accelerate combination.
+        # Flash NF4 fits on one GPU. For 27B, explicit CPU modules remain
+        # unquantized: an "auto" NF4 offload map hit a nested quant-state/meta
+        # error in the tested bitsandbytes/Accelerate combination.
         config = json.loads((args.model_dir / "config.json").read_text())
         layers = config["text_config"]["num_hidden_layers"]
-        if not 1 <= args.clef_gpu_layers < layers:
+        if not flash and not 1 <= args.clef_gpu_layers < layers:
             raise ValueError("--clef-gpu-layers must leave at least one layer on CPU")
-        kwargs["device_map"] = {"model.visual": "cpu", "lm_head": "cpu",
+        kwargs["device_map"] = {"": 0} if flash else {"model.visual": "cpu", "lm_head": "cpu",
                                 "model.language_model.embed_tokens": 0,
                                 "model.language_model.norm": 0,
                                 "model.language_model.rotary_emb": 0,
@@ -187,25 +189,28 @@ def load_predictor(args):
         logits = head(hidden, batch["input_ids"], batch["attention_mask"], batch["records"], EmbeddingView())[0][0]
         probabilities = dict(zip(encoded.questions[0].option_ids, logits.float().softmax(-1).tolist()))
         return max(probabilities, key=probabilities.get), probabilities, len(encoded.input_ids)
-    return predict, {"dtype": "BF16", "quantization": "NF4 double quant" if args.system == "clef_nf4" else "none",
+    return predict, {"dtype": "BF16", "quantization": "NF4 double quant" if quantized else "none",
+                     "model_directory": args.model_dir.name,
+                     "hidden_size": backbone.config.text_config.hidden_size,
+                     "decoder_layers": backbone.config.text_config.num_hidden_layers,
                      "max_memory": {"cuda:0": "12GiB", "cpu": "52GiB"},
-                     "placement": "explicit map; max_memory is not a placement cap" if args.system == "clef_nf4" else "auto map with max_memory",
-                     "device_map": {k: str(v) for k, v in backbone.hf_device_map.items()},
+                     "placement": "explicit full GPU map; max_memory is not a placement cap" if flash and quantized else "explicit map; max_memory is not a placement cap" if quantized else "auto map with max_memory",
+                     "device_map": {k: str(v) for k, v in getattr(backbone, "hf_device_map", kwargs["device_map"]).items()},
                      "parameter_storage_bytes": dict(storage),
-                     "head": "official BF16; CPU embedding slices moved to head device",
+                     "head": "official BF16; per-option embedding slices mapped to head device",
                      "candidate_order": "official encoder sorts option IDs; probabilities mapped back by ID",
                      "source_sha256": source_hash}
 
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--system", required=True, choices=("erabi_fp16", "erabi_fp32", "erabi_pytorch", "laya", "clef_nf4", "clef_offload"))
+    parser.add_argument("--system", required=True, choices=("erabi_fp16", "erabi_fp32", "erabi_pytorch", "laya", "clef_nf4", "clef_offload", "clef_flash_nf4", "clef_flash_offload"))
     parser.add_argument("--input", required=True, type=Path, nargs="+")
     parser.add_argument("--output", required=True, type=Path)
     parser.add_argument("--model-dir", type=Path)
     parser.add_argument("--laya-repo", default=str(ROOT.parent / "laya-local"))
     parser.add_argument("--laya-text-keys", action="store_true", help="Diagnostic: choice text as Laya criteria keys; map results back to original IDs")
-    parser.add_argument("--clef-gpu-layers", type=int, default=52, help="NF4: explicit GPU layer count; CPU layers remain unquantized")
+    parser.add_argument("--clef-gpu-layers", type=int, default=52, help="27B NF4 only: explicit GPU layer count; CPU layers remain unquantized")
     parser.add_argument("--device", default="cuda:0")
     parser.add_argument("--limit-per-domain", type=int)
     parser.add_argument("--public-limit-per-domain", type=int, help="Limit public suites only; retain the entire private test")

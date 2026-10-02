@@ -19,29 +19,31 @@
 | Laya文章キー | 119（38.26%） | 105（65.63%） |
 | CLEF NF4＋CPU退避 | 276（88.75%） | 131（81.88%） |
 | CLEF BF16＋CPU退避 | 276（88.75%） | 132（82.50%） |
+| CLEF Flash NF4・GPU常駐 | 258（82.96%） | 132（82.50%） |
+| CLEF Flash BF16＋CPU退避 | 268（86.17%） | 133（83.13%） |
 
 共通公開160件のID hashは`39ba111f460f6c2c7224e2b25a69b5355776c519625b64a4579ba2ccf8643ff4`、独自311件は`fcd8766f06140b7feb1e04111a7c2f793ee9ba08d3cafacdcdd4b9f95496da62`です。ERABI/Layaの共通160件の値は全3,895件run内の該当予測・要求時間を抽出して計算し、再推論で選び直していません。
 
 以下は共通テストのカテゴリ別**正答数**です。正答率は正答数÷件数です。公開各カテゴリは16件なので、1問で6.25ポイント変わります。
 
-| データ | 件数 | ERABI GPU FP16 | Laya ID＋説明文 | Laya文章キー | CLEF NF4 | CLEF BF16 |
-|---|---:|---:|---:|---:|---:|---:|
-| コマンド危険性 | 82 | 66 | 28 | 27 | 77 | 78 |
-| 一般ゲート | 48 | 41 | 26 | 27 | 45 | 46 |
-| NPC内面・目標 | 45 | 19 | 12 | 14 | 31 | 31 |
-| 架空platformer | 40 | 15 | 12 | 9 | 32 | 31 |
-| 架空voxel survival | 29 | 17 | 10 | 12 | 26 | 26 |
-| 反実仮想 | 67 | 52 | 21 | 30 | 65 | 64 |
-| Emotion | 16 | 6 | 9 | 8 | 7 | 7 |
-| MASSIVE英語 | 16 | 13 | 11 | 13 | 16 | 16 |
-| MASSIVE日本語 | 16 | 13 | 7 | 7 | 16 | 16 |
-| MASSIVE中国語 | 16 | 9 | 7 | 7 | 15 | 15 |
-| Prompt injections | 16 | 10 | 13 | 11 | 12 | 12 |
-| SST-5 | 16 | 7 | 5 | 10 | 10 | 10 |
-| Toxic-chat jailbreak | 16 | 11 | 12 | 12 | 14 | 15 |
-| Toxic-chat toxicity | 16 | 13 | 9 | 10 | 14 | 14 |
-| XNLI英語 | 16 | 10 | 15 | 15 | 14 | 14 |
-| XNLI中国語 | 16 | 7 | 4 | 12 | 13 | 13 |
+| データ | 件数 | ERABI GPU FP16 | Laya ID＋説明文 | Laya文章キー | CLEF 27B NF4 | CLEF 27B BF16 | Flash NF4 | Flash BF16 |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| コマンド危険性 | 82 | 66 | 28 | 27 | 77 | 78 | 73 | 75 |
+| 一般ゲート | 48 | 41 | 26 | 27 | 45 | 46 | 44 | 46 |
+| NPC内面・目標 | 45 | 19 | 12 | 14 | 31 | 31 | 29 | 29 |
+| 架空platformer | 40 | 15 | 12 | 9 | 32 | 31 | 29 | 32 |
+| 架空voxel survival | 29 | 17 | 10 | 12 | 26 | 26 | 24 | 25 |
+| 反実仮想 | 67 | 52 | 21 | 30 | 65 | 64 | 59 | 61 |
+| Emotion | 16 | 6 | 9 | 8 | 7 | 7 | 8 | 8 |
+| MASSIVE英語 | 16 | 13 | 11 | 13 | 16 | 16 | 16 | 16 |
+| MASSIVE日本語 | 16 | 13 | 7 | 7 | 16 | 16 | 16 | 16 |
+| MASSIVE中国語 | 16 | 9 | 7 | 7 | 15 | 15 | 15 | 15 |
+| Prompt injections | 16 | 10 | 13 | 11 | 12 | 12 | 11 | 11 |
+| SST-5 | 16 | 7 | 5 | 10 | 10 | 10 | 10 | 10 |
+| Toxic-chat jailbreak | 16 | 11 | 12 | 12 | 14 | 15 | 15 | 15 |
+| Toxic-chat toxicity | 16 | 13 | 9 | 10 | 14 | 14 | 14 | 15 |
+| XNLI英語 | 16 | 10 | 15 | 15 | 14 | 14 | 14 | 14 |
+| XNLI中国語 | 16 | 7 | 4 | 12 | 13 | 13 | 13 | 13 |
 
 | 実行系 | 独自test p50 / p95 | 共通公開test p50 / p95 |
 |---|---:|---:|
@@ -52,6 +54,8 @@
 | Laya文章キー | 31.44 / 74.23ms | 37.50 / 82.07ms |
 | CLEF NF4＋CPU退避 | 2,076.83 / 2,335.16ms | 1,972.62 / 2,322.15ms |
 | CLEF BF16＋CPU退避 | 7,207.44 / 7,749.63ms | 6,994.53 / 7,410.67ms |
+| CLEF Flash NF4・GPU常駐 | 264.18 / 328.72ms | 222.52 / 305.25ms |
+| CLEF Flash BF16＋CPU退避 | 1,234.05 / 1,324.05ms | 1,174.86 / 1,325.49ms |
 
 ### CLEFの構成と解釈
 
@@ -82,6 +86,27 @@ hf download Cloudflare/clef --revision 2f3de3dd85f379784083b0814d997ab627200f0c 
 python -m scripts.benchmark_gpu_refresh --system clef_nf4 --model-dir models/clef-27b --public-limit-per-domain 16 --sample-seed 42 --input path/to/public-cases.jsonl path/to/private-test.jsonl --output runs/clef-nf4.json
 python -m scripts.benchmark_gpu_refresh --system clef_offload --model-dir models/clef-27b --public-limit-per-domain 16 --sample-seed 42 --input path/to/public-cases.jsonl path/to/private-test.jsonl --output runs/clef-bf16.json
 python -m scripts.summarize_gpu_refresh --match-cases runs/clef-nf4.jsonl --reports runs/fp16.json runs/laya-id.json runs/clef-nf4.json runs/clef-bf16.json --output runs/common-comparison.json
+```
+
+### CLEF Flashの構成と測定結果
+
+[Cloudflare/clef-flash](https://huggingface.co/Cloudflare/clef-flash)はQwen3.5-9Bを基にしたモデルです。公式commit `17f0b0ad64efb65d273590632833508766b2aae6`、約19GBの配布ファイルへ固定しています。公式判定ソースのSHA256はCLEF 27Bと同じ`0e304cf7c6500e8bb59bef7e2afd2c6373f82596dfb3b57d1aa93c175e2dc3a3`です。ソースを確認し、safetensors・`trust_remote_code=False`で実行します。
+
+- NF4はdouble quant、BF16 compute、32 decoder layersを含むbackbone全体と公式BF16 headをGPUに常駐させます。Embedding等はBF16のままで、全parametersを4bitに変換した構成ではありません。明示root mapでは`max_memory`は容量上限として機能しません。
+- BF16は量子化なし、GPU 12GiB / CPU 52GiBのauto mapです。32 decoder layers中18がGPU常駐、14がCPU退避です。visual encoder・text embeddings・公式headはGPU、lm_headとnormはCPU退避、RoPE bufferはGPUです。CPU退避層のweightsはforward時にGPUへ移して演算します。量子化だけでなくGPU常駐層数も異なるため、両構成の速度差を純粋な精度形式の効果とは呼びません。
+- テキスト・choice質問1つ・batch 1・SDPA・KV cacheなし。`causal_conv1d`と`flash-linear-attention`は未導入で、27Bと同じPyTorch reference pathを使います。専用kernelや大容量GPUでの公式速度を再現した測定ではありません。
+- 共通471件の入力監査は142〜521 tokens、中央値330、上限超過0、候補IDのsortによる順序変化0です。モデルごとにtokenizerが異なるので、token数そのものから速度差を比較しません。
+
+NF4の独自正答率は258/311（82.96%）、公開共通testは132/160（82.50%）。初期化24.05秒、独自p50 / p95は264.18 / 328.72ms、3.74件/秒です。peak RSSは4,733MiB（4.62GiB）、全GPU peak−開始は8,309MiB（8.11GiB）、torch peak allocated / reservedは8,031 / 8,118MiB。471件の測定wallは121.24秒（2.02分）、温度43〜73℃、SM clock中央値2,775MHzでした。独自ラベル・公開choice変換・少数標本の制約は他モデルと同じです。
+
+BF16の独自正答率は268/311（86.17%）、公開共通testは133/160（83.13%）。初期化20.09秒、独自p50 / p95は1,234.05 / 1,324.05ms、0.81件/秒です。peak RSSは10,343MiB（10.10GiB）、全GPU peak−開始は10,960MiB（10.70GiB）、torch peak allocated / reservedは10,715 / 10,836MiB。測定wallは576.77秒（9.61分）、温度42〜69℃、SM clock中央値2,827MHzです。全471件のTop-1はNF4とBF16で18件異なり、量子化後の完全一致は保証しません。
+
+再現用コマンド（privateデータは含まれないため、権利を持つJSONLを指定）：
+
+```powershell
+hf download Cloudflare/clef-flash --revision 17f0b0ad64efb65d273590632833508766b2aae6 --local-dir models/clef-flash --max-workers 4
+python -m scripts.benchmark_gpu_refresh --system clef_flash_nf4 --model-dir models/clef-flash --public-limit-per-domain 16 --sample-seed 42 --input path/to/public-cases.jsonl path/to/private-test.jsonl --output runs/clef-flash-nf4.json
+python -m scripts.benchmark_gpu_refresh --system clef_flash_offload --model-dir models/clef-flash --public-limit-per-domain 16 --sample-seed 42 --input path/to/public-cases.jsonl path/to/private-test.jsonl --output runs/clef-flash-bf16.json
 ```
 
 ### 追加測定：ERABI・Layaの公開test全3,584件
