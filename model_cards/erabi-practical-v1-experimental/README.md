@@ -101,49 +101,49 @@ GPU自動選択は容量を抑えたFP16ですが、機種・入力によって�
 
 ## ベンチマーク
 
-測定環境はRTX 5060 Ti 16GB（2026-10-02）。評価対象は独自Decision Mix V2の未学習311件すべてと、公開データ10種類からseed 42で各16件抽出した共通160件です。Jevのみ2026-09-30の同じ311件のリモート結果です。
+### 共通150問の比較
 
-| モデル・入力形式 | 独自311件 | 公開・共通160件 |
-|---|---:|---:|
-| ERABI GPU PyTorch / ONNX FP32 / FP16 | 210 / 311（67.52%） | 99 / 160（61.88%） |
-| Laya 0.3.21 reviewed：ID＋説明文 | 109 / 311（35.05%） | 92 / 160（57.50%） |
-| Laya 0.3.21 reviewed：文章キー | 119 / 311（38.26%） | 105 / 160（65.63%） |
-| CLEF 27B：NF4＋CPU退避 | 276 / 311（88.75%） | 131 / 160（81.88%） |
-| CLEF 27B：BF16＋CPU退避 | 276 / 311（88.75%） | 132 / 160（82.50%） |
-| CLEF Flash 9B：NF4・GPU常駐 | 258 / 311（82.96%） | 132 / 160（82.50%） |
-| CLEF Flash 9B：BF16＋CPU退避 | 268 / 311（86.17%） | 133 / 160（83.13%） |
-| Jev 1.13：リモートAPI | 287 / 311（92.28%） | 未測定 |
+ERABI・Laya・CLEF・CLEF Flash・Jev・GPT-6 Lunaを、同じ公開150問で比較した結果です（2026-10-07）。MASSIVEの日英中の意図分類96問と、XNLIの英中の文間関係54問が対象です。正答率は公開元ラベルとの一致率で、公式ベンチマークscoreや用途全般の性能保証ではありません。
 
-ERABIのカテゴリ別正答率（PyTorch / ONNX FP32）は、コマンド危険性80.49%、一般ゲート85.42%、NPC内面・目標42.22%、架空platformer37.50%、架空voxel survival58.62%、反実仮想77.61%です。
+![全14構成の正答率と応答時間。左は一致率、右は平均と最短・最長の時間を対数目盛りで表示。ローカルはウォームアップ後、APIは通信込み。](https://huggingface.co/sugarknight/erabi-practical-v1-experimental/resolve/main/assets/decision-engine-performance.png)
 
-独自311件のラベルは合成教師の正解非表示再判定による一致で、独立した人手goldではありません。ERABIは同系統のtrainで調整済み、他モデルは同じ調整を行っていないため、独自testの順位は一般的な性能順位ではありません。独自testは学習データとgroup単位で分離されています。独自データ本体は非公開です。公開160件は各公開データセットのラベルを使用します。比較条件の詳細は[ベンチマーク資料](https://github.com/sugarkwork/erabi/blob/main/docs/BENCHMARKS.md)に掲載しています。
+この150問では、平均時間はERABI GPU ONNX FP16の28.80msが最短、正答数はJevとCLEF NF4の136/150（90.67%）が最多です。数問の差から一般的な優劣は断定できません。Layaは候補ID＋説明文と文章キーの2形式を分けています。
 
-Layaは同じ候補でも`{ID: 説明文}`と`{候補文: None}`で結果が変わるため、包装を分けて記載しています。公開testはMASSIVE・XNLI・感情・ゲート分類などで、事前学習との重複までは否定できません。ERABIとLayaの公開3,584件の追加測定は詳細資料に分離し、160件の成績と混ぜて順位付けはしません。
+### 初期化・メモリ・費用
 
-### 速度・メモリの参考値
+![ローカル10構成の初期化時間、プロセスRAMピーク、全GPU使用量の開始値との差分。APIサーバーの初期化・メモリは観測不能。](https://huggingface.co/sugarknight/erabi-practical-v1-experimental/resolve/main/assets/decision-engine-resources.png)
 
-速度の評価対象は独自311件、batch 1、8 warmups後の入力整形を含む推論時間です。初回ダウンロードは除外。処理量は推論時間から算出します。メモリピークは公開testを含む測定全体の値で、ERABI/Layaは3,895件、CLEF/CLEF Flashは471件、CPUは311件です。
+<details>
+<summary>全14構成の数値表：正答率・初期化・平均/最短/最長・RAM/VRAM・費用</summary>
 
-| 実行系 | 初期化 | 推論p50 / p95 | 処理量 | RAM / VRAM目安 |
-|---|---:|---:|---:|---|
-| ERABI GPU PyTorch FP32 | 19.83秒 | 59.46 / 96.27ms | 15.49件/秒 | RSS 2.58GiB / 全GPU増分2.08GiB |
-| ERABI GPU ONNX FP16 | 10.12秒 | 30.51 / 80.91ms | 25.27件/秒 | RSS 1.68GiB / 全GPU増分2.35GiB |
-| ERABI GPU ONNX FP32（TF32有効） | 10.04秒 | 32.88 / 62.71ms | 27.94件/秒 | RSS 2.37GiB / 全GPU増分2.69GiB |
-| ERABI CPU ONNX FP32 | 11.26秒 | 826.28 / 1,598.28ms | 1.12件/秒 | RSS 2.78GiB / VRAMなし |
-| Laya BF16：ID＋説明文 | 11.08秒 | 28.10 / 72.73ms | 28.37件/秒 | RSS 3.17GiB / 全GPU増分3.13GiB |
-| Laya BF16：文章キー | 9.68秒 | 31.44 / 74.23ms | 26.65件/秒 | RSS 2.69GiB / 全GPU増分3.13GiB |
-| CLEF 27B NF4＋CPU退避 | 56.74秒 | 2,076.83 / 2,335.16ms | 0.48件/秒 | RSS 14.37GiB / 全GPU増分13.00GiB |
-| CLEF 27B BF16＋CPU退避 | 58.46秒 | 7,207.44 / 7,749.63ms | 0.14件/秒 | RSS 43.93GiB / 全GPU増分11.20GiB |
-| CLEF Flash 9B NF4・GPU常駐 | 24.05秒 | 264.18 / 328.72ms | 3.74件/秒 | RSS 4.62GiB / 全GPU増分8.11GiB |
-| CLEF Flash 9B BF16＋CPU退避 | 20.09秒 | 1,234.05 / 1,324.05ms | 0.81件/秒 | RSS 10.10GiB / 全GPU増分10.70GiB |
+| モデル・構成 | 正答率 | 初期化（秒） | 平均/件（ms） | 最短〜最長（ms） | VRAM増分（GiB） | RAM peak（GiB） | API費用/150件（USD） |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| ERABI GPU ONNX FP16 | 70.00% | 31.32 | 28.80 | 20.51〜102.64 | 1.66 | 1.60 | なし |
+| ERABI GPU ONNX FP32 | 70.00% | 10.25 | 30.73 | 16.28〜72.07 | 2.49 | 2.35 | なし |
+| ERABI GPU PyTorch FP32 | 70.00% | 6.87 | 46.66 | 38.16〜85.55 | 2.13 | 2.01 | なし |
+| ERABI CPU ONNX FP32 | 70.00% | 9.33 | 177.62 | 134.51〜292.64 | 未使用 | 2.69 | なし |
+| Laya ID＋説明文 | 62.67% | 8.42 | 32.73 | 24.49〜67.38 | 2.90 | 2.90 | なし |
+| Laya 文章キー | 71.33% | 8.05 | 36.85 | 25.41〜92.98 | 3.40 | 2.94 | なし |
+| CLEF Flash NF4・GPU常駐 | 87.33% | 33.24 | 251.60 | 191.06〜295.23 | 8.37 | 4.61 | なし |
+| CLEF Flash BF16・CPU退避 | 88.67% | 18.79 | 1229.41 | 1076.16〜1429.19 | 10.92 | 10.07 | なし |
+| CLEF 27B NF4・CPU退避 | 90.67% | 79.70 | 2095.20 | 1754.29〜2396.86 | 13.07 | 14.36 | なし |
+| CLEF 27B BF16・CPU退避 | 90.00% | 56.28 | 7264.33 | 6524.45〜8506.48 | 11.07 | 43.91 | なし |
+| Jev 1.13 API | 90.67% | 不明 | 357.71 | 285.81〜1266.42 | 不明 | 不明 | 0.00315609 |
+| GPT-6 Luna Decisions | 80.67% | 不明 | 303.13 | 202.45〜1349.18 | 不明 | 不明 | 0.00343020 |
+| GPT-6 Luna Responses none | 82.67% | 不明 | 1352.52 | 761.69〜12530.08 | 不明 | 不明 | 0.00536160 |
+| GPT-6 Luna Responses low | 82.67% | 不明 | 1537.74 | 765.10〜7465.62 | 不明 | 不明 | 0.00837510 |
 
-CPUはRyzen 7 5800X、GPUはRTX 5060 Ti 16GB。PyTorch 2.12.0＋CUDA 13.0、ONNX Runtime 1.30.0です。共通公開160件のERABI中央値はFP16 27.42ms、FP32 19.98msで、FP16が常に最速ではありません。FP32側のTF32は低精度の高速演算で、厳密なFP32演算とは区別します。
+</details>
 
-[CLEF](https://huggingface.co/Cloudflare/clef)は27Bモデルで、この16GB GPUでは両方式ともCPU退避を併用しています。専用の高速化kernelは未導入のため、本構成の速度を大容量GPU上のCLEF本来の性能とはみなしません。BF16はGPU常駐層が少なく、VRAMは小さい一方、RAMと転送時間が増えます。Layaは英語・多言語2モデル常駐。評価対象はテキスト入力・1つの選択問題です。
+- 測定環境：RTX 5060 Ti 16GB、Ryzen 7 5800X、RAM 96GB。ローカルはbatch 1・8 warmups後、入力整形を含む推論時間です。APIは通信とサーバー処理を含む往復時間です。
+- 初期化は保存済みweightsの読込・backend準備。Python起動・初回downloadは除外し、file cacheは消去していません。上のサンプルの初回初期化時間とは定義が異なります。
+- VRAMは全GPUのsample peak−開始値で、モデル専有量ではありません。RAMはプロセスpeak RSS。APIサーバーの初期化・RAM/VRAMは不明です。
+- CLEF 27Bの両形式とCLEF Flash BF16はCPU退避・GPUへのweights転送を併用し、専用の高速化kernelは未導入です。形式だけの速度比較や、大容量GPUでの性能を示すものではありません。
+- API費用は測定時のusage×単価による推計です。ローカルの「なし」はAPI課金がないという意味で、電気代・機材費は未測定です。
 
-VRAM増分は他プロセスを含む全GPUのサンプル値です。JevのサーバーRAM/VRAMは取得できず、リモート速度もローカルGPU速度と直接比較しません。CPUは1プロセスあたり約4GiB以上の空きRAMに、OS・他アプリ分の余裕を確保してください。[測定条件・カテゴリ別結果](https://github.com/sugarkwork/erabi/blob/main/docs/BENCHMARKS.md)も確認してください。
+入力は短文（ERABI tokenizerで61〜133 tokens）で、MASSIVEは16候補、XNLIは3候補です。独立した人手goldや事前学習との非重複は保証していません。長文・NPC・危険コマンドなどへ、この順位をそのまま適用しないでください。
 
-[CLEF Flash](https://huggingface.co/Cloudflare/clef-flash)は9B系の小型モデルです。NF4はGPU常駐、BF16はCPU退避を併用する構成です。Embeddingと判定headはBF16を使い、専用の高速化kernelは両構成とも未導入です。量子化と配置の両方が速度・メモリに影響します。
+[p50/p95・カテゴリ別成績・モデル版・集計と図の再現](https://github.com/sugarkwork/erabi/blob/main/docs/DECISION_ENGINE_COMPARISON.md) · [独自NPC/ゲーム制御/コマンド分類などの用途別評価](https://github.com/sugarkwork/erabi/blob/main/docs/BENCHMARKS.md)
 
 ## 制限・ライセンス
 
